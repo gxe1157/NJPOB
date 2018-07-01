@@ -15,7 +15,6 @@
 	.btn-manage-sub { width:150px; font-size: 1.1em; padding: 0px 5px 0px 5px; }	
 </style>
 
-
 <h2 style="margin-top: -5px;"><small><?= $default['page_title'] ?></small></h2>
 <p style="margin-top: 30px,">
 	<?php

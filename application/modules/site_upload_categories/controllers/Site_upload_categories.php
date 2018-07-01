@@ -57,7 +57,11 @@ function manage()
     $data['redirect_base']= base_url().$this->uri->segment(1);
 
     $data['add_button'] = is_numeric($this->uri->segment(3)) ? "Add Sub Category" : "Add New Category";
-    
+
+    $session_manager = $data['add_button'] == 'Add Sub Category' ? $this->uri->segment(3) : null;
+    $this->session->set_userdata('manage_id', $session_manager);
+
+
     $data['cancel_button_url'] = $data['redirect_base']."/manage";
     $data['add_button_url']= $data['redirect_base'].'/create/'.$this->uri->segment(3);
 

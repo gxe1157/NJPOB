@@ -1,7 +1,8 @@
 <?php
 	if( isset($flash) ) echo $flash;
 
-	$add_button_url = $redirect_base."/manage/";
+	$manage_id = $this->session->userdata('manage_id');
+	$add_button_url = $redirect_base."/manage/".$manage_id;
 	/* Edit Mode for Sub Catergory title */
 	if( $show_parent_id == '' && $columns['parent_cat_id'] != 0 )
 		$show_dropdown = 'Show Dropdown Options';
@@ -16,10 +17,8 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="content">
-
 		<form class="form-horizontal" method="post" action="<?= $form_location ?>" >
 		  <fieldset>
-
 			<?php if( $show_dropdown && $num_dropdown_options > 1 && $this->uri->segment(4) != 0){ ?>
 					<div class="control-group">
 						<label class="control-label" for="selectStatus">Parent Category:</label>
