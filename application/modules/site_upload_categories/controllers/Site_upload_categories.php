@@ -55,13 +55,11 @@ function manage()
     $data['sub_cats'] = $this->_count_sub_cats();
 
     $data['redirect_base']= base_url().$this->uri->segment(1);
-    $data['add_button'] =
-         $this->uri->segment(4) != null ? "Add Sub Category" : "Add New Category";
 
+    $data['add_button'] = is_numeric($this->uri->segment(3)) ? "Add Sub Category" : "Add New Category";
+    
     $data['cancel_button_url'] = $data['redirect_base']."/manage";
-
-    $data['add_button_url']=
-         $data['redirect_base'].'/create/'.$this->uri->segment(3).'/add_sub-category';
+    $data['add_button_url']= $data['redirect_base'].'/create/'.$this->uri->segment(3);
 
     $data['custom_jscript'] = [ 'sb-admin/js/datatables.min',
                                 'public/js/site_datatable_loader',
@@ -76,20 +74,17 @@ function manage()
     $this->templates->admin($data); 
 }
 
-
+  
 function create()
 {
     $update_id = $this->uri->segment(3);
-
     $submit = $this->input->post('submit', TRUE);
-    $posted_mode   = $this->input->post('mode', true);
 
-    $redirect_posted_mode =
-        $this->site_controller.'/manage/'.$this->input->post('parent_cat_id', TRUE);
-
-    if( $submit == "Finish" || $submit == "Return" || $submit == "Cancel" )
-        redirect( $redirect_posted_mode );
-
+    // $this->site_controller.'/manage/'.$this->input->post('parent_cat_id', TRUE);
+    $redirect_posted_mode = $this->site_controller.'/manage';
+    if( $submit == "Finish" || $submit == "Return" || $submit == "Cancel" ){
+        redirect( $redirect_posted_mode.'/'.$return_id );
+    }
 
     if( $submit == "Submit" ) {
         // process changes
@@ -104,13 +99,12 @@ function create()
             $flash_message = '';            
             if(is_numeric($update_id)){
                 //update the category details
-                 $update_rec = $this->_update($update_id, $data);
+                $update_rec = $this->_update($update_id, $data);
                 if( $update_rec > 0 )
                     $flash_message = "The category details were successfully updated ";
            } else {
                 //insert a new category
-                $this->_insert($data);
-                $update_id = $this->get_max(); // get the ID of new category
+                $update_id = $this->_insert($data);
                 $flash_message = $update_id > 0 ? "The category has been successfully added to database. " : "Add New Category record to database has <b>failed</b>. ";
 
             }
@@ -118,13 +112,6 @@ function create()
                $this->_set_flash_msg($flash_message);
 
             redirect( $redirect_posted_mode );
-
-            // redirect( $redirect_posted_mode );
-            // if( $posted_mode == 'add_sub-category'){
-            //     redirect( $redirect_posted_mode );
-            // } else {
-            //     redirect($this->site_controller.'/manage');
-            // }
         }
 
     }
@@ -135,18 +122,31 @@ function create()
         $data['columns'] = $this->fetch_data_from_post();
     }
 
-    $data['site_controller'] = $this->site_controller;
     $data['redirect_base']= base_url().$this->uri->segment(1);
+    $data['form_location'] = $data['redirect_base']."/create/".$update_id;
+
+    $data['show_parent_id'] = '';
+    $data['update_id'] = $update_id;
+
+    /* Sub Catergory logic */
+    if ( $data['columns']['parent_cat_id'] == 0 ) {
+        $data['parent_cat_title'] = $this->_get_cat_title($update_id);
+        $data['columns']['parent_cat_id'] = $update_id;
+
+        if($this->uri->segment(4) == null) {
+            $data['columns']['cat_title'] = '';
+            $data['show_parent_id'] ='<h4>Parent Category:
+                <span style="margin-left: 5px; color: blue; ">'.$data['parent_cat_title'].'</span></h4>';
+            $data['parent_cat_id'] = $update_id == '' ? 0: $update_id;
+            $update_id ='';
+        }
+
+        $data['form_location'] = $data['redirect_base']."/create/".$update_id;          
+    }
 
     $data['options'] = $this->_get_dropdown_options($update_id);
     $data['num_dropdown_options'] = count( $data['options'] );
     $data['sub_cats'] = $this->_count_sub_cats();
-
-    $data['mode'] = $posted_mode != null ? : $this->uri->segment(4);
-    $data['button_options'] = "Update Customer Details";
-
-    $this->default['headline'] = !is_numeric($update_id) ?
-                                    "Add New Category" : "Update Category Details";
 
     $data['default'] = $this->default;  
     $data['columns_not_allowed'] = $this->columns_not_allowed;
@@ -154,7 +154,6 @@ function create()
 
     $data['custom_jscript'] = [ 'sb-admin/js/jquery.cleditor.min'];    
     $data['page_url'] = "create";
-    $data['update_id'] = $update_id;
 
     $this->load->module('templates');
     $this->templates->admin($data);
@@ -168,10 +167,10 @@ function delete()
 
     /* remove dir if all sub-catergories are deleted. */
     if( $parent_cat_id == 0 ) {
-        quit('site_upload_categories - delete');        
-        $category_url = url_title(sub_cat_title($item_id));
-        $directory_name  = build_folder_name($this->parent_cat_img_base, $category_url);
-        $dir_deleted = rmdir($directory_name);
+        // quit('site_upload_categories - delete');        
+        // $category_url = url_title(sub_cat_title($item_id));
+        // $directory_name  = build_folder_name($this->parent_cat_img_base, $category_url);
+        // $dir_deleted = rmdir($directory_name);
     }
 
     $items_deleted = $this->_delete($item_id);

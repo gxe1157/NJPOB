@@ -23,6 +23,7 @@ function __construct() {
     $this->default['page_nav'] = "Manage User Upload";
     $this->default['flash']    = $this->session->flashdata('item');
     $this->default['admin_mode'] = $this->session->admin_mode; 
+    quit(99);
 }
 
 

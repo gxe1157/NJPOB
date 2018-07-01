@@ -58,7 +58,6 @@ function manage_admin()
 {
     $user_id = $this->uri->segment(3);
     $data = $this->build_data($user_id);
-
     $data['cancel_button_url'] = base_url()."site_users/manage";
 
     $this->load->module('templates');
@@ -70,10 +69,6 @@ function member_manage()
     $this->load->library('MY_Form_model');    
     $user_id = $this->site_security->_make_sure_logged_in();
     $data = $this->build_data( $user_id );
-
-    // get cat names
-    $this->load->module('site_upload/site_users');
-    $table_name = 'car_shields_upload';
     $data = $this->my_form_model->admin_member_portal_view( $data );
 
     $this->load->module('templates');

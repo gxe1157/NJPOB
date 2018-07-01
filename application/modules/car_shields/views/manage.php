@@ -79,21 +79,29 @@
 							<td ><?= $date_assigned ?></td>					
 							<td ><?= $document_status[$row->id]; ?></td>							
 							<td>
-								<a class="btn btn-danger btn-sm btnConfirm car_shield_button"
-								   id="delete-danger"
-							   	   href="<?= $remove ?>">
-							  	<i class="fa fa-trash fa-fw"></i> Remove
-								</a>
-								<a class="btn btn-info btn-sm car_shield_button"
-								   id="upload"
-							   	   href="<?= $upload ?>">
-							  	<i class="fa fa-upload fa-fw"></i> upload
-								</a>
-								<a class="btn btn-info btn-sm btn-edit car_shield_button"
-								   id="edit-<?= $edit_url ?>"
-							   	   href="<?= $edit_url ?>">
-							  	<i class="fa fa-pencil fa-fw"></i> Edit
-								</a>
+								<ul style="list-style-type: none; margin: 0; padding: 0;">
+									<li>
+										<a class="btn btn-danger btn-sm btnConfirm car_shield_button"
+										   id="delete-danger"
+									   	   href="<?= $remove ?>">
+									  	<i class="fa fa-trash-o fa-fw"></i> Remove
+										</a>
+									</li>
+									</li>										
+										<a class="btn btn-info btn-sm car_shield_button"
+										   id="upload"
+									   	   href="<?= $upload ?>">
+									  	<i class="fa fa-upload fa-fw"></i> upload
+										</a>
+									</li>
+									<li>
+										<a class="btn btn-info btn-sm btn-edit car_shield_button"
+										   id="edit-<?= $edit_url ?>"
+									   	   href="<?= $edit_url ?>">
+									  	<i class="fa fa-pencil fa-fw"></i> Edit
+										</a>
+									</li>
+								</ul>
 							</td>							
 						</tr>
 			    <?php } ?>

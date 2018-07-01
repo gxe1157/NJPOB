@@ -53,15 +53,15 @@
 			  <tbody>
 
 			    <?php
-					// checkArray($columns->result(),0);
+					// dd($columns->result(),0);
 			    	foreach( $columns->result() as $row ){
 					  	$num_sub_cats = isset($sub_cats[$row->id]) ? $sub_cats[$row->id] : 0;
-			    	 	$edit_url = $redirect_base."/create/".$row->id;
+			    	 	$edit_url = $redirect_base."/create/".$row->id.'/'.$row->parent_cat_id;
 			    	 	$delete_url = $redirect_base."/delete/".$row->id."-".$row->parent_cat_id;
 
 				        $entity = $num_sub_cats == 1 ? "Category" : "Categories";
-				    	$sub_cat_url = $redirect_base.'/manage/'.$row->id.'/add_sub-category';
-				    	$add_cat_url = $redirect_base.'/create/'.$row->id.'/add_sub-category';		
+				    	$sub_cat_url = $redirect_base.'/manage/'.$row->id;
+				    	$add_cat_url = $redirect_base.'/create/'.$row->id;		
 
 			    	 	if($row->parent_cat_id==0) {
 			    	 	 	$parent_cat_title='--';
