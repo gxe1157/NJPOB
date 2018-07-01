@@ -3,9 +3,6 @@
 
 	$manage_id = $this->session->userdata('manage_id');
 	$add_button_url = $redirect_base."/manage/".$manage_id;
-	/* Edit Mode for Sub Catergory title */
-	if( $show_parent_id == '' && $columns['parent_cat_id'] != 0 )
-		$show_dropdown = 'Show Dropdown Options';
 ?>
 
 <h2 style="margin-top: 10px;">
@@ -17,9 +14,15 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="content">
+		<span>Manage_id : <?= $manage_id ?></span>
 		<form class="form-horizontal" method="post" action="<?= $form_location ?>" >
 		  <fieldset>
-			<?php if( $show_dropdown && $num_dropdown_options > 1 && $this->uri->segment(4) != 0){ ?>
+
+			<?php if( count($drop_down_tables)>1 ){ ?>
+				<!-- <?= dd($drop_down_tables,1); ?> -->
+			<?php } ?>			
+
+			<?php if( $show_dropdown && $num_dropdown_options > 1 ){ ?>
 					<div class="control-group">
 						<label class="control-label" for="selectStatus">Parent Category:</label>
 							<div class="input-group">
