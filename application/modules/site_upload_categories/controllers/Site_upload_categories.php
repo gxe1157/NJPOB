@@ -144,7 +144,7 @@ function create()
                 <span style="margin-left: 5px; color: blue; ">'.$data['parent_cat_title'].'</span></h4>';
             $data['parent_cat_id'] = $update_id == '' ? 0: $update_id;
 
-            /* use drop_down_tables dropdown if segement 3 and 4 are empty in case it is needed inside the Add New Category area */
+            /* use drop_down_tables if segement 3 and 4 are empty is used inside the Add New Category area */
             if($this->uri->segment(3) == null)
                 $data['drop_down_tables'] = ['one','two','three'];
 
@@ -152,10 +152,6 @@ function create()
         }
         $data['form_location'] = $data['redirect_base']."/create/".$update_id;
     }
-
-    /* dropdown for Sub Catergory title */
-    if( $show_parent_id == '' && $columns['parent_cat_id'] != 0 )
-        $data['show_dropdown'] = 'Show Dropdown Options';
 
     $data['options'] = $this->_get_dropdown_options($update_id);
     $data['num_dropdown_options'] = count( $data['options'] );

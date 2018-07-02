@@ -1,7 +1,7 @@
 <?php
 	if( isset($flash) ) echo $flash;
 
-	$manage_id = $this->session->userdata('manage_id');
+	$sub_cat_manage_id = $this->session->userdata('manage_id');
 	$add_button_url = $redirect_base."/manage/".$manage_id;
 ?>
 
@@ -14,7 +14,6 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="content">
-		<span>Manage_id : <?= $manage_id ?></span>
 		<form class="form-horizontal" method="post" action="<?= $form_location ?>" >
 		  <fieldset>
 
@@ -22,7 +21,7 @@
 				<!-- <?= dd($drop_down_tables,1); ?> -->
 			<?php } ?>			
 
-			<?php if( $show_dropdown && $num_dropdown_options > 1 ){ ?>
+			<?php if( $this->uri->segment(4) > 0 && $num_dropdown_options > 1 ){ ?>
 					<div class="control-group">
 						<label class="control-label" for="selectStatus">Parent Category:</label>
 							<div class="input-group">
