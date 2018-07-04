@@ -9,7 +9,7 @@ if ( ! function_exists('get_tables_names'))
     {
       $user_address = array('address1', 'address2', 'city', 'state', 'zip', 'county');
       $user_mail_to = array('mail_add1', 'mail_add2','mail_city', 'mail_state', 'mail_zip');
-      $user_main    = array('membership_level', 'first_name','last_name','middle_name','phone','cell_phone', 'email');
+      $users    = array('membership_level', 'first_name','last_name','middle_name','phone','cell_phone', 'email');
 
       $user_info    = array('registered_voter', 'legislative_dist', 'gender', 'dob',
                               'driver_lic', 'height', 'weight','social_sec', 'hair_color',
@@ -30,7 +30,7 @@ if ( ! function_exists('get_tables_names'))
       $user_children = array('child_fname', 'child_lname', 'child_dob', 'child_gender');
 
 
-      return array( $user_main,
+      return array( $users,
                     $user_address,
                     $user_mail_to,
                     $user_info,

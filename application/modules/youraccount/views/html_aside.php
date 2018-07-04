@@ -11,6 +11,7 @@
     <div class="text-center" style="margin-top: 6px;">
        <form id="upload-image-avatar" enctype="multipart/form-data">
           <input type="hidden" id="user_avatar" value ="<?= $user_avatar ?>" >
+          <input type="hidden" id="update_id" name="update_id" value ="<?= $update_id ?>" >
 
           <!-- "../public/images/annon_user.png"  -->
           <img src="<?= base_url() ?>upload/avatars/<?= $user_avatar ?>";

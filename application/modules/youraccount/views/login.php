@@ -1,26 +1,25 @@
-<?php
-  $first_bit = $this->uri->segment(1);
-  $form_location = base_url().$first_bit.'/submit_login';
-?>
 
 <div class="row">
   <div class="col-md-4 col-md-offset-4" style="height:420px;">
-
-      <?= validation_errors("<p style='color: red;'>", "</p>"); ?>
       <?= $this->session->flashdata('item'); ?>
 
-      <form class="form-signin" action="<?= base_url() ?>youraccount/submit_login" method="POST">
+      <form class="form-signin" action="<?= base_url() ?>auth/login" method="POST">
+        <input type="hidden" name="mode" value="0" />
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputText" class="sr-only">Username or Email address</label>
         <input type="text" id="inputText" class="form-control"
-               name="username" placeholder="Username or Email address"
+               name="identity" placeholder="Username or Email address"
                autofocus>
+        <!-- Show errors here -->
+        <span><?= form_error('identity', '<div class="error" style="color: red;">', '</div>'); ?></span>
 
         <label for="inputPassword" class="sr-only">Password</label>
         <br />
         <input type="password" id="inputPassword" class="form-control"
                name = "password" placeholder="Password"
                autocomplete="new-password">
+        <!-- Show errors here -->
+        <span><?= form_error('password', '<div class="error" style="color: red;">', '</div>'); ?></span>
 
         <br />       
         <div class="col-xs-12 col-sm-12 col-md-12">

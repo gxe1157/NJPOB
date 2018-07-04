@@ -32,9 +32,16 @@ public $default = array();
 function __construct() {
     parent::__construct();
 
+    /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+
+    /* Set admin mode */
+    $this->default['admin_mode'] = $this->ion_auth->is_admin() ? 'admin_portal':'member_portal';
+
     $this->load->helper('site_users/form_flds_helper');
     list( $this->Select_option, $this->column_rules ) = get_fields();
-    list( $this->user_main,
+    list( $this->users,
           $this->user_address,
           $this->user_mail_to,
           $this->user_info,
@@ -53,7 +60,7 @@ function __construct() {
     $this->default['flash'] = $this->session->flashdata('item');
     $this->default['set_dir_path'] =
         (uri_string() == 'password_reset' || uri_string() == 'member_profile') ? 1 : 2;
-    $this->default['admin_mode'] = $this->session->admin_mode;        
+
 }
 
 /* ===================================================
@@ -61,49 +68,17 @@ function __construct() {
     functions in applications/core/My_Controller.php
    ==================================================== */
 
-function member_upload($manage_rowid=null)
+function index()
 {
-
-    $update_id  = $this->site_security->_make_sure_logged_in();
-    $manage_rowid = $manage_rowid != null ? $manage_rowid : 0;  
-
-    $this->load->library('MY_Uploads');   
-    $table_name = 'site_users_upload';
-    $required_docs = 1;
-    $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
-
-    $data['required_docs'] = $required_docs;     
-    $data['manage_rowid'] = $manage_rowid;     
-
-    $data['menu_level'] = 1;
-    $data['image_repro'] = '';
-    $data['left_side_nav'] = true;
-    $data['nav_module']= 'youraccount/';
-    $data['title'] = "Upload Image using Ajax JQuery in CodeIgniter";
-    $data['page_title'] = 'Upload Files';
-    $data['module'] = "site_users";
-    // $data['default'] = $this->default;    
-
-    $this->load->module('templates');
-    $this->templates->public_main($data);
-}
-
-function manage_uploads()
-{
-    $update_id = $this->uri->segment(3);
-    quit('site_users/manage_uploads| 99');
-
-    // $data = $this->build_data( $update_id, 'users_upload', '1' );
-    // checkArray($data,0);
-    $this->load->module('templates');
-    $this->templates->admin($data);
+    /* ion_auth users page */
+    redirect('auth/index');
 }
 
 function manage()
 {
      $data['custom_jscript'] = ['sb-admin/js/datatables.min',
                                 'public/js/site_loader_datatable'
-                              ];    
+                               ];    
 
     $data['columns']  = $this->get('last_name'); // get data from table
     $data['default']  = $this->default;    
@@ -192,6 +167,7 @@ function save_changes_ajax()
 {
     $errors_array = [];
     $response=[];
+dd($_POST);
 
     $fld_group = $this->input->post('fld_group', TRUE);
     $update_id = $this->input->post('id', TRUE);
@@ -243,11 +219,11 @@ function save_changes_ajax()
     echo json_encode($response);                                
 }
 
-
 function update_user()
 {
+    $user = $this->ion_auth->user()->result()[0];
     $update_id = is_numeric($this->uri->segment(3)) ?
-            $this->uri->segment(3) : $this->site_security->_get_user_id(); 
+            $this->uri->segment(3) : $user->id; 
 
     /* fetch user application data */
     $result_set = $this->model_name->fetch_form_data($update_id);
@@ -262,7 +238,7 @@ function update_user()
 
     $data['Select_option']  = $this->Select_option;
 
-    $data['user_main'] = $this->user_main;
+    $data['users'] = $this->users;
     $data['user_address'] = $this->user_address;
     $data['user_mail_to'] = $this->user_mail_to;
     $data['user_info'] = $this->user_info;    
@@ -446,8 +422,6 @@ function update_password()
 function delete( $update_id )
 {
     $this->_numeric_check($update_id);    
-        
-
     $submit = $this->input->post('submit', TRUE);
 
     if( $submit =="Cancel" ){
@@ -511,6 +485,45 @@ function ajax_remove_one()
     $this->my_uploads->ajax_remove_one();
 
 }
+
+function member_upload($manage_rowid=null)
+{
+
+    $update_id  = $this->site_security->_make_sure_logged_in();
+    $manage_rowid = $manage_rowid != null ? $manage_rowid : 0;  
+
+    $this->load->library('MY_Uploads');   
+    $table_name = 'site_users_upload';
+    $required_docs = 1;
+    $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
+
+    $data['required_docs'] = $required_docs;     
+    $data['manage_rowid'] = $manage_rowid;     
+
+    $data['menu_level'] = 1;
+    $data['image_repro'] = '';
+    $data['left_side_nav'] = true;
+    $data['nav_module']= 'youraccount/';
+    $data['title'] = "Upload Image using Ajax JQuery in CodeIgniter";
+    $data['page_title'] = 'Upload Files';
+    $data['module'] = "site_users";
+    // $data['default'] = $this->default;    
+
+    $this->load->module('templates');
+    $this->templates->public_main($data);
+}
+
+function manage_uploads()
+{
+    $update_id = $this->uri->segment(3);
+    quit('site_users/manage_uploads| 99');
+
+    // $data = $this->build_data( $update_id, 'users_upload', '1' );
+    // checkArray($data,0);
+    $this->load->module('templates');
+    $this->templates->admin($data);
+}
+
 
 /* ===============================================
     Call backs go here...

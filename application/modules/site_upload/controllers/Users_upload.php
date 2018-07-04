@@ -28,8 +28,8 @@ function __construct() {
 
 function ajax_remove_avatar()
 {
-    // $this->_security_check();
-    $userid = $this->site_security->_make_sure_logged_in();
+ 
+    $userid = $this->input->post( 'update_id', TRUE);
 
     $imagename = 'annon_user.png';
     $this->_update_avatar_data($imagename, $userid);
@@ -40,10 +40,7 @@ function ajax_remove_avatar()
 
 function ajax_upload_one()
 {
-    // $this->_security_check();
-    sleep(1);
-    $userid = $this->site_security->_make_sure_logged_in();
-
+    $userid = $this->input->post( 'update_id', TRUE);
     $config["upload_path"]   = './upload/avatars/';
     $config['allowed_types'] = 'jpeg|jpg|png|gif';
     $config['max_size']      = '2048'; // 2 MB
@@ -71,9 +68,10 @@ function ajax_upload_one()
 
 function _update_avatar_data($imagename, $userid)
 {
+
     /* get image name on file */
     $default_avatar = 'annon_user.png';
-    $mysql_query    = "SELECT avatar_name FROM `user_login` WHERE `id` =".$userid;
+    $mysql_query    = "SELECT avatar_name FROM `users` WHERE `id` =".$userid;
     $result_set     = $this->model_name->_custom_query($mysql_query)->result();
     $avatar_on_file = $result_set[0]->avatar_name;
 
@@ -84,7 +82,7 @@ function _update_avatar_data($imagename, $userid)
     }
 
     /* Update database */
-    $mysql_query = "UPDATE `user_login` SET `avatar_name` = '".$imagename."' WHERE `user_login`.`id` = ".$userid;
+    $mysql_query = "UPDATE `users` SET `avatar_name` = '".$imagename."' WHERE `users`.`id` = ".$userid;
 
     $this->model_name->_custom_query($mysql_query);
 }

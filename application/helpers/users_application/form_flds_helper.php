@@ -5,7 +5,7 @@ if ( ! function_exists('get_tables_names'))
 {
    function get_table_data()
     {
-      $form_tables = array('user_address', 'user_mail_to', 'user_main',
+      $form_tables = array('user_address', 'user_mail_to', 'users',
                              'user_info', 'user_employment_le',
                              'user_children', 'user_employment_prv_sector');
 

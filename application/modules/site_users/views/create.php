@@ -62,7 +62,7 @@
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="user_main">
                 <?php 
-                  $data['fld_group'] = $user_main;
+                  $data['fld_group'] = $users;
                   $data['submit_id']  = 'submit-user_main';
                   $data['add_on'] = '';
                   $this->load->view( 'create_partial', $data);

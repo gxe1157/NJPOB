@@ -13,6 +13,7 @@
 class Auth extends MX_Controller
 {
 	public $data = [];
+	private $mode = null; // Added by Evelio
 
 	public function __construct()
 	{
@@ -64,6 +65,12 @@ class Auth extends MX_Controller
 	 */
 	public function login()
 	{
+		/* Added by Evelio */
+		$this->mode = (bool)$this->input->post('mode');
+		$view_module = $this->mode == 0 ? 'youraccount':'auth';
+		/* Added by Evelio */
+
+
 		$this->data['title'] = $this->lang->line('login_heading');
 
 		// validate form input
@@ -82,15 +89,15 @@ class Auth extends MX_Controller
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				// redirect('auth/index', 'refresh');
-				$this->load->module('dashboard');
-				redirect('site_dashboard/welcome', 'refresh');				
+				$this->load->module($view_module);
+				redirect($view_module.'/welcome', 'refresh');				
 			}
 			else
 			{
 				// if the login was un-successful
 				// redirect them back to the login page
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect('auth/login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
+				redirect($view_module.'/login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
 			}
 
 		}
@@ -112,7 +119,9 @@ class Auth extends MX_Controller
 				'class' => 'form-control',					
 			);
 
-			$this->_render_page('auth' . '/' . 'login', $this->data);
+			$this->_render_page($view_module . '/' . 'login', $this->data);
+			// $this->_render_page('auth' . '/' . 'login', $this->data);
+
 		}
 	}
 
@@ -902,7 +911,7 @@ class Auth extends MX_Controller
 	 */
 	public function _render_page($view, $data = NULL, $returnhtml = FALSE)//I think this makes more sense
 	{
-		/* Added by Evelio */		
+   		/* Added by Evelio */		
         $page_url = explode('/', $view);
 		$default['page_nav'] = "Manage Agents";
 	    $data['custom_jscript'] = [ 'sb-admin/js/datatables.min',
@@ -910,14 +919,13 @@ class Auth extends MX_Controller
 									'sb-admin/js/admin_js/site_user_details',
                                     'sb-admin/js/admin_js/format_flds'];    
 
+	    $data['view_module'] = $page_url[0];
 	    $data['page_url'] = $page_url[1];
-	    $data['view_module'] = 'auth';
 	    $data['title'] = "Admin Login";
-
 	    $data['default'] =  $default;  
 
 	    $this->load->module('templates');
-	    $this->templates->admin($data); 	
+	    $this->mode ? $this->templates->admin($data) : $this->templates->public_main($data);  	
 		/* Added by Evelio */
 
 		// $this->viewdata = (empty($data)) ? $this->data : $data;

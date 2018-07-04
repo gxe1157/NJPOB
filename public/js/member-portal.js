@@ -37,8 +37,11 @@ $(document).ready(function (e) {
       alertType: 'danger'
     }).done(function (e) {
       if( e ) {
+        let formData = new FormData();
+        formData.append( 'update_id', _('update_id').value );           
+
         let target_url = dir_path+'site_upload/users_upload/ajax_remove_avatar';
-        upload_ajax_avatar( target_url, null );
+        upload_ajax_avatar( target_url, formData );
       }
     });
   });
@@ -49,8 +52,10 @@ $(document).ready(function (e) {
     $( '#cancelImg').prop("disabled",true);
 
     e.preventDefault();
+
     let target_url = dir_path+'site_upload/users_upload/ajax_upload_one';
     let formData = new FormData(this);
+    formData.append( 'update_id', _('update_id').value );           
 
     upload_ajax_avatar( target_url, formData );
   });

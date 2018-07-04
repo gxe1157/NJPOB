@@ -1,19 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 // Rename Perfectcontroller to [Name]
-class Youraccount extends MY_Controller 
+class Site_dashboard extends MY_Controller 
 {
 
 /* model name goes here */
-public $mdl_name = 'Mdl_youraccount';
-public $main_controller = 'youraccount';
+public $mdl_name = 'Mdl_site_dashboard';
+public $main_controller = 'site_dashboard';
 
 public $flash_msg = '';
+
 public $default = [];
 
-function __construct( ) {
+function __construct($data = null) {
     parent::__construct();
-    $this->default['flash'] = $this->session->userdata('item');
+    // checkArray($this->default,0);
+    if( !$default['is_logged_in']  ){
+       // quit( uri_string() );
+    }
+
+    $this->default['page_nav'] = "Dashboard";  
+    $this->default['flash']    =$this->session->flashdata('item');
 }
 
 
@@ -24,56 +31,105 @@ function __construct( ) {
 
 function welcome()
 {
-    $this->load->module('auth');
-    $user = $this->ion_auth->user()->result()[0];
-
-    // $data['flash'] = $this->session->flashdata('item');
-    list( $data['status'], $data['user_avatar'],
-          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($user->id); 
-
-    $data['default'] = $this->default;
-    $data['menu_level'] = 1;
-    $data['custom_jscript'] = ['public/js/site_init',
-                               'public/js/site_user_details',
-                               'public/js/member-portal',
-                               'public/js/model_js',
-                              ];
-
+    $data['custom_jscript'] = '';
     $data['page_url'] = 'welcome';
-    $data['page_title'] = 'Member Portal';
-    $data['image_repro'] = '';
-    $data['left_side_nav'] = true;
-    $data['view_module'] = 'youraccount';
-    $data['title'] = "Welcome. You are logged in.";
-    $data['update_id'] = $user->id;
-    
+    $data['view_module'] = 'site_dashboard';
+    $data['title'] = "Welcome";
+
+    $this->default['page_title'] = 'Dashboard Page';    
+    $data['default'] =  $this->default;  
+
     $this->load->module('templates');
-    $this->templates->public_main($data);     
+    $this->templates->admin($data);     
 }
+
+function contactus()
+{
+    $data['custom_jscript'] = ['public/js/contact-us',
+                               'sb-admin/js/bootstrapValidator.min'
+                              ];
+    $data['page_url'] = 'contact-us';
+    $data['view_module'] = 'site_dashboard';
+    $data['title'] = "Welcome";
+
+    $this->default['page_nav'] = "Contact Us";  
+    $this->default['page_title'] = 'Contact Us';    
+    $data['default'] =  $this->default;  
+
+    $this->load->module('templates');
+    $this->templates->admin($data);     
+}
+
+
+function contactus_ajaxPost()
+{
+    /* Send Email */
+    if( ENV != 'local' ) {
+      $from = $_POST['email'];
+      $subject = "NJPOB: Contact Us Form";
+      $message = "Time Stamp : ".convert_timestamp( time(), 'full')."\n\n";
+      foreach( $_POST as $fld_name => $fld_value){
+        $message .= $fld_name." : ".$fld_value."\n";
+      }
+      $message .= "\n\nRecord Number : ".$rec_num."\n\n";
+
+      $this->contactus_mail($from, $subject, $message);     
+    }
+}
+
+
+function contactus_mail($from, $subject, $message)     
+{
+
+    if( ENV != 'local' ) {
+        // send email to jdmedical
+        $email       = 'info@mailers.com';
+        $admin_email = 'webmaster@411mysite.com';
+        $from        = $_POST['email'];
+
+        $this->load->library('email');
+        $this->email->from( $from);
+        $this->email->to($email);
+        $this->email->cc();
+        $this->email->bcc($admin_email);
+
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        $this->email->send();
+    }
+    if ( ! $this->email->send()) {
+         // Generate log error
+         echo "Email was not sent!...";                    
+    }
+}
+
 
 function login()
 {
-    $data['username'] = $this->input->post('username', TRUE);
-    $data['custom_jscript'] = [];
+    if( $_SESSION['is_logged_in'] )
+        redirect( $main_controller.'/welcome');
+
+    $data['custom_jscript'] = '';
     $data['page_url'] = 'login';
-    $data['page_title'] = 'Login';
-    $data['image_repro'] = '';
-    $data['left_side_nav'] = false;
-    $data['view_module'] = 'youraccount';
-    $data['title'] = "Membership Login";
+    $data['view_module'] = 'site_dashboard';
+    $data['title'] = "Admin Login";
+
+    $data['default'] =  $this->default;  
+    $this->default['page_title'] = 'Login';
 
     $this->load->module('templates');
-    $this->templates->public_main($data); 
+    $this->templates->admin($data); 
 }
+
 
 function submit_login()
 {
-    $submit = $this->input->post('submit', TRUE);
 
+    $submit = $this->input->post('submit', TRUE);
     if ($submit=="Submit") {
-        //process the form
         $this->form_validation->set_rules('username', 'Username',
-                 'required|min_length[5]|max_length[60]|check_user[user_login.username]');
+                 'required|min_length[5]|max_length[60]|check_user[staff_login.username]');
 
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[35]');
 
@@ -83,20 +139,21 @@ function submit_login()
             $value1 = $this->input->post('username', TRUE);
             $col2 = 'email';
             $value2 = $this->input->post('username', TRUE);
-            $table = 'user_login';
-            
-            $query =
-                 $this->model_name->get_with_double_condition($table, $col1, $value1, $col2, $value2);
+            $table = 'staff_login' ;
+
+            $query = $this->model_name->get_with_double_condition($col1, $value1, $col2, $value2, $table );
 
             foreach($query->result() as $row) {
                 $user_id = $row->id;
                 $account_status = $row->status;
-                $application_status = $row->app_completed_date;
-            }
+             }
 
             /* member is not active - redirect to not active page */
-            // if($account_status == 0)  redirect();
-
+            if($account_status == 0) {
+                $this->_set_flash_msg("We could not sign you in at this time. If you are a new member, check your email for membership signup validation. For further assistance contact membership support.");        
+                redirect('site_dashboard/login');
+            }
+              
             $remember = $this->input->post('remember', TRUE);
             if ($remember=="remember-me") {
                 $login_type = "longterm";
@@ -105,46 +162,36 @@ function submit_login()
             }
 
             $data['last_login'] = time();
-            $this->model_name->_update($user_id, $data);
+            $this->model_name->update($user_id, $data);
 
             //send them to the private page
-            $this->_in_you_go($user_id, $login_type, $application_status);
+            $this->_in_you_go($user_id, $login_type);
 
-        } else {
-            $this->login();
-            // echo validation_errors();
-            // on fail 3 times use capcha after 3 more attempts then suspend.
         }
     }
-
+    $this->login();
 }
 
-function activate( )
-{
-    $security_code = $this->uri->segment(3);
-    $mess_opt = 1;
-    $this->reset_password( $security_code, $mess_opt );
-}
-
-function reset_password( $security_code=null, $mess=null )
+function activate($security_code=null)
 {
     $submit = $this->input->post('submit-form', TRUE);
-    $security_code = $submit != null ?
-                     $this->input->post('activate_code', TRUE) : $security_code;
+    $security_code = $submit != null ? $this->input->post('activate_code', TRUE) : $security_code;
 
-    $results_set = $this->model_name->get_view_data_custom('security_code', $security_code, 'user_login', null);
-    $num_rows = count($results_set->result());
+    $results_set = $this->model_name->get_view_data_custom('security_code', $security_code,
+     'staff_login', null);
 
-    if( $num_rows > 0 ) {
-        foreach($results_set->result() as $row) {
-            $user_id = $row->id;
-            $application_status = $row->app_completed_date;
-        }    
-    } else {
-        redirect('youraccount/forgot_password/'.$mess);        
-    }
+    if( count($results_set->result()) == 0 ) {
+        $this->_set_flash_msg("There seems to be a problem activating the account. For help in resolving this, please contact membership support.");
+        redirect('site_dashboard/login');
+    }    
+
+
+    foreach($results_set->result() as $row) {
+        $user_id = $row->id;
+    }    
 
     if ($submit=="Submit") {
+        // $this->load->module('site_security');        
         $new_password = $this->input->post('password', TRUE);
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
         $this->form_validation->set_rules('confirm_password', 'Confirm Password',
@@ -158,47 +205,43 @@ function reset_password( $security_code=null, $mess=null )
             $data['user_access'] = 1;                                                
             $data['security_code'] = '';  
             $data['password'] = $this->site_security->_hash_string($new_password);
-            $this->model_name->_update($user_id, $data);
-
-            //send them to the private page
-            $this->_in_you_go($user_id, $login_type, $application_status);
-            die('I should not be here .............................');            
+            $this->model_name->update($user_id, $data);
+   
         } else {
             echo validation_errors();
         }
+
     }
 
-    $data['mess'] = $mess;
     $data['activate_code'] =  $security_code;
-    $data['custom_jscript'] = ['public/js/reg_pswrd'];
-    $data['page_url'] = 'password_reset';
-    $data['page_title'] = 'Member Portal';
-    $data['image_repro'] = '';
-    $data['left_side_nav'] = false;
-    $data['view_module'] = 'youraccount';
+    $data['custom_jscript'] = 'reg_pswrd';
+    $data['page_url'] = 'password_form';
+    $data['view_module'] = 'site_dashboard';    
     $data['title'] = "Membership Login";
 
+    $this->default['page_title'] = 'Member Portal';
+    $data['default'] =  $this->default;  
+
+
     $this->load->module('templates');
-    $this->templates->public_main($data); 
+    $this->templates->admin($data); 
+
 }
 
-function forgot_password($mess=null)
+function forgot_password()
 {
-    $check_mess = $this->input->post('mess', TRUE);
-    $mess = $check_mess ? $check_mess : $mess;
 
-    $submit = $this->input->post('submit', TRUE);
-    
-    if ($submit=="Send My Password" || $submit=="Send New Activate Account Code") {
+     $submit = $this->input->post('submit', TRUE);
+    if ($submit=="Send My Password") {
         //process the form
         $this->form_validation->set_rules('email', 'email',
-            'required|min_length[5]|max_length[60]|valid_email|is_valid[user_login.email]');
+            'required|min_length[5]|max_length[60]|valid_email|is_valid[staff_login.email]');
 
         if ($this->form_validation->run() == TRUE) {
             $email = $this->input->post('email', TRUE);
 
             $results_set = $this->model_name->get_view_data_custom(
-                           'email', $email, 'user_login', $orderby = null)->result();
+                           'email', $email, 'staff_login', $orderby = null)->result();
 
             $user_id = $results_set[0]->id;
 
@@ -206,54 +249,52 @@ function forgot_password($mess=null)
             $random_str  = $this->site_security->generate_random_string(20);
             $data['status'] = 0;                        
             $data['user_priv'] = 0;                                    
-            $data['user_access'] = 0;        
             $data['last_login'] = time();
             $data['security_code']  = $expire_date.$random_str;
-            $data['password'] = $this->site_security->_hash_string('Smokey{2012}');           
+            $data['password'] = $this->site_security->_hash_string('Smokey{2012}');            
 
-            $this->model_name->_update($user_id, $data);
+            $this->model_name->update($user_id, $data);
 
             /* send rest password email */
             $this->send_mail($email, 'recover', $data['security_code'] );                 
 
-            $request = $mess == 1 ? 'activate my account' : 'password reset';
             $this->flash_msg =
-              "We have received your $request request. Please check your email for further instructions.";
+              "We have received your password reset request. Please check your email for further instructions.";
             $this->_set_flash_msg($this->flash_msg);
 
         } else {
            // echo validation_errors();
-
+ 
         }
     }
 
-    $data['mess'] = $mess;
     $data['flash'] = $this->flash_msg ? $this->session->flashdata('item') : '';   
     $data['email'] = $this->input->post('username', TRUE);
-    $data['custom_jscript'] = [];
+
+    $data['custom_jscript'] = '';
     $data['page_url'] = 'forgot_password';
-    $data['page_title'] = 'Login';
-    $data['image_repro'] = '';
-    $data['left_side_nav'] = false;
-    $data['view_module'] = 'youraccount';
-    $data['title'] = "Membership Login";
+    $data['view_module'] = 'site_dashboard';
+    $data['title'] = "Password Recovery";
+
+    $this->default['page_title'] = 'Forgot Password';
+    $data['default'] =  $this->default;  
 
     $this->load->module('templates');
-    $this->templates->public_main($data);     
+    $this->templates->admin($data);     
 
 }
 
 
 function change_password()
 {
-    $this->load->module('site_security');
+
     $userid = $this->site_security->_make_sure_logged_in();
 
     $password  = $this->input->post('password', TRUE);
     $submit    = $this->input->post('submit-form', TRUE);
 
     if($submit == 'Cancel'){
-        redirect( 'youraccount/welcome' );
+        redirect( 'site_dashboard/welcome' );
     }    
 
     $this->form_validation->set_rules('password', 'Password', 'trim|required|callback_password');
@@ -264,10 +305,11 @@ function change_password()
         /* update database */
         $data['last_login'] = time();
         $data['password']    = $this->site_security->_hash_string($password);        
-        $this->model_name->_update($userid, $data);
+        $this->model_name->update($userid, $data);
 
         /* send email notification of password change */
         $this->send_mail( $this->_check_email, 'recover', null);        
+/* fix this */
 
         $this->_end_session();    
         $this->login();
@@ -281,10 +323,11 @@ function change_password()
 
 function check_password_ajax()
 {
-    $this->load->module('site_security');
+    
+    // $this->load->module('site_security');
     $userid = $this->site_security->_make_sure_logged_in();
 
-    $results_set = $this->model_name->get_view_data_custom('id', $userid, 'user_login', null)->result();
+    $results_set = $this->model_name->get_view_data_custom('id', $userid, 'staff_login', null)->result();
     $pword_on_table = $results_set[0]->password;
 
     $old_password = $this->input->post('old_password', TRUE);
@@ -297,49 +340,29 @@ function check_password_ajax()
     }
 }
 
+
 function logout()
 {
     $this->_end_session();        
-    redirect(base_url());
+    redirect(base_url().admin);
 }
 
 function _end_session()
 {
     unset($_SESSION['user_id']);
-    unset($_SESSION['is_logged_in']);
+    unset($_SESSION['admin_mode']); 
+    unset($_SESSION['is_logged_in']); 
     unset($_SESSION['is_admin']);
-
-    unset($_SESSION['cs_user_id']);    
-    unset($_SESSION['cs_user_email']);        
 
     $this->load->module('site_cookies');
     $this->site_cookies->_destroy_cookie();
+
 }
 
-function complete_application()
+
+function _in_you_go($user_id, $login_type)
 {
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_logged_in();
-
-    $data['flash'] = $this->session->flashdata('item');
-    $data['menu_level'] = 1;
-
-    $data['custom_jscript'] = [];
-    $data['page_url'] = 'complete_application';
-    $data['page_title'] = 'Member Portal';
-    $data['image_repro'] = '';
-    $data['left_side_nav'] = '';
-    $data['view_module'] = 'youraccount';
-    $data['title'] = "Welcome. You are logged in.";
-
-    $this->load->module('templates');
-    $this->templates->public_main($data);     
-}
-
-function _in_you_go($user_id, $login_type, $application_status)
-{
-    $this->session->set_userdata('admin_mode', 'member_portal');
-    
+    $this->session->set_userdata('admin_mode', 'admin_portal');    
     //NOTE: the login_type can be longterm or shortterm
     if ($login_type=="longterm") {
         //set a cookie
@@ -352,8 +375,7 @@ function _in_you_go($user_id, $login_type, $application_status)
         $this->session->set_userdata('is_admin', true);                      
     }
     //send the user to the private page
-    $url_location = $application_status == 0 ?
-             'youraccount/complete_application' : 'youraccount/welcome';
+    $url_location ='site_dashboard/welcome';
 
     redirect($url_location);
 }
@@ -361,14 +383,18 @@ function _in_you_go($user_id, $login_type, $application_status)
 
 function site_404page()
 {
+
+    $data['custom_jscript'] = '';
     $data['page_url'] = 'site_404page';
     $data['view_module'] = 'partials';
-    $data['page_title'] = 'Member Portal';    
-    $data['title'] = "Membership Login";
-    $data['left_side_nav'] = false;
-    $data['custom_jscript'] = [];
+    $data['title'] = "Page Not Found";
+
+    $this->default['page_title'] = '';
+    $data['default'] =  $this->default;  
+
     $this->load->module('templates');
-    $this->templates->public_main($data);        
+    $this->templates->admin($data);     
+
 }
 
 
@@ -379,8 +405,8 @@ function test1()
     echo "The session variable was set.";
 
     echo "<hr>";
-    echo anchor('youraccount/test2', 'Get (display) the session variable')."<br>";
-    echo anchor('youraccount/test3', 'Unset (destry) the session variable')."<br>";
+    echo anchor('site_dashboard/test2', 'Get (display) the session variable')."<br>";
+    echo anchor('site_dashboard/test3', 'Unset (destry) the session variable')."<br>";
 }
 
 function test2()
@@ -393,8 +419,8 @@ function test2()
     }
 
     echo "<hr>";
-    echo anchor('youraccount/test1', 'Set the session variable')."<br>";
-    echo anchor('youraccount/test3', 'Unset (destry) the session variable')."<br>";
+    echo anchor('site_dashboard/test1', 'Set the session variable')."<br>";
+    echo anchor('site_dashboard/test3', 'Unset (destry) the session variable')."<br>";
 }
 
 function test3()
@@ -403,8 +429,8 @@ function test3()
     echo "The session variable was unset.";
 
     echo "<hr>";
-    echo anchor('youraccount/test1', 'Set the session variable')."<br>";
-    echo anchor('youraccount/test2', 'Get (display) the session variable')."<br>";
+    echo anchor('site_dashboard/test1', 'Set the session variable')."<br>";
+    echo anchor('site_dashboard/test2', 'Get (display) the session variable')."<br>";
 }
 
 
@@ -413,7 +439,6 @@ function test3()
 /* ===============================================
     Call backs go here...
   =============================================== */
-
 
 
 /* ===============================================

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //echo '----->'.$default['status'];
-// checkArray($default,1);
+// dd($admin_user);
 
 ?>
 
@@ -49,7 +49,7 @@
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-  <?php if( $default['is_logged_in']  ): ?>           
+<?php if( $this->ion_auth->logged_in() ): ?>           
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
 <!-- Dash Board -->           
@@ -78,6 +78,7 @@
 <!-- Members -->
             <li><a href="<?= base_url() ?>site_users/manage"><i class="fa fa-users fa-lg"></i> Members</a></li>
 
+            <li><a href="<?= base_url() ?>site_users/index"><i class="fa fa-users fa-lg"></i> Index</a></li>
 <!-- Members -->
             <li><a href="<?= base_url() ?>enquiries/inbox"><i class="fa fa-users fa-lg"></i> Enquiries</a></li>
 
@@ -102,7 +103,7 @@
 <!-- end of leftside nav -->
 
           <ul class="nav navbar-nav navbar-right navbar-user" style="border: 1px #fff solid;">
-<?php if( $default['is_logged_in'] ): ?>            
+<?php if( $this->ion_auth->logged_in() ): ?>           
             <li class="dropdown messages-dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages For Admin <span class="badge">7</span> <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -139,11 +140,7 @@
             </li>
 <?php endif; ?>
 
-          <?php
-           if( !$default['is_logged_in'] ) { ?>
-                <li style="padding: 0px 30px 0px 0px;"><a href="<?= base_url() ?>site_dashboard/login">
-                <i class="fa fa-sign-in fa-lg" aria-hidden="true"></i> Login</a></li>
-            <?php  } else {  ?>        
+<?php if( $this->ion_auth->logged_in() ): ?>                     
                 <!-- Logged In -->
                 <li class="dropdown user-dropdown" style="padding: 0px 30px 0px 0px;">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -154,10 +151,14 @@
                           </i> Send Message </a></li>
                       <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
                       <li class="divider"></li>
-                      <li><a href="<?= base_url() ?>site_dashboard/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+                      <li><a href="<?= base_url() ?>auth/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
                   </ul>
                 </li>
-            <?php  } ?>
+<?php else:  ?>        
+                <li style="padding: 0px 30px 0px 0px;"><a href="<?= base_url() ?>">
+                <i class="fa fa-sign-in fa-lg" aria-hidden="true"></i> Home Page</a></li>
+<?php endif; ?>
+
           </ul>
         </div><!-- /.navbar-collapse -->
       </nav>

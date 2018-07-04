@@ -56,7 +56,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 // HOME / LOGIN
 
-$route['admin'] = "site_dashboard/login";
+$route['admin'] = "site_dashboard/welcome";
+$route['site_settings/update_site_settings/(:any)'] = "site_settings/update_site_settings/$1";
+
 $route['search'] = "car_shields/search";
 $route['member_profile'] = "site_users/update_user";
 $route['password_reset'] = "site_users/update_password";

@@ -32,10 +32,10 @@ if ( ! function_exists('get_login_info'))
 			return [ null, null, null, null,null];
 
 	    $ci =& get_instance();
-
-	    $results_set = $ci->model_name->get_login_byid($update_id)->result();
+	    // $results_set = $ci->model_name->get_login_byid($update_id)->result();
+	    $results_set = $ci->model_name->get_where($update_id, 'users')->result();
 	    $avatar_name = $results_set[0]->avatar_name;
-	    $status = $results_set[0]->status;
+	    $status = 0; //$results_set[0]->status;
 	    $member_id = $results_set[0]->id;
 	    $avatar_name = $avatar_name !='' ? $avatar_name : 'annon_user.png';
 	    $fullname = $results_set[0]->first_name.' '.$results_set[0]->last_name;
