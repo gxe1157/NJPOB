@@ -13,8 +13,8 @@ function __construct( )
 function get_table()
 {
 	// table name goes here	
-    // $table = "users_registration";
-    // return $table;
+  // $table = "users_registration";
+  // return $table;
 }
 
 /* ===================================================
@@ -72,7 +72,7 @@ function insert_data()
 
   if ($this->db->trans_status() === FALSE) {
       // generate an error... or use the log_message() function to log your error
-      fatal_error( 'user_registration : 1102' );
+      fatal_error( 'Mdl_users_registration : 1102' );
       if( ENV == 'live') {
           $email = 'gxe1157@gmail.com';  
           $this->send_mail($email, 'user_registration : 1102');     

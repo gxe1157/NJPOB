@@ -93,7 +93,7 @@ class Auth extends MX_Controller
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				// redirect('auth/index');
-				$this->load->module($this->view_module);
+				// $this->load->module($this->view_module);
 				redirect($this->view_module.'/welcome');				
 			}
 			else

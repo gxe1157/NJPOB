@@ -42,7 +42,6 @@ function index()
                   WHERE `mem_plan_level` = "'.$Selected_plan.'"';
 
     $data['plans'] = $this->_custom_query($sql_items)->result();
-
     $data['gateway_name'] = 'PayPal';
     $data['custom_jscript'] = ['sb-admin/js/bootstrapValidator.min',
                                'public/js/model_js',
