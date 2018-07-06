@@ -4,12 +4,14 @@
 class Mdl_users_registration extends MY_Model
 {
 
-function __construct( ) {
+function __construct( )
+{
     parent::__construct();
 
 }
 
-function get_table() {
+function get_table()
+{
 	// table name goes here	
     // $table = "users_registration";
     // return $table;
@@ -19,26 +21,45 @@ function get_table() {
     Add custom model functions here
    =================================================== */
 
-function insert_data( $payments, $user_login, $user_main )
+function insert_data()
 {
-  // user_login
-  $table1  = 'user_login';
-  // update payment table
-  $table2  = 'site_payments';
-  // user_main
-  $table3  = 'user_main';
+  $this->load->module('auth');
+
+  /* Step 1 - payments */
+  $site_payments['transactionid'] = $_SESSION['transactionid'];
+  $site_payments['itemnumber']    = 
+                  isset($_SESSION['itemnumber']) != null ? $_SESSION['itemnumber']: null;
+  $site_payments['trans_type']    = $_SESSION['itemname'];
+  $site_payments['pay_method']    = $_SESSION['gateway_name'];
+  $site_payments['amount']        = $_SESSION['totalamount'];
+  $site_payments['username']      = 
+                  isset($_SESSION['username']) != null ? $_SESSION['username']: null;
+  $site_payments['cc_email']      = $_SESSION['cc_email'];    
+  $site_payments['create_date']   = time();  // timestamp for database
+
+  /* Step 2 - new user */
+  $email_temp = explode('@', $_SESSION['email']);
+  $username   = $email_temp[0];
+  $password   = 'Smokey{2012}';
+  $email      = $_SESSION['email'];
+
+  $additional_data = array(
+      $first_name = $_SESSION['first_name'],
+      $last_name  = $_SESSION['last_name'],
+      $middle     = $_SESSION['last_name'],        
+      $phone      = $_SESSION['phone'],
+      $admin_id   = 0,        
+      $membership_level = $_SESSION['itemnumber']
+  );
+  $group = array('2'); // Sets user to admin.
 
   $this->db->trans_start();
-      $this->db->insert( $table1, $user_login);
-      $user_id = $this->model_name->_get_insert_id();
+      /* new user */
+      $user_id = $this->ion_auth->register($username, $password, $email, $additional_data, $group);
 
       /* update payments array */
-      $payments['user_id']  = $user_id;
-      $this->db->insert( $table2, $payments);
-
-      /* update user_main array */
-      $user_main['user_id'] = $user_id;
-      $this->db->insert( $table3, $user_main);    
+      $site_payments['user_id']  = $user_id;
+      $this->db->insert('site_payments', $site_payments);
 
       /* Create with tables with user_id and hold for future updates */
       $reserved_table_rows = array('user_address', 'user_mail_to', 'user_info',
@@ -47,16 +68,16 @@ function insert_data( $payments, $user_login, $user_main )
       foreach ($reserved_table_rows as $table ) {
         $this->db->insert( $table, array('user_id' => $user_id, 'create_date' => time() ));
       }  
-
   $this->db->trans_complete();
 
   if ($this->db->trans_status() === FALSE) {
-      /*-*/    
       // generate an error... or use the log_message() function to log your error
-      // redirect to payment did not go through.. Start over.            
       fatal_error( 'user_registration : 1102' );
-
-      // redirect( $this->main_controller.'/user_payment_declined');
+      if( ENV == 'live') {
+          $email = 'gxe1157@gmail.com';  
+          $this->send_mail($email, 'user_registration : 1102');     
+      }
+      redirect( $this->main_controller.'/user_payment_declined');
   }
   
   /* Set session data */

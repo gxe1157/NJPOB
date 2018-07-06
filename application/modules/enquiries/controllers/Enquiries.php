@@ -157,7 +157,7 @@ function _enquiry_reply_to($update_id)
     $query = $this->get_where($update_id);
     $results_set = $query->result();
     $user_id = $results_set[0]->sent_by;
-    $results = $this->get_where($user_id, 'user_main')->result();
+    $results = $this->get_where($user_id, 'users')->result();
     $reply_to = $results[0]->first_name.' '.$results[0]->last_name.'|'.$results[0]->email;
 
     return $reply_to;
@@ -167,7 +167,7 @@ function _get_user_data($sent_to)
 {
     $parse_data = explode( '|', $sent_to);
     $value = trim($parse_data[1]);
-    $query = $this->model_name->get_view_data_custom('email', $value, 'user_main', null)->result();
+    $query = $this->model_name->get_view_data_custom('email', $value, 'users', null)->result();
     $id = $query[0]->id;
     return $id;
 }
@@ -245,7 +245,7 @@ function view()
     $query = $this->get_where($update_id);
     $results_set = $query->result();
     $user_id = $results_set[0]->sent_by;
-    $get_username = $this->get_where($user_id, 'user_main')->result();
+    $get_username = $this->get_where($user_id, 'users')->result();
 
     $data['username'] = $get_username[0]->first_name.' '.$get_username[0]->last_name;
     $data['options'] = $options;
@@ -287,9 +287,9 @@ function _fetch_enquiries()
     $mysql_query = "
 
     SELECT enquiries.*, 
-        user_main.first_name, 
-        user_main.last_name 
-    FROM enquiries LEFT JOIN user_main ON enquiries.sent_by = user_main.id
+        users.first_name, 
+        users.last_name 
+    FROM enquiries LEFT JOIN users ON enquiries.sent_by = users.id
     WHERE enquiries.sent_to=0 
     order by enquiries.date_created desc";
 
@@ -301,9 +301,9 @@ function _fetch_users_enquiries($user_id)
 {
     $mysql_query = "
     SELECT enquiries.*, 
-        user_main.first_name, 
-        user_main.last_name 
-    FROM enquiries LEFT JOIN user_main ON enquiries.sent_by = user_main.id
+        users.first_name, 
+        users.last_name 
+    FROM enquiries LEFT JOIN users ON enquiries.sent_by = users.id
     WHERE enquiries.sent_to=$user_id 
     order by enquiries.date_created desc";
     

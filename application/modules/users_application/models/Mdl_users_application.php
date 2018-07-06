@@ -22,7 +22,7 @@ function get_table() {
 function fetch_form_data( $user_id=null )
 {
     $this->db->select('
-      user_main.*,
+      users.*,
       user_address.*,
       user_mail_to.*,
       user_info.*,
@@ -32,17 +32,17 @@ function fetch_form_data( $user_id=null )
     ');
 
 
-    $this->db->join('user_address','user_address.id = user_main.id', 'left');
-    $this->db->join('user_mail_to','user_mail_to.id = user_main.id', 'left');
-    $this->db->join('user_info','user_info.id = user_main.id', 'left');
-    $this->db->join('user_employment_le','user_employment_le.id = user_main.id', 'left');
-    $this->db->join('user_children','user_children.id = user_main.id', 'left');
-    $this->db->join('user_employment_prv_sector', 'user_employment_prv_sector.id = user_main.id', 'left');
+    $this->db->join('user_address','user_address.id = users.id', 'left');
+    $this->db->join('user_mail_to','user_mail_to.id = users.id', 'left');
+    $this->db->join('user_info','user_info.id = users.id', 'left');
+    $this->db->join('user_employment_le','user_employment_le.id = users.id', 'left');
+    $this->db->join('user_children','user_children.id = users.id', 'left');
+    $this->db->join('user_employment_prv_sector', 'user_employment_prv_sector.id = users.id', 'left');
 
-    $this->db->from('user_main');
+    $this->db->from('users');
 
     if( is_numeric($user_id) )
-        $this->db->where( array("user_main.id"=> $user_id) );    
+        $this->db->where( array("users.id"=> $user_id) );    
 
     $query = $this->db->get();
     $result_set = $query->result();

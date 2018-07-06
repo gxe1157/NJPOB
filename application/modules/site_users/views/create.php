@@ -42,7 +42,7 @@
           <!-- Nav tabs -->
           <div class="card">
             <ul class="nav nav-tabs nav-clr" role="tablist">
-              <li role="presentation" class="active"><a href="#user_main" aria-controls="user" role="tab" data-toggle="tab"><i class="fa fa-user"></i>  <span>User</span></a></li>
+              <li role="presentation" class="active"><a href="#users" aria-controls="user" role="tab" data-toggle="tab"><i class="fa fa-user"></i>  <span>User</span></a></li>
 
               <li role="presentation" ><a href="#user_address" aria-controls="Address" role="tab" data-toggle="tab"><i class="fa fa-home"></i>  <span>Home Address</span></a></li>
 
@@ -60,10 +60,10 @@
             
             <!-- Tab panes -->
             <div class="tab-content">
-              <div role="tabpanel" class="tab-pane active" id="user_main">
+              <div role="tabpanel" class="tab-pane active" id="users">
                 <?php 
                   $data['fld_group'] = $users;
-                  $data['submit_id']  = 'submit-user_main';
+                  $data['submit_id']  = 'submit-users';
                   $data['add_on'] = '';
                   $this->load->view( 'create_partial', $data);
                 ?>

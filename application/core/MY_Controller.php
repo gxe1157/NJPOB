@@ -133,7 +133,7 @@ function search()
 
     $query = $_REQUEST['query'];
     // $term = $this->input->post('term', TRUE);
-    $stmt = "SELECT id, email, first_name, last_name FROM user_main 
+    $stmt = "SELECT id, email, first_name, last_name FROM users 
              WHERE email LIKE '%".$query."%' limit 10";
 
     $query = $_REQUEST['query'];

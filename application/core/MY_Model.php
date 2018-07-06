@@ -18,7 +18,7 @@ function get_login_byid($user_id)
 {
     $this->db->select('*');
     $this->db->from('user_login');
-    $this->db->join('user_main', 'user_main.id = user_login.id');
+    $this->db->join('users', 'users.id = user_login.id');
     $this->db->where("user_login.id = '".$user_id."'" );    
     $query = $this->db->get();
     return $query;

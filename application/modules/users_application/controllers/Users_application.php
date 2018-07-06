@@ -17,7 +17,7 @@ function __construct() {
     parent::__construct();
 
     $this->load->helper('users_application/form_flds_helper');
-    list( $this->form_tables, $this->user_main, $this->user_address,
+    list( $this->form_tables, $this->users, $this->user_address,
           $this->user_mail_to, $this->user_info, $this->user_employment_le,
           $this->user_employment_prv_sector, $this->user_children ) = get_table_data();
 
@@ -170,7 +170,7 @@ function update_user_account($fld_group, $job_completed)
             $this->_update_from_post('user_address', $this->user_address ); // table_name, field array
             $this->_update_from_post('user_mail_to', $this->user_mail_to );
             $this->_update_from_post('user_info', $this->user_info);
-            $this->_update_from_post('user_main', $this->user_main);
+            $this->_update_from_post('users', $this->users);
        break;
 
       case 'fld_group2':

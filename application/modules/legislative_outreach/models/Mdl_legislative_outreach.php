@@ -37,13 +37,13 @@ function get_legislative_id($update_id=null)
         legislative_outreach.cell_phone,
         legislative_outreach.dob,
         legislative_outreach.email,
-        user_main.email as useremail,
-        user_main.first_name as userfirst,
-        user_main.last_name as userlast
+        users.email as useremail,
+        users.first_name as userfirst,
+        users.last_name as userlast
     ');
 
     $this->db->from('legislative_outreach');
-    $this->db->join('user_main', 'user_main.id = legislative_outreach.user_id', 'left');
+    $this->db->join('users', 'users.id = legislative_outreach.user_id', 'left');
 
     /* Display only one per userid */
     if( uri_string() == 'legislative_outreach/manage' )

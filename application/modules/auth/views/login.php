@@ -1,7 +1,8 @@
 <div class='row'>
-    <div id="infoMessage"><?php echo $message;?></div>
     <div class="col-sm-6 col-sm-offset-4 col-md-4 col-md-offset-4" >
-      <h3>Please sign in</h3><br />
+      <h3>Please sign in</h3>
+      <div id="infoMessage"><?php echo $message;?></div>      
+      <br />
 
       <?php echo form_open("auth/login", 'class="form-signin" id="myform"');?>
 
@@ -20,10 +21,13 @@
         <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?>
       </div>
 
-      <div class="form-group"><?php echo form_submit('submit', lang('login_submit_btn'), 'class="btn btn-success"');?></div>
+      <div class="form-group"><?php echo form_submit('submit', lang('login_submit_btn'), 'class="btn btn-success"');?>
+        <a href="<?= base_url(); ?> ">
+          <button type="button" class="btn btn-secondary">Home Page</button>
+      </div>
 
       <?php echo form_close();?>
 
-      <div><a href="forgot_password"><?php echo lang('login_forgot_password');?></a></div>
+      <div style="margin-bottom: 100px;"><a href="forgot_password"><?php echo lang('login_forgot_password');?></a></div>
   </div>
 </div>

@@ -167,7 +167,6 @@ function save_changes_ajax()
 {
     $errors_array = [];
     $response=[];
-dd($_POST);
 
     $fld_group = $this->input->post('fld_group', TRUE);
     $update_id = $this->input->post('id', TRUE);

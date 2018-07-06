@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2018 at 10:59 PM
+-- Generation Time: Jul 06, 2018 at 05:31 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 5.6.31
 
@@ -88,12 +88,14 @@ CREATE TABLE `business_listings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `business_upload`
+-- Table structure for table `business_listings_upload`
 --
 
-CREATE TABLE `business_upload` (
+CREATE TABLE `business_listings_upload` (
   `id` int(11) NOT NULL,
-  `business_id` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `source_id` int(11) NOT NULL,
+  `parent_cat` int(11) NOT NULL,
   `caption` varchar(250) DEFAULT NULL,
   `image` varchar(100) NOT NULL,
   `orig_name` varchar(100) NOT NULL,
@@ -133,6 +135,28 @@ CREATE TABLE `car_shields` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `car_shields_upload`
+--
+
+CREATE TABLE `car_shields_upload` (
+  `id` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `source_id` int(11) NOT NULL,
+  `parent_cat` int(11) NOT NULL,
+  `caption` varchar(100) DEFAULT NULL,
+  `image` varchar(100) NOT NULL,
+  `orig_name` varchar(100) NOT NULL,
+  `path` varchar(100) NOT NULL,
+  `size` int(11) DEFAULT NULL,
+  `width_height` varchar(100) NOT NULL,
+  `create_date` int(11) DEFAULT NULL,
+  `modified_date` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ci_sessions`
 --
 
@@ -142,19 +166,6 @@ CREATE TABLE `ci_sessions` (
   `timestamp` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `ci_sessions`
---
-
-INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('1u54mcfh5dcl6iimufqm06631p9v6tbo', '::1', 1529015616, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393031353333353b757365725f69647c733a313a2231223b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b69735f6c6f676765645f696e7c623a313b69735f61646d696e7c623a313b),
-('65aooq0ksqp5uumk33r52d9ee31984r0', '::1', 1529016412, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393031363234333b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a226a506835734c5377445268394c36374761557370476752564646757a5735223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b6c6f676765645f696e7c623a313b),
-('6pbgakvipsg4lsij6e3eoeoi4vuf3hm6', '::1', 1529016000, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393031353735363b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a226a506835734c5377445268394c36374761557370476752564646757a5735223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b6c6f676765645f696e7c623a313b),
-('ctm11f1bkak8heggnt905kdqramku5f2', '::1', 1529033177, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393033323837373b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a227975664775794b7672587661654836746764437a6d754764505871447843223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b6c6f676765645f696e7c623a313b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b),
-('ibs6klc6qatnkg17npcao0r82824hp09', '::1', 1529032096, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393033313837303b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a227975664775794b7672587661654836746764437a6d754764505871447843223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b6c6f676765645f696e7c623a313b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b757365725f69647c733a313a2231223b69735f6c6f676765645f696e7c623a313b69735f61646d696e7c623a313b),
-('pvufc5q1vs6ds7h2jo7pmiu962p439q7', '::1', 1529031551, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393033303939333b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a227975664775794b7672587661654836746764437a6d754764505871447843223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b6c6f676765645f696e7c623a313b757365725f69647c733a313a2232223b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b69735f6c6f676765645f696e7c623a313b69735f61646d696e7c623a313b),
-('ugb60bo7e456et19cafo8bn3orpfde0g', '::1', 1529031852, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532393033313535363b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a227975664775794b7672587661654836746764437a6d754764505871447843223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b6c6f676765645f696e7c623a313b61646d696e5f6d6f64657c733a31333a226d656d6265725f706f7274616c223b);
 
 -- --------------------------------------------------------
 
@@ -206,6 +217,26 @@ CREATE TABLE `enquiries` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `groups`
+--
+
+CREATE TABLE `groups` (
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'Administrator'),
+(2, 'members', 'General User');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `legislative_outreach`
 --
 
@@ -228,6 +259,19 @@ CREATE TABLE `legislative_outreach` (
   `create_date` int(11) NOT NULL,
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_attempts`
+--
+
+CREATE TABLE `login_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -281,7 +325,7 @@ INSERT INTO `main_menu` (`id`, `title`, `link`, `parentid`, `priority`, `level`,
 (92, 'POB support', 'POB-Support', 89, 2, 0, 0, 0),
 (94, 'POB Pays Tribute', 'POB-Pays-Tribute', 89, 3, 0, 0, 0),
 (95, 'Board Members', 'Board-Members', 66, 3, 0, 0, 0),
-(96, 'Home', 'youraccount/logout', 0, 0, 1, 0, 0);
+(96, 'Home', '', 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -506,8 +550,14 @@ CREATE TABLE `site_payments` (
 --
 
 INSERT INTO `site_payments` (`id`, `user_id`, `transactionid`, `trans_type`, `itemnumber`, `pay_method`, `amount`, `check_no`, `cc_email`, `username`, `create_date`) VALUES
-(1, 1, 'jPh5sLSwDRh9L67GaUspGgRVFFuzW5', '1 Year Subscription with Initiation', 'LE_Active', 'PayPal', '35.00', '', 'evelio@mailers.com', NULL, 1529015829),
-(2, 2, 'yufGuyKvrXvaeH6tgdCzmuGdPXqDxC', '1 Year Subscription with Initiation', 'LE_Active', 'PayPal', '35.00', '', 'evelio@mailers.com', NULL, 1529031123);
+(1, 1, 'hLuTdbkKJWa7WhMYsVyPk6jBbuqM6j', 'Car Shield Lease', '', 'PayPal', '32.95', '', 'evelio@mailers.com', NULL, 1530047292),
+(2, 1, 'hLuTdbkKJWa7WhMYsVyPk6jBbuqM6j', 'Car Shield Lease', '', 'PayPal', '32.95', '', 'evelio@mailers.com', NULL, 1530047495),
+(3, 1, 'hLuTdbkKJWa7WhMYsVyPk6jBbuqM6j', 'Car Shield Lease', '', 'PayPal', '32.95', '', 'evelio@mailers.com', NULL, 1530047497),
+(4, 1, 'hLuTdbkKJWa7WhMYsVyPk6jBbuqM6j', 'Car Shield Lease', '', 'PayPal', '32.95', '', 'evelio@mailers.com', NULL, 1530047599),
+(5, 1, 'hLuTdbkKJWa7WhMYsVyPk6jBbuqM6j', 'Car Shield Lease', '', 'PayPal', '32.95', '', 'evelio@mailers.com', NULL, 1530047600),
+(8, 8, 'hu8V5Aec35ZExqxvnyrrVXJG3D6Z32', '3 Year Subscription with Initiation', 'LE_Active', 'PayPal', '90.00', '', 'evelio@mailers.com', NULL, 1530841145),
+(9, 1, 'AAM6N8CjPTnEgAqBdpy6g59CwP49yn', '1 Year Subscription with Initiation', 'LE_Active', 'PayPal', '35.00', '', 'evelio@mailers.com', NULL, 1530841775),
+(10, 4, 'AQdxUMt57UnEFga6xvAKaEPsynBy9G', '1 Year Subscription with Initiation', 'LE_Active', 'PayPal', '35.00', '', 'evelio@mailers.com', NULL, 1530846767);
 
 -- --------------------------------------------------------
 
@@ -532,25 +582,34 @@ CREATE TABLE `site_upload_categories` (
 
 INSERT INTO `site_upload_categories` (`id`, `cat_title`, `parent_cat_id`, `category_url`, `list_order`, `create_date`, `modified_date`, `admin_id`) VALUES
 (1, 'Site User Required Documents', 0, 'Site-User-Required-Documents', 0, 0, 0, 0),
-(2, 'Registratation', 1, 'Registratation', 0, 0, 0, 0),
-(3, 'Driver License Front', 1, 'Driver-License-Front', 0, 0, 0, 0),
-(4, 'Driver License Back', 1, 'Driver-License-Back', 0, 0, 0, 0),
-(6, 'Law Enforcement AgencyPhoto ID', 1, 'Law-Enforcement-AgencyPhoto-ID', 0, 0, 0, 0),
+(6, 'Law Enforcement or Agency Photo ID', 1, 'Law-Enforcement-or-Agency-Photo-ID', 0, 0, 0, 0),
 (7, 'Color Passport Picture', 1, 'Color-Passport-Picture', 0, 0, 0, 0),
 (8, 'Right Thumb Finger Print', 1, 'Right-Thumb-Finger-Print', 0, 0, 0, 0),
-(9, 'Insurance Card', 1, 'Insurance-Card', 0, 0, 0, 0);
+(10, 'Car Shield', 0, 'Car-Shield', 0, 0, 0, 0),
+(11, 'Registratation', 10, 'Registratation', 0, 0, 0, 0),
+(12, 'Driver License Front', 10, 'Driver-License-Front', 0, 0, 0, 0),
+(13, 'Driver License Back', 10, 'Driver-License-Back', 0, 0, 0, 0),
+(15, 'Insurance Card', 10, 'Insurance-Card', 0, 0, 0, 0),
+(16, 'test 1 sub', 16, 'test-1-sub', 0, 0, 0, 0),
+(17, 'test 2', 0, 'test-2', 0, 0, 0, 0),
+(18, 'test 3', 0, 'test-3', 0, 0, 0, 0),
+(19, 'sub 1', 18, 'sub-1', 0, 0, 0, 0),
+(20, 'sub 33', 18, 'sub-33', 0, 0, 0, 0),
+(22, 'sub 44', 18, 'sub-44', 0, 0, 0, 0),
+(24, 'sub 55', 18, 'sub-55', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_upload`
+-- Table structure for table `site_users_upload`
 --
 
-CREATE TABLE `users_upload` (
+CREATE TABLE `site_users_upload` (
   `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
+  `source_id` int(11) NOT NULL,
   `parent_cat` int(11) NOT NULL,
-  `role` varchar(100) NOT NULL,
+  `caption` varchar(100) DEFAULT NULL,
   `image` varchar(100) NOT NULL,
   `orig_name` varchar(100) NOT NULL,
   `path` varchar(100) NOT NULL,
@@ -561,18 +620,73 @@ CREATE TABLE `users_upload` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `users_upload`
+-- Table structure for table `users`
 --
 
-INSERT INTO `users_upload` (`id`, `userid`, `parent_cat`, `role`, `image`, `orig_name`, `path`, `size`, `width_height`, `create_date`, `modified_date`, `admin_id`) VALUES
-(1, 1, 7, '', '1_Chrysanthemum.jpg', 'Chrysanthemum.jpg', 'C:/xampp/htdocs/njpob/upload/1_Chrysanthemum.jpg', 859, 'width=\"1024\" height=\"768\"', 1529033055, 1529033055, 1),
-(2, 1, 4, '', '1_Jellyfish.jpg', 'Jellyfish.jpg', 'C:/xampp/htdocs/njpob/upload/1_Jellyfish.jpg', 758, 'width=\"1024\" height=\"768\"', 1529033057, 1529033057, 1),
-(3, 1, 3, '', '1_Koala.jpg', 'Koala.jpg', 'C:/xampp/htdocs/njpob/upload/1_Koala.jpg', 763, 'width=\"1024\" height=\"768\"', 1529033060, 1529033060, 1),
-(4, 1, 9, '', '1_Tulips.jpg', 'Tulips.jpg', 'C:/xampp/htdocs/njpob/upload/1_Tulips.jpg', 606, 'width=\"1024\" height=\"768\"', 1529033063, 1529033063, 1),
-(5, 1, 6, '', '1_Desert.jpg', 'Desert.jpg', 'C:/xampp/htdocs/njpob/upload/1_Desert.jpg', 826, 'width=\"1024\" height=\"768\"', 1529033066, 1529033066, 1),
-(6, 1, 2, '', '1_Lighthouse.jpg', 'Lighthouse.jpg', 'C:/xampp/htdocs/njpob/upload/1_Lighthouse.jpg', 548, 'width=\"1024\" height=\"768\"', 1529033068, 1529033068, 1),
-(7, 1, 8, '', '1_20180211_102549.jpg', '20180211_102549.jpg', 'C:/xampp/htdocs/njpob/upload/1_20180211_102549.jpg', 616, 'width=\"1440\" height=\"2560\"', 1529033071, 1529033071, 1);
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `salt` varchar(255) DEFAULT NULL,
+  `email` varchar(254) NOT NULL,
+  `activation_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_time` int(11) UNSIGNED DEFAULT NULL,
+  `remember_code` varchar(40) DEFAULT NULL,
+  `created_on` int(11) UNSIGNED NOT NULL,
+  `last_login` int(11) UNSIGNED DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `middle_name` varchar(30) NOT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `cell_phone` varchar(14) NOT NULL,
+  `avatar_name` varchar(30) NOT NULL,
+  `exp_date` int(11) NOT NULL,
+  `old_expire` int(11) NOT NULL,
+  `membership_level` varchar(20) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  `transactionid` varchar(255) NOT NULL,
+  `modified_date` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `is_delete` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `middle_name`, `company`, `phone`, `cell_phone`, `avatar_name`, `exp_date`, `old_expire`, `membership_level`, `create_date`, `transactionid`, `modified_date`, `admin_id`, `is_delete`) VALUES
+(1, '127.0.0.1', 'administrator', '$2y$08$Xmo2C/45zCQoSZjTi39OZ.7IIyGJF6yN06y9.12U74gxFmGZVfdiG', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1530835048, 1, 'Evelio', 'Velez', 'M.', 'ADMIN', '(973) 478-8813', '(551) 551-5555', '1_avatar_Desert.jpg', 0, 0, 'LE_active', 0, '', 1530736198, 1, 0),
+(2, '', NULL, '', NULL, 'evelio@mailers.com', NULL, NULL, NULL, NULL, 0, NULL, NULL, 'Evelio', 'Velez', 'M.', NULL, '(973) 478-8813', '', '', 0, 0, 'LE_Active', 1530841145, '', 0, 0, 0),
+(3, '', NULL, '', NULL, 'leury@mailers.com', NULL, NULL, NULL, NULL, 0, NULL, NULL, 'Evelio', 'Velez', '', NULL, '(973) 247-8881', '', '', 0, 0, 'LE_Active', 1530841775, '', 0, 0, 0),
+(4, '::1', 'jim', '$2y$08$UbgY38Np34qHUVBog/TuferY0c3uIVaePasKuilu/0D.RfGWqi5t2', NULL, 'jim@mailers.com', NULL, NULL, NULL, NULL, 1530846767, NULL, 1, NULL, NULL, '', NULL, NULL, '', '', 0, 0, '', 0, '', 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_groups`
+--
+
+CREATE TABLE `users_groups` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `group_id` mediumint(8) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users_groups`
+--
+
+INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -595,14 +709,6 @@ CREATE TABLE `user_address` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `user_address`
---
-
-INSERT INTO `user_address` (`id`, `user_id`, `address1`, `address2`, `city`, `state`, `zip`, `county`, `country`, `create_date`, `modified_date`, `admin_id`) VALUES
-(1, 1, 'address1', 'address2', 'city', 'NJ', '07601', 'bergen', NULL, 1529015829, 1529031910, 1),
-(2, 2, 'address1', 'address2', 'city', 'NJ', '07601', 'Bergen', NULL, 1529031123, 1529031217, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -620,13 +726,6 @@ CREATE TABLE `user_children` (
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `user_children`
---
-
-INSERT INTO `user_children` (`id`, `user_id`, `child_fname`, `child_lname`, `child_dob`, `child_gender`, `create_date`, `modified_date`, `admin_id`) VALUES
-(2, 2, 'Sam', 'Wise jr.', '2010-10-20', 'male', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -655,14 +754,6 @@ CREATE TABLE `user_employment_le` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `user_employment_le`
---
-
-INSERT INTO `user_employment_le` (`id`, `user_id`, `le_agency`, `le_dept`, `le_add1`, `le_add2`, `le_city`, `le_state`, `le_zip`, `le_rank`, `le_email`, `le_phone`, `le_dt_hired`, `le_dt_retired`, `le_yos`, `create_date`, `modified_date`, `admin_id`) VALUES
-(1, 1, 'aaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaa', 'aaaaaaaaaaaa', 'NJ', '10000', 'aaaaaaaaaaaaaaaaa', 'mail@mail.com', '(111) 111-1111', '2017-10-20', NULL, NULL, 1529015829, 1529032091, 1),
-(2, 2, 'agency', 'dept', 'address1', 'address2', 'city', 'NJ', '07601', 'rank', 'work@mail.com', '(999) 999-9999', '2015-10-20', NULL, NULL, 1529031123, 1529031551, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -688,14 +779,6 @@ CREATE TABLE `user_employment_prv_sector` (
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `user_employment_prv_sector`
---
-
-INSERT INTO `user_employment_prv_sector` (`id`, `user_id`, `prv_sector`, `prv_sector_employer`, `prv_sector_dept`, `prv_sector_add1`, `prv_sector_add2`, `prv_sector_city`, `prv_sector_state`, `prv_sector_zip`, `prv_sector_position`, `prv_sector_email`, `prv_sector_phone`, `prv_sector_dt_hired`, `create_date`, `modified_date`, `admin_id`) VALUES
-(1, 1, 'No', NULL, '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1529015829, 1529032091, 1),
-(2, 2, 'Yes', 'private co', 'dept', 'address1', 'address2', 'city', 'NJ', '07601', 'title', 'work@mail.com', '(999) 999-9999', '2016-10-20', 1529031123, 1529031551, 2);
 
 -- --------------------------------------------------------
 
@@ -728,14 +811,6 @@ CREATE TABLE `user_info` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `user_info`
---
-
-INSERT INTO `user_info` (`id`, `user_id`, `registered_voter`, `legislative_dist`, `gender`, `dob`, `driver_lic`, `height`, `weight`, `social_sec`, `hair_color`, `eye_color`, `marital_status`, `spouse_fname`, `spouse_lname`, `spouse_dob`, `spouse_gender`, `spouse_email`, `children`, `create_date`, `modified_date`, `admin_id`) VALUES
-(1, 1, 'Yes', '21', 'Male', '2001-10-20', 'aaaaaaaaaaaaaaaaaaaaa', '5-9', 185, '02937da774348dd535bf27303b855e2ef2e8bd4047ca1848a7f497a6681f26860c1a40d973d8baa8adc842e1169c3862943264dba2d79da9b2976b25394fd72aoyaksNQu82GFsIw+iJNtjNrR1jBTS0uHK0IL7/0h4B8=', 'brn', 'brn', 'Single', NULL, NULL, NULL, NULL, '', NULL, 1529015829, 1529032033, 1),
-(2, 2, 'Yes', '32', 'Male', '2000-10-20', '11111111111111111111111111', '5-8', 185, '831db2fea2fdaa36837ae92f4306d28a4d09b3ee5e75b58d72b509cc7eedd0e6923e58f8002c42fde38bafad72fd7ac5aae2d80c8ec003846020a42b75daac1c3CVQOLTBzOeMuEwS7jgO4V4nkzQairRW+0qK4jpVEqg=', 'brn', 'brn', 'Married', 'Jane', 'Wise', '2000-10-10', 'Male', 'myemail@mail.com', NULL, 1529031123, 1529031403, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -761,14 +836,6 @@ CREATE TABLE `user_login` (
   `is_delete` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `user_login`
---
-
-INSERT INTO `user_login` (`id`, `username`, `email`, `password`, `security_code`, `status`, `user_access`, `user_priv`, `app_completed_date`, `create_date`, `modified_date`, `avatar_name`, `admin_id`, `last_login`, `is_admin`, `is_delete`) VALUES
-(1, '', 'admin@admin.com', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', 'jPh5sLSwDRh9L67GaUspGgRVFFuzW5', 0, 0, 0, 1529032091, 1529015829, 1529032091, '', 1, 1529031870, 0, 0),
-(2, '', 'info@mailers.com', '$2y$11$SkoWFfPPYBbfjO5VrQf.Cev/UHl3gppyfamjDr7sl07Wmt/zK4uSi', 'yufGuyKvrXvaeH6tgdCzmuGdPXqDxC', 0, 0, 0, 1529031551, 1529031123, 1529031551, '', 2, 1529031152, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -788,14 +855,6 @@ CREATE TABLE `user_mail_to` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `user_mail_to`
---
-
-INSERT INTO `user_mail_to` (`id`, `user_id`, `mail_add1`, `mail_add2`, `mail_city`, `mail_state`, `mail_zip`, `create_date`, `modified_date`, `admin_id`) VALUES
-(1, 1, 'address1', 'address2', 'city', 'NJ', '07601', 1529015829, 1529031910, 1),
-(2, 2, 'address1', 'address2', 'city', 'NJ', '07601', 1529031123, 1529031217, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -804,30 +863,15 @@ INSERT INTO `user_mail_to` (`id`, `user_id`, `mail_add1`, `mail_add2`, `mail_cit
 
 CREATE TABLE `user_main` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `first_name` varchar(30) DEFAULT NULL,
-  `last_name` varchar(30) DEFAULT NULL,
-  `middle_name` varchar(30) DEFAULT NULL,
-  `phone` varchar(14) NOT NULL,
+  `app_completed_data` int(11) NOT NULL,
+  `avatar_name` int(11) NOT NULL,
   `cell_phone` varchar(14) NOT NULL,
   `mail_to` varchar(10) DEFAULT NULL,
   `exp_date` date DEFAULT NULL,
   `old_expire` date DEFAULT NULL,
   `membership_level` varchar(20) DEFAULT NULL,
-  `create_date` int(11) NOT NULL,
-  `modified_date` int(11) NOT NULL,
-  `admin_id` int(11) NOT NULL,
   `is_delete` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `user_main`
---
-
-INSERT INTO `user_main` (`id`, `user_id`, `email`, `first_name`, `last_name`, `middle_name`, `phone`, `cell_phone`, `mail_to`, `exp_date`, `old_expire`, `membership_level`, `create_date`, `modified_date`, `admin_id`, `is_delete`) VALUES
-(1, 1, 'evelio@mailers.com', 'Evelio', 'Velez', 'Jr.', '(973) 478-8813', '(999) 999-9999', 'Yes', NULL, NULL, 'LE_Active', 1529015829, 1529031910, 1, 0),
-(2, 2, 'info@mailers.com', 'Sam ', 'Wise', '', '(999) 999-9999', '(999) 999-9999', 'Yes', NULL, NULL, 'LE_Active', 1529031123, 1529031217, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -918,15 +962,21 @@ ALTER TABLE `business_listings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `business_upload`
+-- Indexes for table `business_listings_upload`
 --
-ALTER TABLE `business_upload`
+ALTER TABLE `business_listings_upload`
   ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `car_shields`
 --
 ALTER TABLE `car_shields`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `car_shields_upload`
+--
+ALTER TABLE `car_shields_upload`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -955,9 +1005,21 @@ ALTER TABLE `enquiries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `groups`
+--
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `legislative_outreach`
 --
 ALTER TABLE `legislative_outreach`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1027,10 +1089,25 @@ ALTER TABLE `site_upload_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users_upload`
+-- Indexes for table `site_users_upload`
 --
-ALTER TABLE `users_upload`
+ALTER TABLE `site_users_upload`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_users_groups` (`user_id`,`group_id`),
+  ADD KEY `fk_users_groups_users1_idx` (`user_id`),
+  ADD KEY `fk_users_groups_groups1_idx` (`group_id`);
 
 --
 -- Indexes for table `user_address`
@@ -1101,14 +1178,19 @@ ALTER TABLE `business_categories`
 ALTER TABLE `business_listings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `business_upload`
+-- AUTO_INCREMENT for table `business_listings_upload`
 --
-ALTER TABLE `business_upload`
+ALTER TABLE `business_listings_upload`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `car_shields`
 --
 ALTER TABLE `car_shields`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `car_shields_upload`
+--
+ALTER TABLE `car_shields_upload`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `comments`
@@ -1126,10 +1208,20 @@ ALTER TABLE `contact_message`
 ALTER TABLE `enquiries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `groups`
+--
+ALTER TABLE `groups`
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `legislative_outreach`
 --
 ALTER TABLE `legislative_outreach`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `main_menu`
 --
@@ -1174,62 +1266,83 @@ ALTER TABLE `site_cookies`
 -- AUTO_INCREMENT for table `site_payments`
 --
 ALTER TABLE `site_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `site_upload_categories`
 --
 ALTER TABLE `site_upload_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
--- AUTO_INCREMENT for table `users_upload`
+-- AUTO_INCREMENT for table `site_users_upload`
 --
-ALTER TABLE `users_upload`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `site_users_upload`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `user_address`
 --
 ALTER TABLE `user_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_children`
 --
 ALTER TABLE `user_children`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_employment_le`
 --
 ALTER TABLE `user_employment_le`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_employment_prv_sector`
 --
 ALTER TABLE `user_employment_prv_sector`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_login`
 --
 ALTER TABLE `user_login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_mail_to`
 --
 ALTER TABLE `user_mail_to`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_main`
 --
 ALTER TABLE `user_main`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `webpages`
 --
 ALTER TABLE `webpages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

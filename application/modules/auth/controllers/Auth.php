@@ -7,13 +7,16 @@
  */
 
 /**
- *	'/' was replace with '/' by Evelio 05-20-2018 to fix behavoir with xampp localhost
+ *  Evelio 05-20-2018 
+ *	directory was replace with '/' to fix behavoir with xampp localhost
+ *  redirect('auth/login', 'refresh') removed all refresh from redirects, made pages jumpy
  */
 
 class Auth extends MX_Controller
 {
 	public $data = [];
 	private $mode = null; // Added by Evelio
+	private $view_module = null; // Added by Evelio
 
 	public function __construct()
 	{
@@ -26,6 +29,12 @@ class Auth extends MX_Controller
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
 		$this->lang->load('auth');
+
+		/* Added by Evelio */
+		$this->mode = $this->input->post('mode');
+		$this->view_module = $this->mode == 0 ? 'youraccount':'auth';
+		/* Added by Evelio */
+
 	}
 
 	/**
@@ -36,7 +45,7 @@ class Auth extends MX_Controller
 		if (!$this->ion_auth->logged_in())
 		{
 			// redirect them to the login page
-			redirect('auth/login', 'refresh');
+			redirect('auth/login');
 		}
 		else if (!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
 		{
@@ -65,11 +74,6 @@ class Auth extends MX_Controller
 	 */
 	public function login()
 	{
-		/* Added by Evelio */
-		$this->mode = (bool)$this->input->post('mode');
-		$view_module = $this->mode == 0 ? 'youraccount':'auth';
-		/* Added by Evelio */
-
 
 		$this->data['title'] = $this->lang->line('login_heading');
 
@@ -88,16 +92,16 @@ class Auth extends MX_Controller
 				//if the login is successful
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				// redirect('auth/index', 'refresh');
-				$this->load->module($view_module);
-				redirect($view_module.'/welcome', 'refresh');				
+				// redirect('auth/index');
+				$this->load->module($this->view_module);
+				redirect($this->view_module.'/welcome');				
 			}
 			else
 			{
 				// if the login was un-successful
 				// redirect them back to the login page
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect($view_module.'/login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
+				redirect('auth'.'/login'); // use redirects instead of loading views for compatibility with MY_Controller libraries
 			}
 
 		}
@@ -119,7 +123,7 @@ class Auth extends MX_Controller
 				'class' => 'form-control',					
 			);
 
-			$this->_render_page($view_module . '/' . 'login', $this->data);
+			$this->_render_page('auth' . '/' . 'login', $this->data);
 			// $this->_render_page('auth' . '/' . 'login', $this->data);
 
 		}
@@ -137,7 +141,8 @@ class Auth extends MX_Controller
 
 		// redirect them to the login page
 		$this->session->set_flashdata('message', $this->ion_auth->messages());
-		redirect('auth/login', 'refresh');
+		// redirect('auth/login');
+		redirect('auth/login');		
 	}
 
 	/**
@@ -151,7 +156,7 @@ class Auth extends MX_Controller
 
 		if (!$this->ion_auth->logged_in())
 		{
-			redirect('auth/login', 'refresh');
+			redirect('auth/login');
 		}
 
 		$user = $this->ion_auth->user()->row();
@@ -191,7 +196,7 @@ class Auth extends MX_Controller
 			);
 
 			// render
-			$this->_render_page('auth' . '/' . 'change_password', $this->data);
+			$this->_render_page( 'auth'. '/' . 'change_password', $this->data);
 		}
 		else
 		{
@@ -208,7 +213,7 @@ class Auth extends MX_Controller
 			else
 			{
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect('auth/change_password', 'refresh');
+				redirect('auth/change_password');
 			}
 		}
 	}
@@ -268,7 +273,7 @@ class Auth extends MX_Controller
 				}
 
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect("auth/forgot_password", 'refresh');
+				redirect("auth/forgot_password");
 			}
 
 			// run the forgotten password method to email an activation code to the user
@@ -278,12 +283,12 @@ class Auth extends MX_Controller
 			{
 				// if there were no errors
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				redirect("auth/login", 'refresh'); //we should display a confirmation page here instead of the login page
+				redirect("auth/login"); //we should display a confirmation page here instead of the login page
 			}
 			else
 			{
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect("auth/forgot_password", 'refresh');
+				redirect("auth/forgot_password");
 			}
 		}
 	}
@@ -366,12 +371,12 @@ class Auth extends MX_Controller
 					{
 						// if the password was successfully changed
 						$this->session->set_flashdata('message', $this->ion_auth->messages());
-						redirect("auth/login", 'refresh');
+						redirect("auth/login");
 					}
 					else
 					{
 						$this->session->set_flashdata('message', $this->ion_auth->errors());
-						redirect('auth/reset_password/' . $code, 'refresh');
+						redirect('auth/reset_password/' . $code);
 					}
 				}
 			}
@@ -380,7 +385,7 @@ class Auth extends MX_Controller
 		{
 			// if the code is invalid then send them back to the forgot password page
 			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			redirect("auth/forgot_password", 'refresh');
+			redirect("auth/forgot_password");
 		}
 	}
 
@@ -405,14 +410,14 @@ class Auth extends MX_Controller
 		{
 			// redirect them to the auth page
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
-			// redirect("auth", 'refresh');
+			// redirect("auth");
 			redirect("auth");
 		}
 		else
 		{
 			// redirect them to the forgot password page
 			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			// redirect("auth/forgot_password", 'refresh');			
+			// redirect("auth/forgot_password");			
 			redirect("auth/forgot_password");
 		}
 	}
@@ -463,7 +468,7 @@ class Auth extends MX_Controller
 			}
 
 			// redirect them back to the auth page
-			// redirect('auth', 'refresh');
+			// redirect('auth');
 			redirect('auth');
 		}
 	}
@@ -477,7 +482,7 @@ class Auth extends MX_Controller
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
-			redirect('auth', 'refresh');
+			redirect('auth');
 		}
 
 		$tables = $this->config->item('tables', 'ion_auth');
@@ -519,7 +524,7 @@ class Auth extends MX_Controller
 			// check to see if we are creating the user
 			// redirect them back to the admin page
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
- 			// redirect("auth", 'refresh');
+ 			// redirect("auth");
 
 			/* Added by Evelio */
 			$id =  $this->session->userdata('insert_id');
@@ -599,7 +604,7 @@ class Auth extends MX_Controller
 			$refresh = $refresh == null ? 'refresh' : '';
 			redirect('auth/index', $refresh);
 		}
-		redirect('/', 'refresh');
+		redirect('/');
 	}
 
 	/**
@@ -613,7 +618,7 @@ class Auth extends MX_Controller
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id)))
 		{
-			redirect('auth', 'refresh');
+			redirect('auth');
 		}
 
 		$user = $this->ion_auth->user($id)->row();
@@ -758,7 +763,7 @@ class Auth extends MX_Controller
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
-			redirect('auth', 'refresh');
+			redirect('auth');
 		}
 
 		// validate form input
@@ -772,7 +777,7 @@ class Auth extends MX_Controller
 				// check to see if we are creating the group
 				// redirect them back to the admin page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				redirect("auth", 'refresh');
+				redirect("auth");
 			}
 		}
 		else
@@ -810,14 +815,14 @@ class Auth extends MX_Controller
 		// bail if no group id given
 		if (!$id || empty($id))
 		{
-			redirect('auth', 'refresh');
+			redirect('auth');
 		}
 
 		$this->data['title'] = $this->lang->line('edit_group_title');
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
-			redirect('auth', 'refresh');
+			redirect('auth');
 		}
 
 		$group = $this->ion_auth->group($id)->row();
@@ -839,7 +844,7 @@ class Auth extends MX_Controller
 				{
 					$this->session->set_flashdata('message', $this->ion_auth->errors());
 				}
-				redirect("auth", 'refresh');
+				redirect("auth");
 			}
 		}
 
@@ -913,19 +918,16 @@ class Auth extends MX_Controller
 	{
    		/* Added by Evelio */		
         $page_url = explode('/', $view);
-		$default['page_nav'] = "Manage Agents";
-	    $data['custom_jscript'] = [ 'sb-admin/js/datatables.min',
-                                  	'sb-admin/js/admin_js/site_loader_datatable',
-									'sb-admin/js/admin_js/site_user_details',
-                                    'sb-admin/js/admin_js/format_flds'];    
-
+		// $default['page_nav'] = "Manage Agents";
+    	$data['menu_level'] = $this->mode ? null : 1;
 	    $data['view_module'] = $page_url[0];
 	    $data['page_url'] = $page_url[1];
-	    $data['title'] = "Admin Login";
-	    $data['default'] =  $default;  
+	    $data['title'] = "Login";
+	    // $data['default'] =  $default;  
 
 	    $this->load->module('templates');
 	    $this->mode ? $this->templates->admin($data) : $this->templates->public_main($data);  	
+
 		/* Added by Evelio */
 
 		// $this->viewdata = (empty($data)) ? $this->data : $data;

@@ -51,7 +51,7 @@ function insert_data( $site_payments, $car_shields )
 
 function get_shield_id($user_id=null)
 {
-    // SELECT * FROM car_shields INNER JOIN user_main ON car_shields.user_id=user_main.id;
+    // SELECT * FROM car_shields INNER JOIN users ON car_shields.user_id=users.id;
     /* example of 3 table join */ 
     // $this->db->select('*');
     // $this->db->join('table2', 'table2.ID = table1.ID');
@@ -69,13 +69,13 @@ function get_shield_id($user_id=null)
         car_shields.shield_no,
         car_shields.status,
         car_shields.create_date,
-        user_main.email,
-        user_main.first_name,
+        users.email,
+        users.first_name,
         user_info.social_sec,
         user_info.driver_lic
     ');
 
-    $this->db->join('user_main', 'user_main.id = car_shields.user_id', 'left');
+    $this->db->join('users', 'users.id = car_shields.user_id', 'left');
     $this->db->join('user_info', 'user_info.id = car_shields.user_id', 'left');
     $this->db->from('car_shields');
 

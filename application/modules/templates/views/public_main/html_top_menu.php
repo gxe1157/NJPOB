@@ -1,22 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-    $this->load->module('site_security');
-    $status = $this->site_security->is_logged_in();
+    $status = $this->ion_auth->logged_in();
 ?> 
 
-
     <div class="row">
-    <?php if( ENVIRONMENT == 'development'){ echo '<div style="display: block; height: 5px; background: red;">&nbsp;</div>';} ?>
     <nav class="navbar navbar-inverse">
         <div class="navbar-header">
-            <?php if( !$status ) { ?>
-                <a href="<?= base_url() ?>youraccount/logout"  style="color: white;">
-                <button type="button" class="navbar-toggle  pull-left" style="margin-left: 10px;"
-                         data-toggle="collapse" data-target="#myNavbar">
-                  <span class="glyphicon glyphicon-log-out"> Login Out</span> 
-                </button>
-                </a>
-            <?php } ?>
-
           <button type="button" class="navbar-toggle"
                    data-toggle="collapse" data-target="#myNavbar">
             <span class="icon-bar"></span>
@@ -54,37 +42,23 @@
           </ul>
 
           <?php
-            if( $status ) { ?>
+            if( !$status ) { ?>
                 <ul class="nav navbar-nav navbar-right">
-                   <li><a href="<?= base_url() ?>youraccount/login">
+                   <li><a href="<?= base_url() ?>auth/login">
                    <span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 </ul>
             <?php } else { ?>         
               <ul class="nav navbar-nav navbar-right">            
-                <li><a href="<?= base_url() ?>youraccount/logout">
+                <li><a href="<?= base_url() ?>auth/logout">
                 <span class="glyphicon glyphicon-log-out"></span> Login Out</a></li>
               </ul>
               
-              <ul class="nav navbar-nav navbar-right navbar-user">
+ <!--              <ul class="nav navbar-nav navbar-right navbar-user">
                 <li class="dropdown messages-dropdown">
                   <a href="<?= base_url() ?>enquiries/user_inbox" ><i class="fa fa-envelope"></i> Messages <span class="badge">7</span></a>
                 </li>
-<!--                 <li class="dropdown alerts-dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Default <span class="label label-default">Default</span></a></li>
-                    <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
-                    <li><a href="#">Success <span class="label label-success">Success</span></a></li>
-                    <li><a href="#">Info <span class="label label-info">Info</span></a></li>
-                    <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
-                    <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">View All</a></li>
-                  </ul>
-                </li>
- -->
               </ul>
-
+ -->
           <?php } ?>
         </div>
     </nav>

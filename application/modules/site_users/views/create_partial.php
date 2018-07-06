@@ -1,7 +1,7 @@
  				<div class="row">
  				<div class="col-md-12 ">
  				<?php
-					// $user_main
+					// $users
 					for($i = 0; $i < count($fld_group); $i++ ) {
 						$key = $fld_group[$i]; 
 						$data['key']  = $fld_group[$i]; 

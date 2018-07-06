@@ -43,6 +43,8 @@ function admin( $data = array() )
 
 function get_nav($menu_level)
 {
+    $parent_titles=[];
+    
     $mysql_query = "SELECT * FROM main_menu
                     WHERE parentid = 0 And level = $menu_level
                     ORDER BY parentid, priority";

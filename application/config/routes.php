@@ -61,7 +61,7 @@ $route['site_settings/update_site_settings/(:any)'] = "site_settings/update_site
 
 $route['search'] = "car_shields/search";
 $route['member_profile'] = "site_users/update_user";
-$route['password_reset'] = "site_users/update_password";
+// $route['password_reset'] = "site_users/change_password";
 $route['pay_pal_response'] = "pay_pal/pay_pal_response";
 // $route['business_listings/site_upload/site_ajax_upload/ajax_upload_one'] = "site_upload/site_ajax_upload/ajax_upload_one";
 

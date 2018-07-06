@@ -73,7 +73,7 @@
           </li>
           <li>
             <a id ='change_password'
-               href="<?= base_url() ?>auth/change_password">
+               href="<?= base_url() ?>youraccount/change_password">
                <i class="fa fa-key fa-lg" aria-hidden="true"></i> Change Password</a>
           </li>
           <li>

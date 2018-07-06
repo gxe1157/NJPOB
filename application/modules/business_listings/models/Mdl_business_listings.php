@@ -21,7 +21,7 @@ function get_table() {
 
 function get_business($user_id=null)
 {
-    // SELECT * FROM car_shields INNER JOIN user_main ON car_shields.user_id=user_main.id;
+    // SELECT * FROM car_shields INNER JOIN users ON car_shields.user_id=users.id;
     /* example of 3 table join */ 
     // $this->db->select('*');
     // $this->db->join('table2', 'table2.ID = table1.ID');
@@ -36,11 +36,11 @@ function get_business($user_id=null)
         business_listings.specialization,
         business_listings.city,                        
         business_listings.state,                                
-        user_main.email,
-        user_main.first_name,
+        users.email,
+        users.first_name,
     ');
 
-    $this->db->join('user_main', 'user_main.id = business_listings.user_id', 'left');
+    $this->db->join('users', 'users.id = business_listings.user_id', 'left');
     $this->db->from('business_listings');
 
 
