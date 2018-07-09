@@ -154,7 +154,7 @@ if ( ! function_exists('get_fields'))
             array(
               'field' => 'county',
               'label' => 'County',
-              'rules' => 'required|alpha|max_length[100]',                    
+              'rules' => 'required|max_length[100]',                    
               'icon'  => 'user',
               'placeholder'=>'',
               'input_value' => $results->county,             

@@ -80,9 +80,9 @@ function add_data_ajax(){
       processData:false,
       success:function(data)
       {
-        // console.log( 'Return Data:......  ', data);
+        //console.log( 'Return Data:......  ', data);
         var response = JSON.parse( data );
-        // console.log( 'Return Data:......  ', response);
+        console.log( 'Return Data:......  ', response);
 
         if( response['success'] == 1 ){
             /* Success */

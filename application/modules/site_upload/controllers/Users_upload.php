@@ -14,13 +14,16 @@ var $column_rules = array(
 
 //   Use like this.. in_array($key, $columns_not_allowed ) === false )
 var  $columns_not_allowed = array( 'create_date' );
+private $user=[];
+
 
 function __construct() {
     parent::__construct();
 
     /* is user logged in */
     $this->load->module('auth');
-    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');    
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');  
+    $this->user = $this->ion_auth->user()->row();
 }
 
 
@@ -71,7 +74,7 @@ function ajax_upload_one()
 
 function _update_avatar_data($imagename, $userid)
 {
-
+    $userid =  $this->input->post('update_id', TRUE);
     /* get image name on file */
     $default_avatar = 'annon_user.png';
     $mysql_query    = "SELECT avatar_name FROM `users` WHERE `id` =".$userid;

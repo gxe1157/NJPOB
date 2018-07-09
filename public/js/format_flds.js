@@ -91,11 +91,12 @@ function doCheckDate( action, p ) {
             console.log('leapyear', leapYear, 'mm', mm, 'dd', dd );
 			
             if ( yy <= n ) {
-                if( !leapYear && mm == 2 && dd>28 ){ 				
-					alert('\nError: This is not a Leap Year:\n'+mm+'/ '+dd+'/ '+yy+'\n\nPlease Re-enter Date..' );
-					return ''; //p.substr(0,4);					
-				}
-                return p;
+             //    if( !leapYear && mm == 2 && dd>28 ){ 				
+  				      	// alert('\nError: This is not a Leap Year:\n'+mm+'/ '+dd+'/ '+yy+'\n\nPlease Re-enter Date..' );
+  					      // return ''; //p.substr(0,4);					
+      			    // } 
+
+            return p;
             } else {
                 //alert_mess( '<br />Error: Re-enter Year: ');
                 alert('\nError: Re-enter Year\n\n'+mm+'/ '+dd+'/ '+yy+'\n' );

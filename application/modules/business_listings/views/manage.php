@@ -35,13 +35,7 @@
 
 <div class="row">		
 	<div class="col-md-12">
-			<form>
-				<input type="hidden" name="base_url"
-					   id="base_url" value="<?= base_url() ?>" />
-      			<input type="hidden" 
-      			       id="set_dir_path" name="set_dir_path" value="<?= $admin_mode ?>">
-			</form>	
-					
+
 			<table id="example" class="table table-striped table-bordered">
 			 <thead>
 				  <tr>
@@ -88,7 +82,9 @@
 			  </tbody>
 		  </table>
 	</div><!--/span-->
+
 	<form id="params">
+ 		<input type="hidden" name="base_url"  id="base_url" value="<?= base_url() ?>" />
 		<input type="hidden" id="set_dir_path" value = "<?php echo $admin_mode ?>" >	
 		<input type="hidden" id="dl_required" value = "<?php echo $dl_required ?>" >		
 		<input type="hidden" id="ss_required" value = "<?php echo $ss_required ?>" >

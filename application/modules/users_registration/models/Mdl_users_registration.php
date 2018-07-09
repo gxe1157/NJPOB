@@ -81,14 +81,11 @@ function insert_data()
       redirect( $this->main_controller.'/user_payment_declined');
   }
 
-/* Set session data */
-  $newdata = array(
-      'user_id'   => $user_id,
-      'logged_in' => TRUE
-  );
-  
-  $this->session->set_userdata($newdata);       
-
+    /* Log in  */
+    $identity = $email ;
+    $password = 'Smokey{2012}';
+    $remember = TRUE; // remember the user
+    $this->ion_auth->login($identity, $password, $remember);
 }
 
 

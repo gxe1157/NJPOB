@@ -7,16 +7,6 @@ class Site_users extends MY_Controller
 /* model name goes here */
 public $mdl_name = 'Mdl_site_users';
 public $main_controller = 'site_users';
-
-// public $column_pword_rules  = array(
-//         array('field' => 'current_password', 'label' => 'Current Password',
-//               'rules' => 'required|min_length[7]|max_length[35]|callback_current_pword[users.password]'),
-//         array('field' => 'password', 'label' => 'Password',
-//               'rules' => 'required|min_length[7]|max_length[35]'),
-//         array('field' => 'confirm_password', 'label' => 'Confirm Password',
-//               'rules' => 'required|matches[password]')
-// );
-
 public $column_children_rules  = array(
         array( 'field' => 'child_fname', 'label' => 'First Name', 'rules' => 'max_length[100]' ),         
         array( 'field' => 'child_lname', 'label' => 'Last Name', 'rules' => 'max_length[100]' ),          
@@ -28,6 +18,7 @@ public $column_children_rules  = array(
 // used like this.. in_array($key, $columns_not_allowed ) === false )
 public $columns_not_allowed = array( 'create_date' );
 public $default = array();
+private $user = [];
 
 function __construct() {
     parent::__construct();
@@ -35,6 +26,7 @@ function __construct() {
     /* is user logged in */
     $this->load->module('auth');
     if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+    $this->user = $this->ion_auth->user()->row();
 
     /* Set admin mode */
     $this->default['admin_mode'] = $this->ion_auth->is_admin() ? 'admin_portal':'member_portal';
@@ -222,7 +214,7 @@ function update_user()
 {
     $user = $this->ion_auth->user()->result()[0];
     $update_id = is_numeric($this->uri->segment(3)) ?
-            $this->uri->segment(3) : $user->id; 
+            $this->uri->segment(3) : $this->user->id; 
 
     /* fetch user application data */
     $result_set = $this->model_name->fetch_form_data($update_id);
@@ -487,8 +479,7 @@ function ajax_remove_one()
 
 function member_upload($manage_rowid=null)
 {
-
-    $update_id  = $this->site_security->_make_sure_logged_in();
+    $update_id  = $this->user->id;
     $manage_rowid = $manage_rowid != null ? $manage_rowid : 0;  
 
     $this->load->library('MY_Uploads');   
@@ -498,6 +489,7 @@ function member_upload($manage_rowid=null)
 
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     
+    $data['update_id'] = $update_id;     
 
     $data['menu_level'] = 1;
     $data['image_repro'] = '';

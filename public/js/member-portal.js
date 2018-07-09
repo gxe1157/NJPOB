@@ -72,7 +72,7 @@ $(document).ready(function (e) {
       success:function(data)
       {
         var imgData = JSON.parse( data );
-        // console.log( 'Return Data:......  ', imgData, imgData['file_name'] );
+        console.log( 'Return Data:......  ', imgData, imgData['file_name'] );
         document.getElementById('user_avatar').value = imgData['file_name'];
 
         $( '#upload-button').prop("disabled",false);

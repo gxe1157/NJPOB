@@ -15,7 +15,7 @@
       <li><a href="<?= base_url('users_registration/exit_after_payment') ?>"
              class="btn btn-default"
              role="button">Exit</a></li>
-      <li><a href="<?= base_url() ?>users_application"
+      <li><a href="<?= base_url('users_application') ?>"
              class="btn btn-primary"
              role="button">Go to Application</a></li>
 

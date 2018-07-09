@@ -74,9 +74,11 @@ function modal_post_ajax()
 
     $update_id = $this->input->post('rowId', TRUE);
     unset($_POST['rowId']);
-    $user_id = $this->site_security->_get_user_id();    
+    $user_id = $this->user->id; //$this->site_security->_get_user_id();    
+    $table_name='legislative_outreach';
 
     $response = $this->my_form_model->modal_post($update_id, $user_id, $this->column_rules);
+
     echo json_encode($response);                
     return;    
 }
@@ -105,10 +107,9 @@ function member_manage()
 {
     $this->load->library('MY_Form_model');    
     $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
-    $data = $this->build_data( $user_id );
-    list( $data['status'], $data['user_avatar'],
-          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($user_id);
 
+    $data = $this->build_data( $user_id );
+    $data['update_id'] = $user_id;
     $data = $this->my_form_model->admin_member_portal_view( $data );
 
     $this->load->module('templates');

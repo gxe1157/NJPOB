@@ -112,7 +112,6 @@ function youraccount_profile()
 
 function index($update_profile=null)
 {
-
     list( $Select_option, $fld_group1, $fld_group2, $fld_group3, $fld_group4, $fld_group5 ) = get_fields($this->user);
 
     $data['Select_option']  = $Select_option;
