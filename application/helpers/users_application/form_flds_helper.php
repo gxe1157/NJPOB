@@ -42,19 +42,8 @@ if ( ! function_exists('get_tables_names'))
 
 if ( ! function_exists('get_fields'))
 {
-   function get_fields( $result_set = array() )
+   function get_fields( $results = array() )
     {
-
-      $results = array();
-      $display_value = false;
-
-      if( count($result_set) > 0 ){
-         $results = $result_set[0];
-         $display_value = true;
-      }
-         
-      // $ci =& get_instance();
-      // $ci->load->module('lib');     
 
       $Select_option = array(
           array(''=>'Please Select...','Yes'=>'Yes','No'=>'No'),
@@ -69,38 +58,18 @@ if ( ! function_exists('get_fields'))
               'rules' => '',
               'icon'  => 'user',
               'placeholder'=>'John A. Smith ',
-              'input_value' => $display_value ? $results->first_name." ".$results->last_name : '',
+              'input_value' => $results->first_name." ".$results->last_name,
               'input_type' => 'text', // text, password or drop_down_sel
               'input_options' => '0',
               'fld_group' =>'1'
             ),
-            // array(
-            //   'field' => 'first_name',
-            //   'label' => 'First Name',
-            //   'rules' =>'required|min_length[3]|max_length[40]',
-            //   'icon'  => 'user',
-            //   'placeholder'=>'',
-            //   'input_type' => 'text', // text, password or drop_down_sel
-            //   'input_options' => '0',
-            //   'fld_group' =>'1'
-            // ),
-            // array(
-            //   'field' => 'last_name',
-            //   'label' => 'Last Name',
-            //   'rules' =>'required|min_length[3]|max_length[40]',
-            //   'icon'  => 'user',
-            //   'placeholder'=>'',
-            //   'input_type' => 'text', // text, password or drop_down_sel
-            //   'input_options' => '0',
-            //   'fld_group' =>'1'
-            // ),
             array(
               'field' => 'email',
               'label' => 'Email',
               'rules' => '', 
               'icon'  => 'envelope',
               'placeholder'=>'email@email.com',
-              'input_value' => $display_value ? $results->email : '',              
+              'input_value' => $results->email,              
               'input_type' =>'text',
               'input_options' => '0',          
               'fld_group' =>'1'
@@ -111,7 +80,7 @@ if ( ! function_exists('get_fields'))
               'rules' =>'',
               'icon'  => 'earphone',
               'placeholder'=>'(201) 999-9999',
-              'input_value' => $display_value ? $results->phone : '',              
+              'input_value' => $results->phone,              
               'input_type' =>'text',
               'input_options'=>'0',
               'fld_group' =>'1'          
@@ -119,10 +88,10 @@ if ( ! function_exists('get_fields'))
             array(
               'field' => 'cell_phone',
               'label' => 'Cell Phone',
-              'rules' =>'',
+              'rules' =>'required',
               'icon'  => 'phone',
               'placeholder'=>'(201) 999-9999',
-              'input_value' => $display_value ? $results->cell_phone : '',
+              'input_value' => $results->cell_phone,
               'input_type' =>'text',
               'input_options' => '0',          
               'fld_group' =>'1'          
@@ -133,7 +102,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->address1 : '',              
+              'input_value' => $results->address1,              
               'input_type' =>'text',
               'input_options'=>'0',
               'fld_group' =>'1'          
@@ -144,7 +113,7 @@ if ( ! function_exists('get_fields'))
              'rules' => 'max_length[100]',
              'icon'  => 'envelope',
              'placeholder'=>'',
-             'input_value' => $display_value ? $results->address2 : '',             
+             'input_value' => $results->address2,             
              'input_type' =>'text',
              'input_options'=>'0',
              'fld_group' =>'1'         
@@ -155,7 +124,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->city : '',                           
+              'input_value' => $results->city,                           
               'input_type' =>'text',
               'input_options'=>'0',
               'fld_group' =>'1'          
@@ -166,7 +135,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',          
               'icon'  => 'envelope',
               'placeholder'=>'Example: NJ, Ct, CA ...',
-              'input_value' => $display_value ? $results->state : '',            
+              'input_value' => $results->state,            
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'1'          
@@ -177,7 +146,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|is_natural|exact_length[5]',                    
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->zip : '',          
+              'input_value' => $results->zip,          
               'input_type' =>'text',
               'input_options'=>'0',
               'fld_group' =>'1'
@@ -188,7 +157,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|alpha|max_length[100]',                    
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->county : '',             
+              'input_value' => $results->county,             
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -199,7 +168,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',                    
               'icon'  => 'user',
               'placeholder'=>'Are you a registered voter?',
-              'input_value' => $display_value ? $results->registered_voter : '',             
+              'input_value' => $results->registered_voter,             
               'input_type' => 'drop_down_sel',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -210,7 +179,7 @@ if ( ! function_exists('get_fields'))
               'rules' => '',                    
               'icon'  => 'user',
               'placeholder'=>'Enter your legistlative district if known...',
-              'input_value' => $display_value ? $results->legislative_dist : '',              
+              'input_value' => $results->legislative_dist,              
               'input_type' => 'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -221,7 +190,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => 'envelope',
               'placeholder'=> 'Is mailing address same?',
-              'input_value' => $display_value ? $results->mail_to : '',         
+              'input_value' => $results->mail_to,         
               'input_type' => 'drop_down_sel',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -232,7 +201,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',          
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->mail_add1 : '',             
+              'input_value' => $results->mail_add1,             
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -243,7 +212,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'max_length[100]',          
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->mail_add2 : '',              
+              'input_value' => $results->mail_add2,              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -254,7 +223,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',          
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->mail_city : '',              
+              'input_value' => $results->mail_city,              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -265,7 +234,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',       
               'icon'  => 'envelope',
               'placeholder'=>'Example: NJ, Ct, CA ...',
-              'input_value' => $display_value ? $results->mail_state : '',             
+              'input_value' => $results->mail_state,             
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -276,7 +245,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|is_natural|exact_length[5]',                              
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->mail_zip : '',           
+              'input_value' => $results->mail_zip,           
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'2'          
@@ -290,7 +259,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|alpha_numeric',                              
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->driver_lic : '',              
+              'input_value' => $results->driver_lic,              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' =>'3'          
@@ -301,7 +270,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|numeric|max_length[9]',                                       
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->social_sec : '',              
+              'input_value' => $results->social_sec,              
               'input_type' => 'password',
               'input_options' => '0',
               'fld_group' =>'ss'          
@@ -312,7 +281,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'matches[social_sec]',                                        
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->social_sec : '',             
+              'input_value' => $results->social_sec,             
               'input_type' =>'password',
               'input_options' => '0',
               'fld_group' =>'ssc'          
@@ -323,7 +292,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',                              
               'icon'  => 'user',
               'placeholder'=>'Please select ',
-              'input_value' => $display_value ? $results->marital_status : '',             
+              'input_value' => $results->marital_status,             
               'input_type' =>'drop_down_sel',
               'input_options' => '2',
               'fld_group' =>'3'
@@ -337,7 +306,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',
               'icon'  => 'user',
               'placeholder'=>'Law Enforcement Agency',
-              'input_value' => $display_value ? $results->le_agency : '',      
+              'input_value' => $results->le_agency,      
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -348,7 +317,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|max_length[100]',
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->le_dept : '',         
+              'input_value' => $results->le_dept,         
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -359,7 +328,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|max_length[100]',
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->le_rank : '',            
+              'input_value' => $results->le_rank,            
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -370,7 +339,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->le_add1 : '',        
+              'input_value' => $results->le_add1,        
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -381,7 +350,7 @@ if ( ! function_exists('get_fields'))
               'rules' => '',
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->le_add2 : '',             
+              'input_value' => $results->le_add2,             
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -392,7 +361,7 @@ if ( ! function_exists('get_fields'))
               'icon'  => 'envelope',
               'rules' => 'required|min_length[3]|max_length[100]',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->le_city : '',            
+              'input_value' => $results->le_city,            
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -403,7 +372,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => 'envelope',
               'placeholder'=>'Example: NJ, Ct, CA ...',
-              'input_value' => $display_value ? $results->le_state : '',             
+              'input_value' => $results->le_state,             
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -414,7 +383,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|is_natural|exact_length[5]', 
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->le_zip : '',             
+              'input_value' => $results->le_zip,             
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -425,7 +394,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|valid_email|max_length[200]',
               'icon'  => 'envelope',
               'placeholder'=>'email@email.com',
-              'input_value' => $display_value ? $results->le_email : '',         
+              'input_value' => $results->le_email,         
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -436,7 +405,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => 'earphone',
               'placeholder'=>'(201) 999-9999',
-              'input_value' => $display_value ? $results->le_phone : '',          
+              'input_value' => $results->le_phone,          
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_'
@@ -446,7 +415,7 @@ if ( ! function_exists('get_fields'))
               'label' => 'Date Hired',
               'icon'  => 'user',
               'placeholder'=>' MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->le_dt_hired) : '',              
+              'input_value' => format_date($results->le_dt_hired),              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_',
@@ -456,7 +425,7 @@ if ( ! function_exists('get_fields'))
               'label' => 'Date Retired',
               'icon'  => 'user',
               'placeholder'=>' MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->le_dt_retired) : '',              
+              'input_value' => format_date($results->le_dt_retired),              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_',
@@ -466,7 +435,7 @@ if ( ! function_exists('get_fields'))
               'label' => 'Years of Service',
               'icon'  => 'user',
               'placeholder'=>'99',
-              'input_value' => $display_value ? $results->le_yos : '',          
+              'input_value' => $results->le_yos,          
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_',
@@ -477,7 +446,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',                              
               'icon'  => '',
               'placeholder'=>'Please select ',
-              'input_value' => $display_value ? $results->prv_sector : '',             
+              'input_value' => $results->prv_sector,             
               'input_type' =>'drop_down_sel',
               'input_options' => '0',
               'fld_group' =>'le_'
@@ -488,7 +457,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',
               'icon'  => 'user',
               'placeholder'=>'Agency/Company Name',
-              'input_value' => $display_value ? $results->prv_sector_employer : '',              
+              'input_value' => $results->prv_sector_employer,              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -499,7 +468,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|max_length[100]',
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->prv_sector_dept : '',          
+              'input_value' => $results->prv_sector_dept,          
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -510,7 +479,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|max_length[100]',
               'icon'  => 'user',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->prv_sector_position : '',         
+              'input_value' => $results->prv_sector_position,         
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -521,7 +490,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|min_length[3]|max_length[100]',
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->prv_sector_add1 : '',        
+              'input_value' => $results->prv_sector_add1,        
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -532,7 +501,7 @@ if ( ! function_exists('get_fields'))
               'rules' => '',
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->prv_sector_add2 : '',        
+              'input_value' => $results->prv_sector_add2,        
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -543,7 +512,7 @@ if ( ! function_exists('get_fields'))
               'icon'  => 'envelope',
               'rules' => 'required|min_length[3]|max_length[100]',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->prv_sector_city : '', 
+              'input_value' => $results->prv_sector_city, 
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -554,7 +523,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => 'envelope',
               'placeholder'=>'Example: NJ, Ct, CA ...',
-              'input_value' => $display_value ? $results->prv_sector_state : '',        
+              'input_value' => $results->prv_sector_state,        
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -565,7 +534,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|is_natural|exact_length[5]', 
               'icon'  => 'envelope',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->prv_sector_zip : '', 
+              'input_value' => $results->prv_sector_zip, 
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -576,7 +545,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required|valid_email|max_length[200]',
               'icon'  => 'envelope',
               'placeholder'=>'email@email.com',
-              'input_value' => $display_value ? $results->prv_sector_email : '',      
+              'input_value' => $results->prv_sector_email,      
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -587,7 +556,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => 'earphone',
               'placeholder'=>'(201) 999-9999',
-              'input_value' => $display_value ? $results->prv_sector_phone : '',       
+              'input_value' => $results->prv_sector_phone,       
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'
@@ -598,7 +567,7 @@ if ( ! function_exists('get_fields'))
               'icon'  => 'user',
               'rules' => 'required',              
               'placeholder'=>' MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->prv_sector_dt_hired) : '',
+              'input_value' => format_date($results->prv_sector_dt_hired),
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'prv_'              
@@ -611,7 +580,7 @@ if ( ! function_exists('get_fields'))
               'label' => 'Date of Birth',
               'icon'  => '',
               'placeholder'=>'MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->dob) : '',
+              'input_value' => format_date($results->dob),
               'input_type' =>'text',
               'input_options' => '0'
             ),
@@ -620,7 +589,7 @@ if ( ! function_exists('get_fields'))
               'label' => 'Gender',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->gender : '',
+              'input_value' => $results->gender,
               'input_type' =>'drop_down_sel',
               'input_options' => '1'
             ),   
@@ -631,7 +600,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'ft - in',
-              'input_value' => $display_value ? $results->height : '',       
+              'input_value' => $results->height,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -641,7 +610,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'lbs',
-              'input_value' => $display_value ? $results->weight : '',       
+              'input_value' => $results->weight,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -651,7 +620,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->hair_color : '',       
+              'input_value' => $results->hair_color,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -661,7 +630,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->eye_color : '',       
+              'input_value' => $results->eye_color,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -672,7 +641,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->spouse_fname : '',       
+              'input_value' => $results->spouse_fname,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -682,7 +651,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->spouse_lname : '',       
+              'input_value' => $results->spouse_lname,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -693,7 +662,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->spouse_dob) : '',
+              'input_value' => format_date($results->spouse_dob),
               'input_type' =>'text',
               'input_options' => '0'
             ),
@@ -703,7 +672,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',              
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->spouse_gender : '',
+              'input_value' => $results->spouse_gender,
               'input_type' =>'drop_down_sel',
               'input_options' => '1'
             ),
@@ -714,7 +683,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',              
               'icon'  => 'enveople',
               'placeholder'=>'email@email.com',
-              'input_value' => $display_value ? $results->spouse_email : '',
+              'input_value' => $results->spouse_email,
               'input_type' =>'text',
               'input_options' => '0'
             ),   
@@ -728,7 +697,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->child_fname : '',       
+              'input_value' => $results->child_fname,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -738,7 +707,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->child_lname : '',       
+              'input_value' => $results->child_lname,       
               'input_type' =>'text',
               'input_options' => '0'
             ),          
@@ -749,7 +718,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->child_dob) : '',
+              'input_value' => format_date($results->child_dob),
               'input_type' =>'text',
               'input_options' => '0'
             ),
@@ -759,7 +728,7 @@ if ( ! function_exists('get_fields'))
               'rules' => 'required',              
               'icon'  => '',
               'placeholder'=>'',
-              'input_value' => $display_value ? $results->child_gender : '',
+              'input_value' => $results->child_gender,
               'input_type' =>'drop_down_sel',
               'input_options' => '1'
             ),   

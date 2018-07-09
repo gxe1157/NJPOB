@@ -53,6 +53,21 @@ class MY_Form_helpers
 	    return $data;
 	}
 
+	private function format_date($value)
+	{
+	    if(empty($value)){
+	    	$date = "0000/00/00";
+		    $value = $date[5].$date[6].'/'.$date[8].$date[9].'/'.$date[0].$date[1].$date[2].$date[3];
+		}
+
+
+
+        $date = convert_timestamp($value, 'datepicker_us') == "01/01/1970" ?
+           "00/00/0000" : convert_timestamp($value, 'datepicker_us');
+
+        return $date;
+	}
+
 	private function required_flds(& $column_rules)
 	{
         $field_name = '';		

@@ -17,7 +17,10 @@ var  $columns_not_allowed = array( 'create_date' );
 
 function __construct() {
     parent::__construct();
-    // checkArray($this->default,1);
+
+    /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');    
 }
 
 

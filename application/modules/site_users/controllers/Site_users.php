@@ -8,14 +8,14 @@ class Site_users extends MY_Controller
 public $mdl_name = 'Mdl_site_users';
 public $main_controller = 'site_users';
 
-public $column_pword_rules  = array(
-        array('field' => 'current_password', 'label' => 'Current Password',
-              'rules' => 'required|min_length[7]|max_length[35]|callback_current_pword[user_login.password]'),
-        array('field' => 'password', 'label' => 'Password',
-              'rules' => 'required|min_length[7]|max_length[35]'),
-        array('field' => 'confirm_password', 'label' => 'Confirm Password',
-              'rules' => 'required|matches[password]')
-);
+// public $column_pword_rules  = array(
+//         array('field' => 'current_password', 'label' => 'Current Password',
+//               'rules' => 'required|min_length[7]|max_length[35]|callback_current_pword[users.password]'),
+//         array('field' => 'password', 'label' => 'Password',
+//               'rules' => 'required|min_length[7]|max_length[35]'),
+//         array('field' => 'confirm_password', 'label' => 'Confirm Password',
+//               'rules' => 'required|matches[password]')
+// );
 
 public $column_children_rules  = array(
         array( 'field' => 'child_fname', 'label' => 'First Name', 'rules' => 'max_length[100]' ),         
@@ -328,7 +328,7 @@ function change_account_status( $update_id, $status )
     $this->_numeric_check($update_id);    
     // $this->_security_check();    
     $table_data = ['status' => $status];
-    $this->model_name->update_data( 'user_login', $table_data, $update_id );  
+    $this->model_name->update_data( 'users', $table_data, $update_id );  
     if( $status == 1)
         $this->_set_flash_msg("The user account was sucessfully re-activated");
 
@@ -336,87 +336,87 @@ function change_account_status( $update_id, $status )
 }
 
 
-function update_password()
-{
-    $this->site_security->_make_sure_logged_in();        
-    $update_id = is_numeric($this->uri->segment(3)) ?
-             $this->uri->segment(3) : $this->site_security->_get_user_id(); 
+// function update_password()
+// {
+//     $this->site_security->_make_sure_logged_in();        
+//     $update_id = is_numeric($this->uri->segment(3)) ?
+//              $this->uri->segment(3) : $this->site_security->_get_user_id(); 
 
-    $submit = $this->input->post('submit', TRUE);
-    if ($submit=="Cancel_member_manage")
-        redirect('youraccount/welcome');
+//     $submit = $this->input->post('submit', TRUE);
+//     if ($submit=="Cancel_member_manage")
+//         redirect('youraccount/welcome');
 
-    if( !is_numeric($update_id) ){
-        redirect( $this->main_controller.'/manage');
-    } elseif( $submit == "Cancel" ) {
-        redirect( $this->main_controller.'/update_user/'.$update_id);
-    } 
+//     if( !is_numeric($update_id) ){
+//         redirect( $this->main_controller.'/manage');
+//     } elseif( $submit == "Cancel" ) {
+//         redirect( $this->main_controller.'/update_user/'.$update_id);
+//     } 
 
-    if( $submit == "Submit" ) {
-        // process changes
+//     if( $submit == "Submit" ) {
+//         // process changes
 
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules( $this->column_pword_rules );
+//         $this->load->library('form_validation');
+//         $this->form_validation->set_rules( $this->column_pword_rules );
 
-        if($this->form_validation->run() == TRUE) {
-            $password = $this->input->post('password', TRUE);
-            $this->load->module('site_security');
-            $data['password'] = $this->site_security->_hash_string($password);
-            //update the account details
-            $this->_set_flash_msg("Your password was sucessfully updated.");
+//         if($this->form_validation->run() == TRUE) {
+//             $password = $this->input->post('password', TRUE);
+//             $this->load->module('site_security');
+//             $data['password'] = $this->site_security->_hash_string($password);
+//             //update the account details
+//             $this->_set_flash_msg("Your password was sucessfully updated.");
 
-            if(uri_string() == 'password_reset') {
-                $rows_affected = 
-                    $this->model_name->update_data( 'user_login', $data, $update_id );
+//             if(uri_string() == 'password_reset') {
+//                 $rows_affected = 
+//                     $this->model_name->update_data( 'users', $data, $update_id );
 
-                $this->load->module('youraccount');
-                $this->youraccount->_end_session();
-                redirect( 'youraccount/login');
-            } else {
-                redirect( $this->main_controller.'/create/'.$update_id);
-            }
+//                 $this->load->module('youraccount');
+//                 $this->youraccount->_end_session();
+//                 redirect( 'youraccount/login');
+//             } else {
+//                 redirect( $this->main_controller.'/create/'.$update_id);
+//             }
 
-        }
-    }
+//         }
+//     }
 
-    $result_set = $this->model_name->fetch_form_data($update_id);    
-    $data['columns'] = $result_set[0];
-    list( $data['status'], $data['user_avatar'],
-          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($update_id);    
+//     $result_set = $this->model_name->fetch_form_data($update_id);    
+//     $data['columns'] = $result_set[0];
+//     list( $data['status'], $data['user_avatar'],
+//           $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($update_id);    
 
-    $data['default']  = $this->default;    
-    $data['page_url']  = "update_password";
-    $data['update_id'] = $update_id;
+//     $data['default']  = $this->default;    
+//     $data['page_url']  = "update_password";
+//     $data['update_id'] = $update_id;
 
-    /* Update member page */
-    if( uri_string() == 'password_reset') {
-        /* member manager */
-        $data['page_title'] = $this->default['page_title'];
-        $data['custom_jscript'] = ['public/js/site_init',
-                                   'public/js/member-portal',
-                                   'public/js/model_js'             
-                                  ];            
-        // $data['mode'] = 'password_reset';
-        $data['menu_level'] = 1;
-        $data['image_repro'] = '';
-        $data['left_side_nav'] = true;
-        $data['nav_module']= 'youraccount/';
+//     /* Update member page */
+//     if( uri_string() == 'password_reset') {
+//         /* member manager */
+//         $data['page_title'] = $this->default['page_title'];
+//         $data['custom_jscript'] = ['public/js/site_init',
+//                                    'public/js/member-portal',
+//                                    'public/js/model_js'             
+//                                   ];            
+//         // $data['mode'] = 'password_reset';
+//         $data['menu_level'] = 1;
+//         $data['image_repro'] = '';
+//         $data['left_side_nav'] = true;
+//         $data['nav_module']= 'youraccount/';
   
-        $data['cancel'] = 'Cancel_member_manage';
-        $data['form_location'] = base_url()."password_reset";
+//         $data['cancel'] = 'Cancel_member_manage';
+//         $data['form_location'] = base_url()."password_reset";
 
-        $data['view_module'] = "site_users";    
-        $this->load->module('templates');
-        $this->templates->public_main($data);
-    } else {
-        $data['page_title'] = $this->default['page_title'];
-        $data['cancel'] = 'Cancel';
+//         $data['view_module'] = "site_users";    
+//         $this->load->module('templates');
+//         $this->templates->public_main($data);
+//     } else {
+//         $data['page_title'] = $this->default['page_title'];
+//         $data['cancel'] = 'Cancel';
 
-        $data['view_module'] = "site_users";    
-        $this->load->module('templates');
-        $this->templates->admin($data);
-    }
-}
+//         $data['view_module'] = "site_users";    
+//         $this->load->module('templates');
+//         $this->templates->admin($data);
+//     }
+// }
 
 function delete( $update_id )
 {
@@ -528,25 +528,25 @@ function manage_uploads()
     Call backs go here...
   =============================================== */
 
-function current_pword(){
-    $error_msg = "Current Password is not Valid.";
+// function current_pword(){
+//     $error_msg = "Current Password is not Valid.";
 
-    $userid = $this->site_security->_make_sure_logged_in();
-    $results_set = $this->model_name->get_view_data_custom('id', $userid, 'user_login', null)->result();
+//     $userid = $this->site_security->_make_sure_logged_in();
+//     $results_set = $this->model_name->get_view_data_custom('id', $userid, 'users', null)->result();
 
-    $pword_on_table = $results_set[0]->password;
-    $old_password = $this->input->post('current_password', TRUE);
-    //echo "<h4>current_password".$old_password."password".$pword_on_table."</h4>";
+//     $pword_on_table = $results_set[0]->password;
+//     $old_password = $this->input->post('current_password', TRUE);
+//     //echo "<h4>current_password".$old_password."password".$pword_on_table."</h4>";
 
-    $result = $this->site_security->_verify_hash($old_password, $pword_on_table);
+//     $result = $this->site_security->_verify_hash($old_password, $pword_on_table);
 
-    if ($result == false) {
-        echo "<h4>current_password".$old_password."password".$pword_on_table."</h4>";
-        $this->form_validation->set_message('current_pword', $error_msg);        
-    }
-    return $result;
+//     if ($result == false) {
+//         echo "<h4>current_password".$old_password."password".$pword_on_table."</h4>";
+//         $this->form_validation->set_message('current_pword', $error_msg);        
+//     }
+//     return $result;
 
-}
+// }
 
 
 

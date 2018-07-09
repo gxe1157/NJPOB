@@ -1,3 +1,8 @@
+<?php
+    if( $this->session->flashdata('logout_msg'))
+             echo $this->session->flashdata('logout_msg');
+?>
+
 <div class='row'>
     <div class="col-sm-6 col-sm-offset-4 col-md-4 col-md-offset-4" >
       <h3>Please sign in</h3>

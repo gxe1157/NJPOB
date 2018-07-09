@@ -11,7 +11,7 @@ function __construct( ) {
 
 function get_table() {
 	// table name goes here	
-    $table = "user_login";
+    $table = "users";
     return $table;
 }
 

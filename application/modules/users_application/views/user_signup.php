@@ -1,7 +1,3 @@
-<?php
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_logged_in();
-?>
 
     <section>
         <div class="wizard">

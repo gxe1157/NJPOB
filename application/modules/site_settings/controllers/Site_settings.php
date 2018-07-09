@@ -2,8 +2,13 @@
 class Site_settings extends MX_Controller 
 {
 
-function __construct() {
-parent::__construct();
+function __construct()
+ {
+    parent::__construct();
+    /* is user logged in */
+    // $this->load->module('auth');
+    // if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+
 }
 
 function _get_map_code()

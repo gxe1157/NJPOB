@@ -24,8 +24,9 @@ public $default = [];
 
 function __construct() {
     parent::__construct();
-   /* is user logged in */
-    $this->default = login_init();  
+    /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
 
     /* Manage panel */
     $update_id = $this->uri->segment(3);
@@ -224,33 +225,33 @@ function _count_sub_cats()
     return $sub_cats;
 }
 
-function _get_sub_cat($parent_id)
-{
-    $sql  = "SELECT * FROM ".$this->items_mysql_table." where parent_cat_id = $parent_id ORDER BY cat_title";
-    $sub_categories = $this->db->query($sql)->result();
-    return $sub_categories;
-}
+// function _get_sub_cat($parent_id)
+// {
+//     $sql  = "SELECT * FROM ".$this->items_mysql_table." where parent_cat_id = $parent_id ORDER BY cat_title";
+//     $sub_categories = $this->db->query($sql)->result();
+//     return $sub_categories;
+// }
 
-function _get_cat_id_from_cat_url( $category_url ) {
-    $query   = $this->get_where_custom('category_url', $category_url);
-    $num_row = $query->num_rows();
+// function _get_cat_id_from_cat_url( $category_url ) {
+//     $query   = $this->get_where_custom('category_url', $category_url);
+//     $num_row = $query->num_rows();
 
-    // show_error('Page was found........... ' );
-    if($num_row == 0 ) show_404();
+//     // show_error('Page was found........... ' );
+//     if($num_row == 0 ) show_404();
 
-    $cat_id = _get_first_record( $query, 'id');
-    return $cat_id;
-}
+//     $cat_id = _get_first_record( $query, 'id');
+//     return $cat_id;
+// }
 
-function _get_target_pagination_base_url()
-{
-    $first_seg  = $this->uri->segment(1);
-    $second_seg = $this->uri->segment(2);
-    $third_seg  = $this->uri->segment(3);
-    $target_base_url = base_url().$first_seg.'/'.$second_seg.'/'.$third_seg;
-    return $target_base_url;
+// function _get_target_pagination_base_url()
+// {
+//     $first_seg  = $this->uri->segment(1);
+//     $second_seg = $this->uri->segment(2);
+//     $third_seg  = $this->uri->segment(3);
+//     $target_base_url = base_url().$first_seg.'/'.$second_seg.'/'.$third_seg;
+//     return $target_base_url;
 
-}
+// }
 
 
 /* ===============================================

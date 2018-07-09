@@ -1006,14 +1006,6 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('post_register');
 
-		/* Added by Evelio */
-		$this->session->set_userdata('insert_id', $id);
-		$users_data = [
-			'hire_date' => time(),
-			'user_id'   => $id
-		];
-
-    	$this->db->insert('users_data', $users_data);		
 		return (isset($id)) ? $id : FALSE;
 	}
 

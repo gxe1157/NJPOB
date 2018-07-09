@@ -44,12 +44,12 @@ function insert_data()
   $email      = $_SESSION['email'];
 
   $additional_data = array(
-      $first_name = $_SESSION['first_name'],
-      $last_name  = $_SESSION['last_name'],
-      $middle     = $_SESSION['last_name'],        
-      $phone      = $_SESSION['phone'],
-      $admin_id   = 0,        
-      $membership_level = $_SESSION['itemnumber']
+      'first_name' => $_SESSION['first_name'],
+      'last_name'  => $_SESSION['last_name'],
+      'middle'     => $_SESSION['middle_name'],        
+      'phone'      =>  $_SESSION['phone'],
+      'admin_id'   => 0,        
+      'membership_level' => $_SESSION['itemnumber']
   );
   $group = array('2'); // Sets user to admin.
 
@@ -73,21 +73,21 @@ function insert_data()
   if ($this->db->trans_status() === FALSE) {
       // generate an error... or use the log_message() function to log your error
       fatal_error( 'Mdl_users_registration : 1102' );
-      if( ENV == 'live') {
-          $email = 'gxe1157@gmail.com';  
-          $this->send_mail($email, 'user_registration : 1102');     
-      }
+
+      $this->load->library('MY_Email_send');
+      $mess_code = 'Database failed to save entry at Mdl_users_registration : 1102';
+      $this->my_email_send->email_report($mess_ecode);          
+
       redirect( $this->main_controller.'/user_payment_declined');
   }
-  
-  /* Set session data */
+
+/* Set session data */
   $newdata = array(
       'user_id'   => $user_id,
-      'email'     => $user_login['email'],
       'logged_in' => TRUE
   );
   
-  $this->session->set_userdata($newdata);     
+  $this->session->set_userdata($newdata);       
 
 }
 

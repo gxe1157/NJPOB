@@ -19,13 +19,12 @@ var $column_rules = array(
     array('field' => 'itemname', 'label' => 'Membership payment plan was not selected', 'rules' => 'required'),
 );
 
-    
-    // $this->form_validation->set_rules('domain_name','Domain Name','required|is_unique[domains.domain_name]',array('is_unique' => 'This %s already exists.'));
+private $user = [];
 
 function __construct() {
     parent::__construct();
-
-
+    $this->load->module('auth');
+    // $this->user = $this->ion_auth->user()->row();
 }
 
 /* ===================================================
@@ -35,8 +34,6 @@ function __construct() {
 
 function index()
 {
-    $this->_security_check();  
-
     $Selected_plan = $this->input->post('selected_plan', TRUE);
     $sql_items = 'SELECT * FROM membership_plans
                   WHERE `mem_plan_level` = "'.$Selected_plan.'"';
@@ -67,21 +64,16 @@ function check_user_ajax()
     $email = $_POST['email'];
     // Check its existence (for example, execute a query from the database) ...
     $table = 'users';
-    $orderby = '';
-    $results = $this->model_name->get_view_data_custom('email', $email, $table, $orderby);
+    $results = $this->model_name->get_view_data_custom('email', $email, $table, null);
     $isAvailable = $results->num_rows()>0 ? false : true;
 
     // Finally, return a JSON
-    echo json_encode(array(
-          'valid' => $isAvailable,
-        ));
+    echo json_encode( array('valid' => $isAvailable) );
 }
 
 
 function process_payment()
 {
-    $this->_security_check();  
-
     // process changes
     $this->load->library('form_validation');
     $this->form_validation->set_rules( $this->column_rules ); 
@@ -94,6 +86,7 @@ function process_payment()
         $this->load->module('pay_pal');
         /* ENV is localhost or live */
         ENV != 'live' ? $this->pay_pal->test_mode($source_page) : $this->pay_pal->process_paypal($source_page);
+
     } else {
         /* Form validation failed */  
         $_POST['selected_plan'] = $this->input->post('itemnumber', TRUE);
@@ -105,34 +98,35 @@ function process_payment()
 
 function post_payment()
 {
-    $this->load->module('site_security');  
     /* Insert into mysql here */
     $this->model_name->insert_data();
-    $site_payments['transactionid'] = $_SESSION['transactionid'];
-    /* Send Email */
-    if( ENV == 'live') {
-        $email = $users['email'];  
-        $this->send_mail($email, 'registration_paid', $site_payments['transactionid']);     
-        $this->send_mail($email, 'activate', $site_payments['transactionid']);     
-    }
-    redirect( $this->main_controller.'/payment_accepted');
-}
 
+    /* Send Email */
+    $this->load->library('MY_Email_send');
+    $email_to = $_SESSION['email'];  
+    $type = 'registration_paid';
+    $variables = null;    
+    $this->my_email_send->send_admin_email($email_to, $type, $variables);
+    redirect( $this->main_controller.'/payment_accepted');
+
+}
 
 function payment_accepted()
 {
+
     $data['page_title'] = 'Payment Processing: Complete ';
     $data['view_module']= 'users_registration';
-    $data['page_url']   = 'user_payment_accepted';     
+    $data['page_url']   = 'user_payment_accepted'; 
+
     $this->_show_page($data);
 }
-
 
 function payment_declined()
 {
     $data['page_title'] = 'Payment Processing: Declined';
     $data['view_module']= 'users_registration';
     $data['page_url']   = 'user_payment_declined';     
+
     $this->_show_page($data);
 }
 
@@ -159,6 +153,20 @@ function _show_page($data)
 
 }
 
+function exit_after_payment()
+{
+    $flash_msg = $this->model_name->get_view_data_custom(
+                'title', 'save_check_email', 'site_messages', null)->row(); 
+    $this->session->set_userdata('logout_msg', $flash_msg);
+
+    /* Send Email */
+    $this->load->library('MY_Email_send');
+    $email_to = $users['email'];  
+    $type = 'activate';
+    $variables = array($_SESSION['transactionid']);
+
+    redirect('auth/logout'); 
+}
 
 /* ===============================================
     Call backs go here...

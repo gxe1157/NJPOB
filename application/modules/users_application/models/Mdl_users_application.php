@@ -31,7 +31,6 @@ function fetch_form_data( $user_id=null )
       user_employment_prv_sector.*,
     ');
 
-
     $this->db->join('user_address','user_address.id = users.id', 'left');
     $this->db->join('user_mail_to','user_mail_to.id = users.id', 'left');
     $this->db->join('user_info','user_info.id = users.id', 'left');
@@ -48,15 +47,16 @@ function fetch_form_data( $user_id=null )
     $result_set = $query->result();
     return $result_set;
 }   
-
          
 function update_data( $table_name, $table_data )
 {
   /* Check if user_id in table */
-  $user_id = $this->session->user_id;
-  if( empty($user_id) ) die('----- user_id is empty ------');
+  /* is user logged in */
 
-  $this->db->where('id', $user_id);
+  $this->user = $this->ion_auth->user()->row();  
+  if( empty($this->user->id) ) die('----- user_id is empty ------');
+
+  $this->db->where('id', $this->user->id);
   $query=$this->db->get($table_name);
   $num_rows = $query->num_rows();
   
@@ -68,13 +68,13 @@ function update_data( $table_name, $table_data )
       }
 
       $table_data['modified_date']= time();      
-      $table_data['admin_id'] = $user_id;
-      $this->db->where('id', $user_id);
+      $table_data['admin_id'] = $this->user->id;
+      $this->db->where('id', $this->user->id);
       $this->db->update( $table_name, $table_data);
       // echo "update | ".$table_name."<br>";
   } else {
       /* insert new record */
-      die( 'User_id: '.$user_id.' for table ['.$table_name.'] tried Illegal record insert | Prg: users_application |');
+      die( 'User_id: '.$this->user->id.' for table ['.$table_name.'] tried Illegal record insert | Prg: users_application |');
   }    
 
   /*-*/    

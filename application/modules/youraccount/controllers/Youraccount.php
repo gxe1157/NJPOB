@@ -10,9 +10,17 @@ public $main_controller = 'youraccount';
 
 public $flash_msg = '';
 public $default = [];
+private $user = [];
+
 
 function __construct( ) {
     parent::__construct();
+
+    /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+
+    $this->user = $this->ion_auth->user()->row();
     $this->default['flash'] = $this->session->userdata('item');
 }
 
@@ -22,14 +30,16 @@ function __construct( ) {
     functions in applications/core/My_Controller.php
   ==================================================== */
 
+function index()
+{
+    $this->user->app_completed_date == 0 ?
+       $this->complete_application() : $this->welcome();
+}
+
 function welcome()
 {
-    $this->load->module('auth');
-    $user = $this->ion_auth->user()->result()[0];
-
-    // $data['flash'] = $this->session->flashdata('item');
     list( $data['status'], $data['user_avatar'],
-          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($user->id); 
+          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($this->user->id); 
 
     $data['default'] = $this->default;
     $data['menu_level'] = 1;
@@ -45,7 +55,7 @@ function welcome()
     $data['left_side_nav'] = true;
     $data['view_module'] = 'youraccount';
     $data['title'] = "Welcome. You are logged in.";
-    $data['update_id'] = $user->id;
+    $data['update_id'] = $this->user->id;
     
     $this->load->module('templates');
     $this->templates->public_main($data);     
@@ -53,31 +63,25 @@ function welcome()
 
 function check_password_ajax()
 {
-    $this->load->module('site_security');
-    $userid = $this->site_security->_make_sure_logged_in();
+quit('check_password_ajax');
 
-    $results_set = $this->model_name->get_view_data_custom('id', $userid, 'user_login', null)->result();
-    $pword_on_table = $results_set[0]->password;
+    // $results_set = $this->model_name->get_view_data_custom('id', $this->user->id, 'users', null)->result();
+    // $pword_on_table = $results_set[0]->password;
 
-    $old_password = $this->input->post('old_password', TRUE);
-    $result = $this->site_security->_verify_hash($old_password, $pword_on_table);
+    // $old_password = $this->input->post('old_password', TRUE);
+    // $result = $this->site_security->_verify_hash($old_password, $pword_on_table);
 
-    if ($result==TRUE) {
-        echo 1;
-    } else {
-        echo 0;
-    }
+    // if ($result==TRUE) {
+    //     echo 1;
+    // } else {
+    //     echo 0;
+    // }
 }
 
 function complete_application()
 {
 
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_logged_in();
-
-    $data['flash'] = $this->session->flashdata('item');
     $data['menu_level'] = 1;
-
     $data['custom_jscript'] = [];
     $data['page_url'] = 'complete_application';
     $data['page_title'] = 'Member Portal';

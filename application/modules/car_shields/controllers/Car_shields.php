@@ -18,6 +18,10 @@ function __construct() {
     parent::__construct();
 
     /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+
+    /* is user logged in */
     $this->default = login_init();    
 
     /* get user data */
@@ -44,7 +48,7 @@ function __construct() {
 
     $this->default['flash'] = $this->session->flashdata('item');
     $this->default['admin_mode'] = $this->session->admin_mode;
-    // $this->site_security->_make_sure_logged_in();
+
 }
 
 

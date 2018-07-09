@@ -1,7 +1,3 @@
-<?php
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_logged_in();
-?>
 
 <style>
 .error-template {padding: 20px 15px;text-align: center;}
@@ -23,7 +19,7 @@
     	<P>&nbsp;</P>    	    	    	    			
         <div class="error-actions">
             <a href="<?= base_url() ?>users_application" class="btn btn-primary btn-lg"> Proceed To Application</a>
-       		<a  href="youraccount/logout" class="btn btn-primary btn-lg"> Cancel </a>
+       		<a  href="<?= base_url('auth/logout'); ?>" class="btn btn-primary btn-lg"> Cancel </a>
         </div>
     </div>
 </div>

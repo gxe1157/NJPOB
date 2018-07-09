@@ -74,7 +74,6 @@ class Auth extends MX_Controller
 	 */
 	public function login()
 	{
-
 		$this->data['title'] = $this->lang->line('login_heading');
 
 		// validate form input
@@ -94,7 +93,7 @@ class Auth extends MX_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				// redirect('auth/index');
 				// $this->load->module($this->view_module);
-				redirect($this->view_module.'/welcome');				
+				redirect($this->view_module.'/index');				
 			}
 			else
 			{
@@ -135,13 +134,20 @@ class Auth extends MX_Controller
 	public function logout()
 	{
 		$this->data['title'] = "Logout";
+		$logout_msg = isset($_SESSION['logout_msg'] ) ? $_SESSION['logout_msg']: 0;
 
 		// log the user out
 		$logout = $this->ion_auth->logout();
 
+		/* Added by Evelio */
+		if( $logout_msg ) {
+		    $value = '<div class="alert alert-'.$logout_msg->type.'" role="alert">'.$logout_msg->message.'</div>';
+			$this->session->set_flashdata('logout_msg', $value);          
+		}	
+		/* Added by Evelio */
+
 		// redirect them to the login page
 		$this->session->set_flashdata('message', $this->ion_auth->messages());
-		// redirect('auth/login');
 		redirect('auth/login');		
 	}
 

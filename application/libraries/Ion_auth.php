@@ -430,7 +430,10 @@ class Ion_auth
 		}
 		else
 		{
-			if (version_compare(PHP_VERSION, '7.0.0') >= 0)
+			/* Changed by Evelio */
+			$_SESSION = array();			
+			//if (version_compare(PHP_VERSION, '7.0.0') >= 0)
+			if (version_compare(PHP_VERSION, '5.6.0') >= 0)			
 			{
 				session_start();
 			}

@@ -8,26 +8,24 @@ class Users_application extends MY_Controller
 public $mdl_name = 'mdl_users_application';
 public $main_controller = 'users_application';
 
-public $column_rules = array();
-public $result_set = array();
-public $membership_level = null;
+public $column_rules = [];
 public $is_law_officer = null;
+private $user = [];
 
 function __construct() {
     parent::__construct();
+
+    /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+    $this->user = $this->ion_auth->user()->row();
 
     $this->load->helper('users_application/form_flds_helper');
     list( $this->form_tables, $this->users, $this->user_address,
           $this->user_mail_to, $this->user_info, $this->user_employment_le,
           $this->user_employment_prv_sector, $this->user_children ) = get_table_data();
-
-
-    /* fetch user application data */
-    $user_id = $this->session->user_id;
-    /* fetch user application data */
-    $this->result_set = $this->model_name->fetch_form_data($user_id);
-    $this->membership_level = $this->result_set[0]->membership_level;
-    $this->is_law_officer = substr($this->membership_level,0,3) == 'LE_' ? 1 : 0; 
+    $this->is_law_officer =
+          substr($this->user->membership_level,0,3) == 'LE_' ? 1 : 0; 
 }
 
 /* ===================================================
@@ -92,10 +90,18 @@ function ajax_save_exit()
     $fld_group = $this->input->post('fld_group', TRUE);
     $job_completed = false;    
     $this->update_user_account($fld_group, $job_completed);
-    
+
+    $flash_msg = $this->model_name->get_view_data_custom(
+                'title', 'save_exit_application', 'site_messages', null)->row(); 
+    $this->session->set_userdata('logout_msg', $flash_msg);
+
     /* Send Email */
-    $email = $this->input->post( 'email', TRUE);
-    $this->send_mail($email, 'memFormNotComplete',null );     
+    $this->load->library('MY_Email_send');
+    $email_to = $this->input->post( 'email', TRUE);    
+    $type = 'memFormNotComplete';
+    $variables = null;
+    $this->my_email_send->send_admin_email($email_to, $type, $variables);
+
     echo 1;       // passed    
 }
 
@@ -107,9 +113,8 @@ function youraccount_profile()
 function index($update_profile=null)
 {
 
-    $this->_security_check();   
+    list( $Select_option, $fld_group1, $fld_group2, $fld_group3, $fld_group4, $fld_group5 ) = get_fields($this->user);
 
-    list( $Select_option, $fld_group1, $fld_group2, $fld_group3, $fld_group4, $fld_group5 ) = get_fields($this->result_set);
     $data['Select_option']  = $Select_option;
     $data['fld_group1']     = $fld_group1;
     $data['fld_group2']     = $fld_group2;
@@ -131,7 +136,7 @@ function index($update_profile=null)
     }
 
     $data['is_law_officer'] = $this->is_law_officer;
-    $data['user_children_data'] = $this->model_name->get_view_data_custom('user_id', $user_id, 'user_children', null);
+    $data['user_children_data'] = $this->model_name->get_view_data_custom('user_id', $this->user->id, 'user_children', null);
 
     $data['menu_level']     = 1;
     $data['custom_jscript'] = [ 'sb-admin/js/bootstrapValidator.min',
@@ -167,7 +172,7 @@ function update_user_account($fld_group, $job_completed)
 {   
     switch ($fld_group) {
       case 'fld_group1':
-            $this->_update_from_post('user_address', $this->user_address ); // table_name, field array
+            $this->_update_from_post('user_address', $this->user_address );
             $this->_update_from_post('user_mail_to', $this->user_mail_to );
             $this->_update_from_post('user_info', $this->user_info);
             $this->_update_from_post('users', $this->users);
@@ -182,7 +187,7 @@ function update_user_account($fld_group, $job_completed)
             $this->_update_from_post('user_employment_le', $this->user_employment_le);
             $this->_update_from_post('user_employment_prv_sector', $this->user_employment_prv_sector);
             if( $job_completed == true ) { 
-                $this->model_name->update_data('user_login', array('app_completed_date' => time()) );    
+                $this->model_name->update_data('users', array('app_completed_date' => time()) );    
 
                 /* Send Email */
                 if( ENV == 'live') {

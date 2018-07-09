@@ -100,7 +100,7 @@ function _ad_plan_select_options(){
 function formSubmit()
 {
 	echo "<h1>form submitted</h1>";
- 	$this->lib->checkArray($_POST,1);
+ 	$this->lib->dd($_POST,1);
 quit('formSubmit');
 
 }

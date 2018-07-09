@@ -25,21 +25,26 @@ class MY_Form_model extends MY_Controller{
         return ($response);                
     }
 
-    function modal_post($update_id, $user_id, $column_rules)
+    function modal_post($update_id, $user_id, $column_rules, $table_name=null)
     {
 
         $this->form_validation->set_rules( $column_rules );
         if($this->form_validation->run() == TRUE) {
             /* get the variables */
-            $data = $this->input->post(null, TRUE);
+            $data = $this->_filter_data( $table_name, $this->input->post(null, TRUE));
 
+            $user = $this->ion_auth->user()->row();
+            $data['admin_id'] = $user->id;
             $data['admin_id'] = $this->default['admin_id'];
+ddf('Check this '.$data['admin_id']);
+
             $data['user_id'] = $user_id;
             if(isset($data['dob']))
                 $data['dob'] = SQLformat_date( $data['dob'] );
 
             /* remove some fields from data array */
             $this->remove_from_data($data);
+            
             if(is_numeric($update_id)){
                 //update details
                 $data['modified_date'] = time();            
@@ -113,6 +118,22 @@ class MY_Form_model extends MY_Controller{
 
     }   
 
+    protected function _filter_data($table_name, $data)
+    {
+        $filtered_data = array();
+        $columns = $this->db->list_fields($table_name);
+
+        if (is_array($data))
+        {
+            foreach ($columns as $column)
+            {
+                if (array_key_exists($column, $data))
+                    $filtered_data[$column] = $data[$column];
+            }
+        }
+
+        return $filtered_data;
+    }
 
     function admin_member_portal_view($data)
     {

@@ -695,7 +695,7 @@ $(document).ready(function() {
           {
             // console.log( 'Return Data:......  ', data);
             let response = JSON.parse(data);
-            // console.log(response);
+            console.log(response);
 
             if( data == 1 ) {
                FormCheck[fld_group] = 1;            
@@ -723,7 +723,6 @@ $(document).ready(function() {
         })  
     }
 
-
     function save_exit_ajax(fld_group, step_id ){
         var formData = new FormData();
         var jdata = "#step"+step_id+" input, #step"+step_id+" select";
@@ -748,7 +747,7 @@ $(document).ready(function() {
             // console.log( 'Return Data:......  ', data);
             if( data == 1 ) {
                 // console.log('Success server side............' );                
-                window.location.replace('youraccount/logout');                
+                window.location.replace('auth/logout');                
             } else {
                 console.log('Failed server side.............' );
             }

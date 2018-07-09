@@ -12,7 +12,7 @@
     <br />
     <br />
     <ul class="list-inline pull-right">
-      <li><a href="<?= base_url() ?>auth/logout"
+      <li><a href="<?= base_url('users_registration/exit_after_payment') ?>"
              class="btn btn-default"
              role="button">Exit</a></li>
       <li><a href="<?= base_url() ?>users_application"
