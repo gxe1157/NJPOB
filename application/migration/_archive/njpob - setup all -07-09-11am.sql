@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.8.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2018 at 04:41 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 5.6.31
+-- Generation Time: Jul 09, 2018 at 04:55 PM
+-- Server version: 10.1.33-MariaDB
+-- PHP Version: 7.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -167,6 +167,16 @@ CREATE TABLE `ci_sessions` (
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `ci_sessions`
+--
+
+INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('5cg54rj2tdtruqj4opdpg0fkpm3vv930', '::1', 1531147600, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533313134373630303b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a22616e536b46664b6e5875376463343672767734486670665578485a545374223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b757365725f69647c693a333b6c6f676765645f696e7c623a313b),
+('b69nclo48o10l7qe1ecdt40lfj3pb7h8', '::1', 1531146985, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533313134363938353b6964656e746974797c733a31353a2261646d696e4061646d696e2e636f6d223b656d61696c7c733a31353a2261646d696e4061646d696e2e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353330383335303438223b6c6173745f636865636b7c693a313533313134363938353b),
+('e9dbtjmf3qdnq1traaco83ovae65gn49', '::1', 1531147600, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533313134373630303b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a22616e536b46664b6e5875376463343672767734486670665578485a545374223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b757365725f69647c693a333b6c6f676765645f696e7c623a313b),
+('qjh1hgmneirbeca46jp52frm7splc9m7', '::1', 1531147207, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533313134373230373b726566657272616c5f706167657c733a31383a2275736572735f726567697374726174696f6e223b7472616e73616374696f6e69647c733a33303a2235414c45374743574146355976445336683358654636584e7278616b6871223b63635f656d61696c7c733a31383a226576656c696f406d61696c6572732e636f6d223b757365725f69647c733a313a2232223b6c6f676765645f696e7c623a313b6964656e746974797c733a32363a2273757065727669736f72406e6574636172742d6465762e636f6d223b656d61696c7c733a32363a2273757065727669736f72406e6574636172742d6465762e636f6d223b6f6c645f6c6173745f6c6f67696e7c4e3b6c6173745f636865636b7c693a313533313134373230373b);
+
 -- --------------------------------------------------------
 
 --
@@ -217,6 +227,26 @@ CREATE TABLE `enquiries` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `groups`
+--
+
+CREATE TABLE `groups` (
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'Administrator'),
+(2, 'members', 'General User');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `legislative_outreach`
 --
 
@@ -239,6 +269,19 @@ CREATE TABLE `legislative_outreach` (
   `create_date` int(11) NOT NULL,
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_attempts`
+--
+
+CREATE TABLE `login_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -495,6 +538,30 @@ CREATE TABLE `site_cookies` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `site_messages`
+--
+
+CREATE TABLE `site_messages` (
+  `id` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  `type` enum('info','warning','danger','default','success') NOT NULL,
+  `create_date` int(11) NOT NULL,
+  `modified_date` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `site_messages`
+--
+
+INSERT INTO `site_messages` (`id`, `title`, `message`, `type`, `create_date`, `modified_date`, `admin_id`) VALUES
+(1, 'save_exit_application', 'Your membership application has been saved but remains incomplete. Membership cannot take effect until you complete and submit your application in full in order for you to receive membership benefits.', 'info', 0, 0, 1),
+(2, 'save_check_email', 'Thank you for joining our family that we call The brotherhood.\r\n\r\nAn email has been sent for you to activate your account.', 'success', 0, 0, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `site_payments`
 --
 
@@ -511,6 +578,14 @@ CREATE TABLE `site_payments` (
   `username` varchar(100) DEFAULT NULL,
   `create_date` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `site_payments`
+--
+
+INSERT INTO `site_payments` (`id`, `user_id`, `transactionid`, `trans_type`, `itemnumber`, `pay_method`, `amount`, `check_no`, `cc_email`, `username`, `create_date`) VALUES
+(1, 1, '5ALE7GCWAF5YvDS6h3XeF6XNrxakhq', '1 Year Subscription with Initiation', 'LE_Active', 'PayPal', '35.00', '', 'evelio@mailers.com', NULL, 1531147172),
+(2, 2, 'anSkFfKnXu7dc46rvw4HfpfUxHZTSt', '1 Year Subscription with Initiation', 'LE_Active', 'PayPal', '35.00', '', 'evelio@mailers.com', NULL, 1531147349);
 
 -- --------------------------------------------------------
 
@@ -576,6 +651,72 @@ CREATE TABLE `site_users_upload` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `salt` varchar(255) DEFAULT NULL,
+  `email` varchar(254) NOT NULL,
+  `activation_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_time` int(11) UNSIGNED DEFAULT NULL,
+  `remember_code` varchar(40) DEFAULT NULL,
+  `created_on` int(11) UNSIGNED NOT NULL,
+  `last_login` int(11) UNSIGNED DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `middle_name` varchar(30) NOT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `cell_phone` varchar(14) NOT NULL,
+  `avatar_name` varchar(30) NOT NULL,
+  `exp_date` int(11) NOT NULL,
+  `old_expire` int(11) NOT NULL,
+  `membership_level` varchar(20) NOT NULL,
+  `create_date` int(11) NOT NULL,
+  `transactionid` varchar(255) NOT NULL,
+  `modified_date` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `is_delete` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `middle_name`, `company`, `phone`, `cell_phone`, `avatar_name`, `exp_date`, `old_expire`, `membership_level`, `create_date`, `transactionid`, `modified_date`, `admin_id`, `is_delete`) VALUES
+(1, '127.0.0.1', 'administrator', '$2y$08$Xmo2C/45zCQoSZjTi39OZ.7IIyGJF6yN06y9.12U74gxFmGZVfdiG', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1531146985, 1, 'Evelio', 'Velez', 'M.', 'ADMIN', '(973) 478-8813', '(551) 551-5555', '1_avatar_Desert.jpg', 0, 0, 'LE_active', 0, '', 1530736198, 1, 0),
+(2, '::1', 'supervisor', '$2y$08$UPC/wEcNAElV5Gs9GwU3F.R65RR2F9yL5HBmcP3t2fStKC/lpSssi', NULL, 'supervisor@netcart-dev.com', NULL, NULL, NULL, NULL, 1531147172, 1531147207, 1, 'john', 'smith', '', NULL, '(452) 348-7451', '', '', 0, 0, 'LE_Active', 0, '', 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_groups`
+--
+
+CREATE TABLE `users_groups` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `group_id` mediumint(8) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users_groups`
+--
+
+INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user_address`
 --
 
@@ -593,6 +734,14 @@ CREATE TABLE `user_address` (
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user_address`
+--
+
+INSERT INTO `user_address` (`id`, `user_id`, `address1`, `address2`, `city`, `state`, `zip`, `county`, `country`, `create_date`, `modified_date`, `admin_id`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1531147172, 0, 0),
+(2, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1531147349, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -639,6 +788,14 @@ CREATE TABLE `user_employment_le` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `user_employment_le`
+--
+
+INSERT INTO `user_employment_le` (`id`, `user_id`, `le_agency`, `le_dept`, `le_add1`, `le_add2`, `le_city`, `le_state`, `le_zip`, `le_rank`, `le_email`, `le_phone`, `le_dt_hired`, `le_dt_retired`, `le_yos`, `create_date`, `modified_date`, `admin_id`) VALUES
+(1, 1, NULL, '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1531147172, 0, 0),
+(2, 2, NULL, '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1531147349, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -664,6 +821,14 @@ CREATE TABLE `user_employment_prv_sector` (
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `user_employment_prv_sector`
+--
+
+INSERT INTO `user_employment_prv_sector` (`id`, `user_id`, `prv_sector`, `prv_sector_employer`, `prv_sector_dept`, `prv_sector_add1`, `prv_sector_add2`, `prv_sector_city`, `prv_sector_state`, `prv_sector_zip`, `prv_sector_position`, `prv_sector_email`, `prv_sector_phone`, `prv_sector_dt_hired`, `create_date`, `modified_date`, `admin_id`) VALUES
+(1, 1, '', NULL, '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1531147172, 0, 0),
+(2, 2, '', NULL, '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1531147349, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -696,6 +861,14 @@ CREATE TABLE `user_info` (
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `user_info`
+--
+
+INSERT INTO `user_info` (`id`, `user_id`, `registered_voter`, `legislative_dist`, `gender`, `dob`, `driver_lic`, `height`, `weight`, `social_sec`, `hair_color`, `eye_color`, `marital_status`, `spouse_fname`, `spouse_lname`, `spouse_dob`, `spouse_gender`, `spouse_email`, `children`, `create_date`, `modified_date`, `admin_id`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, 1531147172, 0, 0),
+(2, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, 1531147349, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -714,6 +887,14 @@ CREATE TABLE `user_mail_to` (
   `modified_date` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user_mail_to`
+--
+
+INSERT INTO `user_mail_to` (`id`, `user_id`, `mail_add1`, `mail_add2`, `mail_city`, `mail_state`, `mail_zip`, `create_date`, `modified_date`, `admin_id`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, 1531147172, 0, 0),
+(2, 2, NULL, NULL, NULL, NULL, NULL, 1531147349, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -847,9 +1028,21 @@ ALTER TABLE `enquiries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `groups`
+--
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `legislative_outreach`
 --
 ALTER TABLE `legislative_outreach`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -907,6 +1100,12 @@ ALTER TABLE `site_cookies`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `site_messages`
+--
+ALTER TABLE `site_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `site_payments`
 --
 ALTER TABLE `site_payments`
@@ -923,6 +1122,21 @@ ALTER TABLE `site_upload_categories`
 --
 ALTER TABLE `site_users_upload`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_users_groups` (`user_id`,`group_id`),
+  ADD KEY `fk_users_groups_users1_idx` (`user_id`),
+  ADD KEY `fk_users_groups_groups1_idx` (`group_id`);
 
 --
 -- Indexes for table `user_address`
@@ -975,136 +1189,204 @@ ALTER TABLE `webpages`
 --
 ALTER TABLE `business_categories`
   MODIFY `recno` int(11) NOT NULL AUTO_INCREMENT COMMENT 'I|11|0', AUTO_INCREMENT=17;
+
 --
 -- AUTO_INCREMENT for table `business_listings`
 --
 ALTER TABLE `business_listings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `business_listings_upload`
 --
 ALTER TABLE `business_listings_upload`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `car_shields`
 --
 ALTER TABLE `car_shields`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `car_shields_upload`
 --
 ALTER TABLE `car_shields_upload`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `contact_message`
 --
 ALTER TABLE `contact_message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `enquiries`
 --
 ALTER TABLE `enquiries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `groups`
+--
+ALTER TABLE `groups`
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `legislative_outreach`
 --
 ALTER TABLE `legislative_outreach`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `main_menu`
 --
 ALTER TABLE `main_menu`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+
 --
 -- AUTO_INCREMENT for table `msite_accounts`
 --
 ALTER TABLE `msite_accounts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `msite_ads`
 --
 ALTER TABLE `msite_ads`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `msite_buy_ads`
 --
 ALTER TABLE `msite_buy_ads`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `msite_categories`
 --
 ALTER TABLE `msite_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `site_admin_emails`
 --
 ALTER TABLE `site_admin_emails`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT for table `site_admin_terms_conditions`
 --
 ALTER TABLE `site_admin_terms_conditions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `site_cookies`
 --
 ALTER TABLE `site_cookies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `site_messages`
+--
+ALTER TABLE `site_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `site_payments`
 --
 ALTER TABLE `site_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `site_upload_categories`
 --
 ALTER TABLE `site_upload_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
 --
 -- AUTO_INCREMENT for table `site_users_upload`
 --
 ALTER TABLE `site_users_upload`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `user_address`
 --
 ALTER TABLE `user_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `user_children`
 --
 ALTER TABLE `user_children`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `user_employment_le`
 --
 ALTER TABLE `user_employment_le`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `user_employment_prv_sector`
 --
 ALTER TABLE `user_employment_prv_sector`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `user_mail_to`
 --
 ALTER TABLE `user_mail_to`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `webpages`
 --
 ALTER TABLE `webpages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
