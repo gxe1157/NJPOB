@@ -19,48 +19,12 @@ function __construct()
      =============================================================== */
    if( $this->mdl_name != 'mdl_' ) $this->load->model( $this->mdl_name, 'model_name');
    /* Check Logged in Status */
-   $this->default = login_init();
+   // $this->default = login_init();
 }
 
 /* ===============================================
    Add DRY funtions  // Added By Evelio Velez 04-2017
    =============================================== */
-
-function send_mail( $email, $type, $mess_ecode)
-{
-    if( ENV != 'live')  return false;
-
-    $results_set = $this->model_name->get_view_data_custom('type', $type, 'site_admin_emails', null)->result();
-
-    $admin_email = $results_set[0]->admin_email;
-    $from        = $results_set[0]->from;
-    $subject     = $results_set[0]->subject;
-    $message     = $results_set[0]->body;
-
-    $domain  = base_url();
-    $message = sprintf($message, $domain, $mess_ecode);
-
-    $this->load->library('email');
-    $this->email->from( $from, $user_id);
-    $this->email->to($email);
-    $this->email->cc($admin_email);
-
-    $this->email->subject($subject);
-    $this->email->message($message);
-
-    $this->email->send();
-
-    // if ( ! $this->email->send()) {
-    //         // Generate log error
-    // }
-}
-
-
-function _security_check()
-{
-    // ! - line below is not active - !
-    // $this->site_security->_make_sure_is_admin();
-}
 
 function _numeric_check($update_id)
 {
@@ -81,7 +45,7 @@ function _set_flash_danger_msg($flash_msg)
 }
 
 
-function _get_column_names( $key_value )  // we will use for $key_value only "field" or "label"
+function _get_column_names( $key_value ) // use for $key_value "field" or "label"
 {
     foreach ($this->column_rules as $key => $value) {
         if( $key_value == 'field' ) {

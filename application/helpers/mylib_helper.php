@@ -10,6 +10,9 @@ if ( ! function_exists('login_init'))
 	    $userid = $ci->site_security->_get_user_id();	    
 	    $userid = is_numeric( $userid ) ? $userid : 0; // Will return userid not a true or false
 	    $login_data = $ci->model_name->get_login_byid($userid)->result();
+        
+        if($login_data)
+        	return null;
 
 	    $default['status']= $userid > 0 ? 1 : 0;
 		$default['admin_id'] = $userid;	    /* tis user is logged */

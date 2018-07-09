@@ -12,7 +12,9 @@ public $column_rules = [];
 
 // used like this.. in_array($key, $columns_not_allowed ) === false )
 public $columns_not_allowed = array( 'create_date' );
-public $default = array();
+public $default = [];
+private $user = null;
+
 
 function __construct() {
     parent::__construct();
@@ -20,23 +22,24 @@ function __construct() {
     /* is user logged in */
     $this->load->module('auth');
     if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+    $this->user = $this->ion_auth->user()->row();    
 
-    /* is user logged in */
-    $this->default = login_init();    
+    // /* is user logged in */
+    // $this->default = login_init();    
 
     /* get user data */
-    $table_name = 'car_shields';
+    // $table_name = 'car_shields';
     $update_id = $this->uri->segment(3);
-    $results_set =
-       $this->model_name->get_view_data_custom('id', $update_id,$table_name, null)->result();
+    // $results_set =
+    //    $this->model_name->get_view_data_custom('id', $update_id,$table_name, null)->result();
 
     $this->load->helper('car_shields/form_flds_helper');
     $this->column_rules = get_fields();
 
     /* user status */
-    $this->default['username'] = count($results_set) > 0 ? $results_set[0]->username : '';    
-    $this->default['user_status'] = count($results_set) > 0 ? $results_set[0]->status : '';
-    $this->default['user_is_delete'] = count($results_set) > 0 ? $results_set[0]->is_deleted : 0;
+    // $this->default['username'] = count($results_set) > 0 ? $results_set[0]->username : '';    
+    // $this->default['user_status'] = count($results_set) > 0 ? $results_set[0]->status : '';
+    // $this->default['user_is_delete'] = count($results_set) > 0 ? $results_set[0]->is_deleted : 0;
 
     /* page settings */
     $this->default['page_title'] = "Manage Car Shields";    
@@ -71,7 +74,7 @@ function manage_admin()
 function member_manage()
 {
     $this->load->library('MY_Form_model');    
-    $user_id = $this->site_security->_make_sure_logged_in();
+    $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
     $data = $this->build_data( $user_id );
     $data = $this->my_form_model->admin_member_portal_view( $data );
 
@@ -81,7 +84,7 @@ function member_manage()
 
 function car_shield_upload($manage_rowid=null)
 {
-    $update_id  = $this->site_security->_make_sure_logged_in();
+    $update_id  = $this->user->id; //$this->site_security->_make_sure_logged_in();
 
     $this->load->library('MY_Uploads');   
     $table_name = 'car_shields_upload';
@@ -179,7 +182,7 @@ function process_payment()
     if($submit=='Cancel')
         redirect( $this->main_controller.'/member_manage');
 
-    $user_id = $this->site_security->_make_sure_logged_in();
+    $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
     list( $data['status'], $data['user_avatar'],
           $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($user_id);
 
