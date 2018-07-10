@@ -6,6 +6,8 @@
 <?php $this->load->view('html_head');?>
 
 <body>
+ <div>Mode: <?= $this->session->admin_mode;?></div> 
+
   <!--main container for page  -->
   <div class="container">
 <!-- header image -->

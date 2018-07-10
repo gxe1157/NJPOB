@@ -73,7 +73,6 @@ function build_table_row(&$response, $user_id, $id )
     // if($response['new_update_id'])
     //         $line ='<tr id="tr_'.$id.'">';
 
-    $line .='<tr id="tr_'.$id.'">';
     $line .='<td class="right">'.$fullname.'</td>';   
     $line .='<td class="right">'.$voter_fname.' '.$voter_lname.'</td>';
     $line .='<td class="right">'.$voter_city.'</td>';
@@ -83,12 +82,7 @@ function build_table_row(&$response, $user_id, $id )
         href="http://localhost/njpob/legislative_outreach/delete/'.$id.'">
         <i class="fa fa-trash fa-fw"></i> Remove
         </a>
-        <a class="btn btn-info btn-sm btn-edit actionBtn"
-           id="edit-'.$id.'/'.$user_id.'"
-           href="'.$id.'/'.$user_id.'">
-        <i class="fa fa-pencil fa-fw"></i> Edit
-        </a>
-        </td>';                               
+        <button class="btn btn-info btn-sm btn-edit actionBtn" id="'.$id.'/'.$user_id.'" onClick="javascript: editBtn(this)"><i class="fa fa-pencil fa-fw"></i> Edit</button></td>';                               
 
     // if($response['new_update_id'])
     //         $line .='</tr>';

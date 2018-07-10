@@ -22,16 +22,8 @@ function __construct() {
     $this->load->module('auth');
     if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
     $this->user = $this->ion_auth->user()->row();    
-    /* is user logged in */
-    // $this->default = login_init();    
-
-    /* get user data */
-    // $table_name = 'business_listings';
 
     $update_id = $this->uri->segment(3);
-    // $results_set =
-    //    $this->model_name->get_view_data_custom('id', $update_id,$table_name, null)->result();
-
     $this->load->helper('business_listings/form_flds_helper');
     $this->column_rules = get_fields();
 

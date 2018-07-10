@@ -16,8 +16,8 @@ function __construct($data = null) {
     parent::__construct();
 
     $this->load->module('auth');
-    if (!$this->ion_auth->logged_in())
-        redirect('auth/login', 'refresh');
+    // if (!$this->ion_auth->logged_in())
+    //     redirect('auth/login', 'refresh');
  
     $this->default['page_nav'] = "Dashboard";  
     $this->default['flash']    = $this->session->flashdata('item');
@@ -28,6 +28,14 @@ function __construct($data = null) {
     Controller functions goes here. Put all DRY
     functions in applications/core/My_Controller.php
   ==================================================== */
+
+function login()
+{
+
+    // $admin_mode = uri_string() == 'admin' ? 'admin_portal' : 'member_portal';
+    $this->session->set_userdata('admin_mode', 'admin_portal');
+    redirect('auth'.'/login');
+}
 
 function welcome()
 {

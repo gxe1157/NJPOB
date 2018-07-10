@@ -76,11 +76,7 @@
 							   	href="<?= $remove ?>">
 							  	<i class="fa fa-trash fa-fw"></i> Remove
 								</a>
-								<a class="btn btn-info btn-sm btn-edit actionBtn"
-								   id="edit-<?= $edit_url ?>"
-							   	   href="<?= $edit_url ?>">
-							  	<i class="fa fa-pencil fa-fw"></i> Edit
-								</a>
+								<button class="btn btn-info btn-sm btn-edit actionBtn" id="<?= $edit_url ?>"  onClick="javascript: editBtn(this);"><i class="fa fa-pencil fa-fw"></i> Edit</button>								
 							</td>    							
 						</tr>
 			    <?php } ?>

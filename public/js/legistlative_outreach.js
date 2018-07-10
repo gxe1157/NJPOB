@@ -16,16 +16,12 @@ var fldNames = {'first_name':'First Name', 'last_name' : 'Last Name', 'middle_na
 
 model_js_mess.fldNames = fldNames;
 
-
-$('.btn-edit').on('click', function (e) {
-    e.preventDefault();
-    let myHeader = this.id;
-    let editId = myHeader.split('-');
-    let rowId = editId[1].split('/');
-
+function editBtn( obj ){
+    let rowId = ( obj.id ).split('/');
     let formData = new FormData();
     formData.append('rowId', rowId[0] );
     formData.append('userId', rowId[1] );    
+// alert( rowId[0]+' | '+rowId[1]);
 
     $.ajax({
       url: dir_path+'legislative_outreach/modal_fetch_ajax',
@@ -37,7 +33,7 @@ $('.btn-edit').on('click', function (e) {
       success : function(data){
         // console.log( 'Return Data:......  ', data);
         let response = JSON.parse( data );
-        // console.log( 'Return Data:......  ', response);
+        console.log( 'Return Data:......  ', response);
 
         $( ".btnSubmitForm" ).trigger( "click" );
 
@@ -61,7 +57,7 @@ $('.btn-edit').on('click', function (e) {
       }
 
     });
-});
+};
 
 function add_data_ajax(){
     let formData = new FormData();
@@ -97,7 +93,7 @@ function add_data_ajax(){
           }else{
             // Update Record
             $('#tr_'+row_id).html(response['table_lines']);
-            console.log(response['table_lines']);
+            // console.log(response['table_lines']);
           }
           let flash_type = response['flash_type'];
           myAlert( 'Alert'+' ! ',response["flash_message"], flash_type );
