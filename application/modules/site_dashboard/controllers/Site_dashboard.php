@@ -37,10 +37,15 @@ function __construct($data = null) {
 function index()
 {
     /* This was redirected fron auth/login if passed */
-    if( $this->ion_auth->is_admin() )
+    if( $this->ion_auth->is_admin() ){
         $this-> welcome();
-    else
-        redirect('auth'.'/login');    
+    } else {
+        $flash_msg = $this->model_name->get_view_data_custom(
+                    'title', 'admin_login_denied', 'site_messages', null)->row();
+        $this->session->set_userdata('logout_msg', $flash_msg);
+        redirect('auth'.'/logout');    
+    }
+
 }
 
 function login()

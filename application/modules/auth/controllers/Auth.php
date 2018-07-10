@@ -143,12 +143,11 @@ class Auth extends MX_Controller
 		if( $logout_msg ) {
 		    $value = '<div class="alert alert-'.$logout_msg->type.'" role="alert">'.$logout_msg->message.'</div>';
 			$this->session->set_flashdata('logout_msg', $value);          
+		} else {
+			// redirect them to the login page
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
 		}	
-		/* Added by Evelio */
-
-		// redirect them to the login page
-		$this->session->set_flashdata('message', $this->ion_auth->messages());
-		redirect('auth/login');		
+		redirect('auth/login');
 	}
 
 	/**

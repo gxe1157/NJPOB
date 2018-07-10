@@ -113,8 +113,8 @@
 						</h3>						
 						<p>
 							Are you a free lance professional or perhaps a business owner
-						<a class="more_info" id="business_network_info" href="more_info">More information....</a>			
 						</p>
+						<a class="more_info" id="business_network_info" href="more_info">More information....</a>							
 					</div>
 				</div>
 			</div>
