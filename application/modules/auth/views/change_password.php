@@ -33,6 +33,8 @@
             </p>
 
       <?php echo form_close();?>
+      
+     <div style="margin-bottom: 100px;"><a href="forgot_password"><?php echo lang('login_forgot_password');?></a></div>      
 
 </div>
 </div>

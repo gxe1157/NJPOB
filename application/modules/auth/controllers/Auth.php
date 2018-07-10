@@ -31,8 +31,8 @@ class Auth extends MX_Controller
 		$this->lang->load('auth');
 
 		/* Added by Evelio */
-		$this->mode = $this->input->post('mode');
-		$this->view_module = $this->mode == 0 ? 'youraccount':'auth';
+		$this->view_module=
+			$this->session->userdata('admin_mode') != 'admin_portal' ? 'youraccount':'site_dashboard';
 		/* Added by Evelio */
 
 	}

@@ -29,7 +29,7 @@ function __construct() {
     $this->user = $this->ion_auth->user()->row();
 
     /* Set admin mode */
-    $this->default['admin_mode'] = $this->ion_auth->is_admin() ? 'admin_portal':'member_portal';
+    $this->default['admin_mode'] = $this->session->admin_mode;
 
     $this->load->helper('site_users/form_flds_helper');
     list( $this->Select_option, $this->column_rules ) = get_fields();
@@ -258,7 +258,13 @@ function update_user()
     $data['base_url']  = base_url();
 
     /* Update member page */
-    if( uri_string() == 'member_profile') {
+    if(  $this->default['admin_mode'] == 'admin_portal' ) {
+        $data['mode'] = 'admin_member_profile';
+        $data['cancel'] = 'cancel';
+
+        $this->load->module('templates');
+        $this->templates->admin($data);
+    } else {
         /* member manager */
         $data['page_title'] = $this->default['page_title'];
         $data['menu_level'] = 1;
@@ -270,13 +276,6 @@ function update_user()
         $data['view_module'] = "site_users";    
         $this->load->module('templates');
         $this->templates->public_main($data);
-    } else {
-
-        $data['mode'] = 'admin_member_profile';
-        $data['cancel'] = 'cancel';
-
-        $this->load->module('templates');
-        $this->templates->admin($data);
     }
 
 }

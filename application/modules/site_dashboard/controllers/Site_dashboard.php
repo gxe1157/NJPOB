@@ -16,9 +16,14 @@ function __construct($data = null) {
     parent::__construct();
 
     $this->load->module('auth');
-    // if (!$this->ion_auth->logged_in())
-    //     redirect('auth/login', 'refresh');
- 
+
+    /* if uri_string is not in array login */
+    $allow_access = ['admin', 'site_dashboard/login'];
+    if ( !in_array( uri_string(), $allow_access) ) {
+         if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+         $this->user = $this->ion_auth->user()->row();
+    }   
+
     $this->default['page_nav'] = "Dashboard";  
     $this->default['flash']    = $this->session->flashdata('item');
 }
@@ -29,9 +34,17 @@ function __construct($data = null) {
     functions in applications/core/My_Controller.php
   ==================================================== */
 
+function index()
+{
+    /* This was redirected fron auth/login if passed */
+    if( $this->ion_auth->is_admin() )
+        $this-> welcome();
+    else
+        redirect('auth'.'/login');    
+}
+
 function login()
 {
-
     // $admin_mode = uri_string() == 'admin' ? 'admin_portal' : 'member_portal';
     $this->session->set_userdata('admin_mode', 'admin_portal');
     redirect('auth'.'/login');

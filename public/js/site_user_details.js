@@ -97,8 +97,6 @@ function save_changes_ajax( id ){
  
 }
 
-
-
 $(document).ready(function() {
     prvSectorUpdate();    
 
@@ -123,6 +121,11 @@ $(document).ready(function() {
         formatData(this,event,'UP','phone');        
     })
 
+    $('.more_info').on('click', function(e){
+        e.preventDefault();
+        let id = this.id;              
+        alert('Need information here...... '+id);
+    });
 
     let change_occurred = false;
     $('#users_admin').on( 'focus', ':input', function(){

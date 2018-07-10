@@ -123,7 +123,6 @@ function build_data( $user_id )
     $required_docs = 10;
     $results_set = $data['columns']->result();
     $data['document_status'] = $this->_upload_status_update($required_docs, $user_id , $results_set);
-// dd($data['document_status']);
 
     $data['redirect_base']= base_url().$this->uri->segment(1);
     $data['default'] = $this->default;  

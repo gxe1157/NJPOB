@@ -49,7 +49,7 @@ function submit_ranking()
     $data['ranking'] = $this->input->post('ranking', TRUE);
 
     if ($submit=="Cancel"){
-        $page_url = $this->default['admin_mode'] == 'member_portal' ? 'user_inbox':'inbox';
+        $page_url = $this->default['admin_mode'] == 'admin_portal' ? 'inbox':'user_inbox';
         redirect('enquiries/'.$page_url);
     }
 
@@ -258,7 +258,16 @@ function view()
 
 
     /* Update member page */
-    if( $this->default['admin_mode'] == 'member_portal' ) {
+    if( $this->default['admin_mode'] == 'admin_portal' ) {
+        /* member manager */
+        $data['return_url'] = "enquiries/inbox/".$user_id;
+        // $data['cancel']     = 'manage_admin';
+        $data['page_url']   = "view";
+
+        $this->load->module('templates');
+        $this->templates->admin($data);
+
+    } else {
         $this->load->library('MY_Form_model');    
         $data = $this->my_form_model->admin_member_portal_view( $data );
 
@@ -269,15 +278,6 @@ function view()
 
         $this->load->module('templates');
         $this->templates->public_main($data);
-
-    } else {
-        /* member manager */
-        $data['return_url'] = "enquiries/inbox/".$user_id;
-        // $data['cancel']     = 'manage_admin';
-        $data['page_url']   = "view";
-
-        $this->load->module('templates');
-        $this->templates->admin($data);
     }
 
 }
