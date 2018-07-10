@@ -57,30 +57,45 @@ function get_legislative_id($update_id=null)
     return $query;
 }   
 
-// function update_data( $table_name, $table_data, $user_id)
-// {
-//   /* Check if user_id in table */
-//   if( empty($user_id) ) $user_id = 0; //die('----- user_id is empty ------');
+function build_table_row(&$response, $user_id, $id )
+{
+    $id = $response['new_update_id'] ? : $id;
 
-//   $this->db->where('id', $user_id);
-//   $query=$this->db->get($table_name);
-//   $num_rows = $query->num_rows();
-  
-//   if($num_rows>0){
-//       /* update by user_id */    
-//       $table_data['modified_date']= time();      
-//       $table_data['admin_id'] = $user_id;
-//       $this->db->where('id', $user_id);
-//       $this->db->update( $table_name, $table_data);
+    $query = $this->model_name->get_where($user_id, 'users')->row();
+    $fullname = $query->first_name.' '.$query->last_name;
 
-//       $rows_updated = $this->db->affected_rows();
-//       return $rows_updated;          
-//   } else {
-//       /* insert new record */
-//       die( 'User_id: '.$user_id.' for table ['.$table_name.'] tried Illegal record insert | Prg: users_application |');
-//   }    
-//   /*-*/    
-// }
+    $voter_fname = $this->input->post('first_name', TRUE);
+    $voter_lname = $this->input->post('last_name', TRUE);
+    $voter_city  = $this->input->post('city', TRUE);
+    $voter_email = $this->input->post('email', TRUE);
+
+    $line = '';
+    // if($response['new_update_id'])
+    //         $line ='<tr id="tr_'.$id.'">';
+
+    $line .='<tr id="tr_'.$id.'">';
+    $line .='<td class="right">'.$fullname.'</td>';   
+    $line .='<td class="right">'.$voter_fname.' '.$voter_lname.'</td>';
+    $line .='<td class="right">'.$voter_city.'</td>';
+    $line .='<td class="right">'.$voter_email.'</td>';
+    $line .='<td class="center">
+        <a class="btn btn-danger btn-sm btnConfirm actionBtn" id="delete-danger"
+        href="http://localhost/njpob/legislative_outreach/delete/'.$id.'">
+        <i class="fa fa-trash fa-fw"></i> Remove
+        </a>
+        <a class="btn btn-info btn-sm btn-edit actionBtn"
+           id="edit-'.$id.'/'.$user_id.'"
+           href="'.$id.'/'.$user_id.'">
+        <i class="fa fa-pencil fa-fw"></i> Edit
+        </a>
+        </td>';                               
+
+    // if($response['new_update_id'])
+    //         $line .='</tr>';
+
+    return $line;
+}
+// http://localhost/njpob/legislative_outreach/8/1
 
 
 

@@ -66,10 +66,15 @@ $('.btn-edit').on('click', function (e) {
 function add_data_ajax(){
     let formData = new FormData();
     let getData = $('#myModel').find(':input').serializeArray();
+    let row_id = 0;
+
     $.each(getData, function(i, field){
         formData.append( field.name, field.value);  
         // console.log('jdata', field.name, field.value );
+        if( field.name == 'rowId') { row_id = field.value;}
     });
+
+    formData.append( 'update_id', _('update_id').value);  
 
     $.ajax({
       url: dir_path +'legislative_outreach/modal_post_ajax', 
@@ -82,13 +87,21 @@ function add_data_ajax(){
       {
         //console.log( 'Return Data:......  ', data);
         var response = JSON.parse( data );
-        console.log( 'Return Data:......  ', response);
+        // console.log( 'Return Data:......  ', response);
 
         if( response['success'] == 1 ){
-            /* Success */
-            let target_url = $('#set_dir_path').val() == 0 ? 'manage_admin' : 'member_manage';
-            let href= dir_path+"legislative_outreach/"+target_url;       
-            window.location.replace( href );
+          /* Success */
+          if(response['new_update_id'] > 0) {
+            // New Record Added
+            $( response['table_lines'] ).appendTo('#example');
+          }else{
+            // Update Record
+            $('#tr_'+row_id).html(response['table_lines']);
+            console.log(response['table_lines']);
+          }
+          let flash_type = response['flash_type'];
+          myAlert( 'Alert'+' ! ',response["flash_message"], flash_type );
+
         } else if ( response['success'] == 2 ) {
             /* Failed to write t drive */
             myAlert('Error!','<b>Record failed insert/update to database.</b>');

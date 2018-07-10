@@ -24,15 +24,7 @@ function __construct() {
     if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
     $this->user = $this->ion_auth->user()->row();    
 
-    /* is user logged in */
-    // $this->default = login_init();    
-
-    /* get user data */
-    // $table_name = 'legislative_outreach';
     $update_id = $this->uri->segment(3);
-    // $results_set =
-    //   $this->model_name->get_view_data_custom('id', $update_id, $table_name, null)->result();
-
     $this->load->helper('legislative_outreach/form_flds_helper');
     $this->column_rules = get_fields();
 
@@ -41,6 +33,7 @@ function __construct() {
     // $this->default['user_status'] = count($results_set) > 0 ? $results_set[0]->status : '';
     // $this->default['user_is_delete'] = count($results_set) > 0 ?
     //        $results_set[0]->is_deleted : 0;
+
 
     /* page settings */
     $this->default['page_title'] = "Manage Legislative Out Reach";    
@@ -72,12 +65,17 @@ function modal_post_ajax()
 {
     $this->load->library('MY_Form_model');
 
-    $update_id = $this->input->post('rowId', TRUE);
-    unset($_POST['rowId']);
-    $user_id = $this->user->id; //$this->site_security->_get_user_id();    
-    $table_name='legislative_outreach';
+    $user_id  = $this->input->post('update_id', TRUE);; // update_id is Member ID
+    $admin_id = $this->user->id;
 
-    $response = $this->my_form_model->modal_post($update_id, $user_id, $this->column_rules);
+    $update_id  = $this->input->post('rowId', TRUE); // update row
+    
+    unset($_POST['rowId']);
+
+    $response = $this->my_form_model->modal_post($update_id, $user_id, $this->column_rules, null);
+
+    $response['table_lines']=
+        $this->model_name->build_table_row( $response, $user_id, $update_id);
 
     echo json_encode($response);                
     return;    

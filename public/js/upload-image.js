@@ -128,7 +128,7 @@ function remove( obj ){
             $( '#removeImg_'+position ).prop("disabled",false);            
             // console.log( 'Return Data:......  ', data);
             let response = JSON.parse( data );
-            console.log( 'Return Data:......  ', response);
+            // console.log( 'Return Data:......  ', response);
 
              /* Redirect if module/controller exist */
             if(response['success'] == 1 ){

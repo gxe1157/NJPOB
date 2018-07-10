@@ -14,6 +14,10 @@
 	<h2 style="margin-top: -5px;"><small><?= $default['page_title'] ?></small></h2>
 <?php } ?>
 
+<style>
+	.actionBtn{ margin-top: 2px; width: 75px; font-size: 12px; padding: 2px; }
+</style>
+
 <!-- Memeber Detail Panel -->
 <div class="row">
     <?php if( $default['admin_mode'] == 'admin_portal' ) {
@@ -62,20 +66,18 @@
 			    	 	$fullname = $row->first_name.' '.$row->last_name;
 			    	 	$member_name = $row->userfirst.' '.$row->userlast;
 			    ?>
-						<tr>
+						<tr id="tr_<?= $row->id; ?>" >
 							<td class="right"><?= $member_name ?></td>
 							<td class="right"><?= $fullname ?></td>
 							<td class="right"><?= $row->city ?></td>
 							<td class="right"><?= $row->email ?></td>
 							<td class="center">
-								<a class="btn btn-danger btn-sm btnConfirm" id="delete-danger"
-							   	style="margin-top: 2px; width: 75px; font-size: 12px; padding: 2px;"
+								<a class="btn btn-danger btn-sm btnConfirm actionBtn" id="delete-danger"
 							   	href="<?= $remove ?>">
 							  	<i class="fa fa-trash fa-fw"></i> Remove
 								</a>
-								<a class="btn btn-info btn-sm btn-edit"
+								<a class="btn btn-info btn-sm btn-edit actionBtn"
 								   id="edit-<?= $edit_url ?>"
-							   	   style="margin-top: 2px; width: 75px; font-size: 12px; padding: 2px;"
 							   	   href="<?= $edit_url ?>">
 							  	<i class="fa fa-pencil fa-fw"></i> Edit
 								</a>

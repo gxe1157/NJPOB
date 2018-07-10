@@ -326,7 +326,7 @@ $(document).ready(function(){
       alertType: "primary",
       button_mess: "Submit"            
     }).done(function (e) {
-      console.log('href '+href);	
+      // console.log('href '+href);	
 	  // if( e ) window.location.replace( href );	  	
     });
   });   

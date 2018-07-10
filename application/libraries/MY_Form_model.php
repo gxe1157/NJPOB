@@ -31,10 +31,13 @@ class MY_Form_model extends MY_Controller{
         $this->form_validation->set_rules( $column_rules );
         if($this->form_validation->run() == TRUE) {
             /* get the variables */
+            $response['new_update_id'] = 0;
+
             $data = $this->_filter_data( $table_name, $this->input->post(null, TRUE));
 
-            $data['admin_id'] = $user_id;
-            $data['user_id'] = $update_id;
+            $this->user = $this->ion_auth->user()->row(); 
+            $data['admin_id'] = $this->user->id;
+            $data['user_id'] = $user_id;
 
             if(isset($data['dob']))
                 $data['dob'] = SQLformat_date( $data['dob'] );
@@ -48,6 +51,9 @@ class MY_Form_model extends MY_Controller{
                 $rows_updated = $this->_update($update_id, $data);
 
                 $this->update_user_info($user_id);
+                $flash_message = $rows_updated > 0 ?
+                    "Record update was successful." : "Record update has failed.<br>Please notify the website administrator.";
+
                 $response['success'] = $rows_updated > 0 ? 1: 2; // Update failed
 
             } else {
@@ -56,8 +62,11 @@ class MY_Form_model extends MY_Controller{
                 $new_update_id = $this->_insert($data);
 
                 $this->update_user_info($user_id);
-                $response['success'] = $new_update_id > 0 ? 1: 2; // Insert failed
+                $flash_message = $new_update_id > 0 ?
+                    "Inserting new record was successful." : "Inserting new record has failed.<br>Please notify the website administrator.";
 
+                $response['success'] = $new_update_id > 0 ? 1: 2; //Insert failed
+                $response['new_update_id'] = $new_update_id;
             }
 
             $response['data'] = $data;
@@ -117,7 +126,10 @@ class MY_Form_model extends MY_Controller{
 
     protected function _filter_data($table_name=null, $data)
     {
-        $table_name = $table_name == null ?  $this->get_table() : $data_table;          
+
+        $table_name = $table_name == null ?
+                      $this->model_name->get_table() : $table_name;
+
         $filtered_data = array();
         $columns = $this->db->list_fields($table_name);
 

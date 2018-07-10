@@ -87,18 +87,9 @@ function doCheckDate( action, p ) {
          return p.substr(2, 2);
         },
      '8': function () {
-            var leapYear = ( ((yy % 4 == 0) && (yy % 100 != 0)) || (yy % 400 == 0) );
-            console.log('leapyear', leapYear, 'mm', mm, 'dd', dd );
-			
             if ( yy <= n ) {
-             //    if( !leapYear && mm == 2 && dd>28 ){ 				
-  				      	// alert('\nError: This is not a Leap Year:\n'+mm+'/ '+dd+'/ '+yy+'\n\nPlease Re-enter Date..' );
-  					      // return ''; //p.substr(0,4);					
-      			    // } 
-
-            return p;
+               return p;
             } else {
-                //alert_mess( '<br />Error: Re-enter Year: ');
                 alert('\nError: Re-enter Year\n\n'+mm+'/ '+dd+'/ '+yy+'\n' );
                 return p.substr(0,4);
             }

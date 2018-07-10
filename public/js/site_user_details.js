@@ -75,7 +75,7 @@ function save_changes_ajax( id ){
             }
                 
             change_occurred = false;
-            console.log('update_flds',update_flds);
+            // console.log('update_flds',update_flds);
 
         } else {
           // console.log('response',response);

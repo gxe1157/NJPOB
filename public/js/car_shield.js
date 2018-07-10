@@ -107,7 +107,7 @@ function openModal(){
       button_mess: "Submit"            
     }).done(function (e) {
       // console.log('href '+href);  
-    // if( e ) window.location.replace( href );     
+      // if( e ) window.location.replace( href );     
     });
 }
 
