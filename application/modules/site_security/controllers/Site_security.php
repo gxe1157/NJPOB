@@ -94,10 +94,12 @@ function _decrypt_string($str)
 
 function _decode_ss($str)
 {
-
-    $this->load->library('encryption');
-    $decrypted_string = $this->encryption->decrypt($str);
-    $last4_social = 'xxx-xx-'.substr($decrypted_string,5,4);
+    $last4_social=null;
+    if($str){
+       $this->load->library('encryption');
+        $decrypted_string = $this->encryption->decrypt($str);
+        $last4_social = 'xxx-xx-'.substr($decrypted_string,5,4);
+    }
     return $last4_social;
 }
 

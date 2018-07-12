@@ -290,7 +290,7 @@
                           <div class="col-md-4 pull-right" style="margin-top: 25px;">
                               <a href="<?= base_url() ?>site_users/member_upload" class="btn btn-primary btn-lg">
                                   Go to upload page</a>
-                              <a href="youraccount/logout" class="btn btn-primary btn-lg">
+                              <a href="auth/logout" class="btn btn-primary btn-lg">
                                   Save and Exit </a>
                         </div>
                       </div>
