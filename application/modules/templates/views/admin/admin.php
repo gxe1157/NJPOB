@@ -88,15 +88,18 @@
                   <i class="fa fa-cog fa-lg"></i> Site Settings<b class="caret"></b></a>
 
               <ul class="dropdown-menu">
-                <li><a href="<?= base_url() ?>site_dashboard/welcome">
-                    <i class="fa fa-angle-double-right"></i>  General Settings</a></li>
-                <li><a href="<?= base_url() ?>site_admin_terms_conditions/manage">
-                    <i class="fa fa-angle-double-right"></i> Terms-Conditions</a></li>
                 <li><a href="<?= base_url() ?>site_admin_emails/manage">
                     <i class="fa fa-angle-double-right"></i> Emails</a></li>
+                <li><a href="<?= base_url() ?>site_dashboard/welcome">
+                    <i class="fa fa-angle-double-right"></i>  General Settings</a></li>
+                <li><a href="<?= base_url() ?>membership_plans/manage">
+                    <i class="fa fa-angle-double-right"></i> Memebership Plans</a></li>
+                <li><a href="<?= base_url() ?>site_admin_terms_conditions/manage">
+                    <i class="fa fa-angle-double-right"></i> Terms-Conditions</a></li>
                 <li><a href="<?= base_url() ?>site_upload_categories/manage">
-                    <i class="fa fa-angle-double-right"></i> Manage Upload Categories</a></li>
+                    <i class="fa fa-angle-double-right"></i> Upload Categories</a></li>
               </ul>
+
             </li>
           </ul>
  <?php endif; ?>

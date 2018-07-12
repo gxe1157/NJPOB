@@ -27,11 +27,6 @@ function __construct() {
     $this->load->helper('business_listings/form_flds_helper');
     $this->column_rules = get_fields();
 
-    /* user status */
-    // $this->default['username'] = count($results_set) > 0 ? $results_set[0]->username : '';    
-    // $this->default['user_status'] = count($results_set) > 0 ? $results_set[0]->status : '';
-    // $this->default['user_is_delete'] = count($results_set) > 0 ? $results_set[0]->is_deleted : 0;
-
     /* page settings */
     $this->default['page_title'] = "Manage Business Network";    
     $this->default['headline'] = !is_numeric($update_id) ? "Manage Business Network" : "Update Business Network Details";

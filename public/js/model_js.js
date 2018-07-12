@@ -227,6 +227,10 @@ function ezBSAlert (options) {
 
 /* My custom model */
 $(document).ready(function(){
+  $('#openUploadModal').on('click', function () {
+      $('#uploadModal').modal();
+  })
+
   $("#btnAlert").on("click", function(){  	
     var prom = ezBSAlert({
       messageText: "hello world",

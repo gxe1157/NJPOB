@@ -47,8 +47,7 @@ function __construct() {
       $this->default['add_button']   = "Add New Webpage";      
       $data['redirect_url'] = base_url().$this->uri->segment(1)."/create";
       $data['custom_jscript'] = [ 'sb-admin/js/datatables.min',
-                                  'public/js/site_loader_datatable',
-                                  'public/js/format_flds'];    
+                                  'public/js/site_loader_datatable'];
 
       $data['columns']  = $this->get('page_url'); // get data ordered by .. 
       $data['default']  = $this->default;    
