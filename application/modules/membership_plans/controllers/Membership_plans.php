@@ -72,12 +72,13 @@ function build_data()
 
 function create()
 {
-    // dd($_POST);
-
     $update_id = $this->uri->segment(3);
     $submit = $this->input->post('submit', TRUE);
+    $cancel = $this->input->post('cancel', TRUE);
+    $show_panel = $this->input->post('show_panel', TRUE);
+    $panel_id = $this->uri->segment(4) != null ? $this->uri->segment(4) : $show_panel;
 
-    if( $submit == "Cancel" )
+    if( $cancel == "cancel" )
         redirect( $this->main_controller.'/manage');
 
     if( $submit == "Submit" ) {
@@ -104,9 +105,9 @@ function create()
                   "New Memebership Plan was sucessfully added" : "New Memebership Plan failed to be added";
                 $flash_type = $update_id > 0 ? 'success':'danger';
             }
-
-            $this->_set_flash_msg($flash_message, $flash_type);      
-            redirect($this->main_controller.'/create/'.$update_id);
+            $panel_id = empty($panel_id) ? '' : '/'.$panel_id;
+            $this->_set_flash_msg($flash_message, $flash_type); 
+            redirect($this->main_controller.'/create/'.$update_id.$panel_id);
         }
     }
 
@@ -115,15 +116,19 @@ function create()
     } else {
         $fetch['columns'] = $this->fetch_data_from_post();
     }
-    $data = $this->build_data( $user_id );
 
     $this->load->library('MY_Form_helpers');
     $data = $this->my_form_helpers->build_columns($data, $fetch, $this->column_rules);
 
+
+    $data['show_panel'] = empty($panel_id) ? 'panel1': $panel_id;
     $data['default'] = $this->default;  
     $data['action'] = is_numeric($update_id) ? 'Update Record' : 'Submit';
     $data['custom_jscript'] = [ 'sb-admin/js/jquery.cleditor.min',
+                                'public/js/site_init',    
                                 'public/js/site_loader_cleditor',
+                                'public/js/membership_plans',
+                                'public/js/upload-modal-image',                                
                                 'public/js/model_js',
                                 'public/js/format_flds'];    
 

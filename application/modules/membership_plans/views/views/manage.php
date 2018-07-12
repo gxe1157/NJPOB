@@ -75,7 +75,7 @@
 							   	   href="<?= $edit_url ?>">
 							  	<i class="fa fa-pencil fa-fw"></i> Edit
 								</a>
-							</td>						
+							</td>							
 						</tr>
 			    <?php } ?>
 

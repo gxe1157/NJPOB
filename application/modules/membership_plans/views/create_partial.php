@@ -25,13 +25,13 @@
 							}
 						}	
 					?>			
-	            </div>
+	            </div/>
 
 				<div class="col-sm-6 col-sm-offset-4 col-md-6 col-md-offset-3">
 	                <ul class="list-inline">
 		                <li><button type="submit" 
 		                			name="cancel"
-		                			value="<?= $cancel ?>"
+		                			value="cancel"
 		                            class="btn btn-default" >Cancel</button></li>                                                              
 		                <li><button type="submit"  
 		                			name="submit"
