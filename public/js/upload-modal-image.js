@@ -232,10 +232,9 @@ $('#upload-image-form').submit( function( e ) {
     let controller = _('module').value;
     let member_id = _('member_id').value || 0;
     let img_id = _('rowId').value;  
-alert('img_id | '+img_id  );      
     e.preventDefault();
 
-console.log( $('#upload-image-form').serializeArray() );
+// console.log( $('#upload-image-form').serializeArray() );
 
     let formData = new FormData(this);
     formData.append('position', position);
@@ -266,9 +265,10 @@ console.log( $('#upload-image-form').serializeArray() );
             data['caption'] = response['caption'];
             data['image_org_name'] = response['client_name'];
             data['create_date'] = response['image_date'];
-            data['record_id'] = response['new_insert_id'];
+            data['record_id'] = response['record_id'];
             data['remove_name'] = response['file_name'];
-            data['next_line_no'] = response['image_count'];
+            data['next_line_no'] = response['image_position'];
+console.log('row_data | ',data);
 
             $("#uploadModal").modal('toggle');
             let table_row =  build_table_row(data);

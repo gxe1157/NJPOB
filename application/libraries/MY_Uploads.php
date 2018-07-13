@@ -100,7 +100,7 @@ function ajax_upload_one()
         $this->upload->initialize($config);
 
         if( $this->upload->do_upload('file') ) {
-          $response['data'] = $this->upload->data();
+          $data = $this->upload->data();
           $table_data = [
              'caption' => $caption,
              'userid' => $user_id,
@@ -111,31 +111,43 @@ function ajax_upload_one()
              'path' => $data['full_path'],
              'size' => $data['file_size'],
              'width_height' => $data['image_size_str'],
-             'create_date' => time(),
-             'modified_date' => time(),
              'admin_id' => $user_id // should be login admin
           ];
 
-          $response['caption'] = $caption;
-          $response['image_date'] = convert_timestamp( time(), 'datepicker_us');
-          $response['success'] = 1;
+
+
           $response['error_mess'] = '';
 
           if(is_numeric($this->img_id)){
               //update details
               $table_data['modified_date'] = time();            
               $rows_updated = $this->model_name->update($this->img_id, $table_data, $this->table_name);
+              $response['record_id'] = $this->img_id;
               $response['success'] = $rows_updated > 0 ? 1: 2; // Update failed
-
+              $response['image_position'] = $position;              
           } else {
               //insert a new record    
-              $table_data['create_date'] = time(); 
-              $new_update_id = $this->model_name->insert($table_data, $this->table_name);
-              $response['success'] = $new_update_id > 0 ? 1: 2; // Insert failed
+              $table_data['create_date'] = time();
+              $response['record_id'] = $this->model_name->insert($table_data, $this->table_name);
+              $response['success'] = $response['record_id'] > 0 ? 1: 2; // Insert failed
+              $results_set =
+                 $this->_get_uploaded_images($user_id, $this->source_id, $this->table_name )->num_rows();
+              $response['image_position'] = $results_set -1;
+
           }
 
-          /* redirect back to origin controller */
-          $response['redirect'] = base_url().$this->controller.'/create/'.$update_id.'/upload_files';
+          $response['caption'] = $caption;
+          $response['full_path'] = $data['full_path'];
+          $response['client_name'] = $data['client_name'];
+          $response['image_date'] = convert_timestamp( time(), 'datepicker_us');
+          $response['file_name'] = $data['file_name'];
+
+
+
+          /* build alert message for client side */
+          list( $image_list, $users_images) =
+             $this->_get_image_info($user_id, $this->source_id, $this->required_docs, $this->table_name);
+          $data['alert_mess'] = $this->set_message(count($image_list), count($users_images));
 
         } else {
           // display errors
@@ -153,8 +165,8 @@ function ajax_upload_one()
 
     $response['is_uploaded'] = $is_uploaded;
     $response['upload_path'] = $this->upload_path;    // use to debug
-    // echo json_encode($response);
-    return $response;
+    echo json_encode($response);
+    return;
 }
 
 function _is_already_uploaded($imagename, $img_path)
