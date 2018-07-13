@@ -42,18 +42,15 @@ $(document).ready(function() {
         $(this).attr( 'autocomplete', 'off' );
     });
 
-
-    /* detect any input change */
-    // let change_occurred = false;    
-    // $('#business_app :input').change(function(e){
-    //    console.log($(e.target).attr('id'));
-    //   change_occurred = true;
+    // /* detect any input change */
+    // $('#business_app').on('input', function() {
+    // // do something
+    //    alert( 'field '+this.id+' changed.....');
     // });
+
 
     $('#business_app #submit_btn').on('click', function() {
         $('#show_panel').val(last_clicked_href);
-alert( $('#show_panel').val()+' | '+last_clicked_href)        ;
-
         // let error_mess = '<b>No changes have occurred to this record.</b>';
         //  if( change_occurred == false ){
         //     myAlert( jsUcfirst('Alert'), error_mess, 'warning' );                  

@@ -129,6 +129,31 @@ function get_where_custom($col, $value, $orderby) {
     return $query;
 }
 
+        /* insert */
+        function insert($data, $data_table = null ){
+            $table = $data_table == null ?  $this->get_table() : $data_table;    
+
+            $this->db->insert($table, $data);
+            $query = $this->get_insert_id();
+            return $query;   
+        }
+
+        /* get_insert_id */
+        function get_insert_id(){
+           /* get record id number after insert completed */ 
+           $last_id =  $this->db->query('SELECT LAST_INSERT_ID() as last_id')->row()->last_id;
+           return $last_id;
+        }
+
+        /* update */
+        function update($id, $data, $data_table = null){
+            $table = $data_table == null ?  $this->get_table() : $data_table;    
+
+            $this->db->where('id', $id);
+            $this->db->update($table, $data);
+            $rows_updated = $this->db->affected_rows();
+            return $rows_updated;    
+        }
 
 function _insert($data, $data_table = null ){
     $table = $data_table == null ?  $this->get_table() : $data_table;    

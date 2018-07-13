@@ -57,6 +57,10 @@ function ajax_remove_one()
 function ajax_upload_one()
 {
     sleep(1);
+    /* get admin_id logged in */
+    $user = $this->ion_auth->user()->row();
+    $admin_id = $user->id;    
+
     $user_id    = $this->input->post('member_id', TRUE); 
     $position   = $this->input->post('position', TRUE);
     $parent_cat = $this->input->post('parent_cat', TRUE);    
@@ -96,7 +100,7 @@ function ajax_upload_one()
         $this->upload->initialize($config);
 
         if( $this->upload->do_upload('file') ) {
-          $data = $this->upload->data();
+          $response['data'] = $this->upload->data();
           $table_data = [
              'caption' => $caption,
              'userid' => $user_id,
@@ -112,52 +116,45 @@ function ajax_upload_one()
              'admin_id' => $user_id // should be login admin
           ];
 
-          $data['caption'] = $caption;
-          $data['image_date'] = convert_timestamp( time(), 'datepicker_us');
-          $data['success'] = 1;
-          $data['error_mess'] = '';
+          $response['caption'] = $caption;
+          $response['image_date'] = convert_timestamp( time(), 'datepicker_us');
+          $response['success'] = 1;
+          $response['error_mess'] = '';
 
-          $data['new_insert_id'] = $this->_insert_img_data($table_data);
-          if($data['new_insert_id']>0){ // successful record entry
-            $results_set = $this->_get_uploaded_images($user_id, $this->source_id, $this->table_name )->result();
-            $data['image_count'] = count($results_set) -1;
+          if(is_numeric($this->img_id)){
+              //update details
+              $table_data['modified_date'] = time();            
+              $rows_updated = $this->model_name->update($this->img_id, $table_data, $this->table_name);
+              $response['success'] = $rows_updated > 0 ? 1: 2; // Update failed
 
-            /* build alert message for client side */
-            list( $image_list, $users_images) = $this->_get_image_info($user_id, $this->source_id, $this->required_docs, $this->table_name);
-            $data['alert_mess'] = $this->set_message(count($image_list), count($users_images));
-          }else{
-            $return_message = "<p>File did upload properly. Please try again.";
-            $data['success'] = 0;
-            $data['error_mess'] = $return_message;
-          }    
+          } else {
+              //insert a new record    
+              $table_data['create_date'] = time(); 
+              $new_update_id = $this->model_name->insert($table_data, $this->table_name);
+              $response['success'] = $new_update_id > 0 ? 1: 2; // Insert failed
+          }
+
+          /* redirect back to origin controller */
+          $response['redirect'] = base_url().$this->controller.'/create/'.$update_id.'/upload_files';
 
         } else {
           // display errors
           $return_message = "<p>The filetype/size you are attempting to upload is not allowed. The max-size for files is ".$config['max_size']." kb and accepted file formats are ".$config['allowed_types'].".</p>";
-          $data['success'] = 0;
-          //$data['error_mess'] = $return_message;
-          $data['error_mess'] = $this->upload->data();
+          $response['success'] = 0;
+          $response['errors_array'] = $return_message;
+          $response['error_array_console'] = $this->upload->data();
         }
 
     } else {
           $return_message = "<p>File is already uploaded.";
-          $data['success'] = 0;
-          $data['error_mess'] = $return_message;
+          $response['success'] = 0;
+          $response['error_mess'] = $return_message;
     }
 
-    $data['is_uploaded'] = $is_uploaded;
-    $data['upload_path'] = $this->upload_path;    // use to debug
-    echo json_encode($data);
-    return;
-}
-
-function _insert_img_data($table_data)
-{
-    $this->db->insert($this->table_name, $table_data);
-    /* get record id number after insert completed */ 
-    $last_id =  $this->db->query('SELECT LAST_INSERT_ID() as last_id')->row()->last_id;
-
-    return $last_id;    
+    $response['is_uploaded'] = $is_uploaded;
+    $response['upload_path'] = $this->upload_path;    // use to debug
+    // echo json_encode($response);
+    return $response;
 }
 
 function _is_already_uploaded($imagename, $img_path)

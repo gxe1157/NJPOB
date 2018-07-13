@@ -105,7 +105,7 @@ class MY_Form_model extends MY_Controller{
 
     function update_user_info($user_id)
     {
-       
+        /* Should be member which and admin user loggedin */
         $table_data = [];
         $user_dl = $this->input->post('driver_lic', TRUE);                  
         if( isset($user_dl) )
@@ -119,7 +119,6 @@ class MY_Form_model extends MY_Controller{
             $rows_updated = $this->model_name->update_data( 'user_info', $table_data, $user_id);
             if($rows_updated <1)
                 quit( 'MY_Form_model | failed update');
-            
         }
 
     }   

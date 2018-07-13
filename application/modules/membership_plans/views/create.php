@@ -5,6 +5,7 @@
     unset($_SESSION['item']);
   }
 
+  $arrImgNames = [];
 	$form_location = base_url().$this->uri->segment(1)."/create/".$update_id;
   $show_buttons = false;
   $admin_mode = $default['admin_mode'] == 'admin_portal' ? 0 : 1;
@@ -103,6 +104,9 @@
                    value = "<?= $manage_rowid; ?>" />                    
           <input type="hidden" name="dbf_images" id="dbf_images"
                    value='<?= json_encode($arrImgNames) ?>' >
+          <input type="hidden" name="rowId" id="rowId"
+                   value='' >
+
 
           <div class="form-group">
             <label class="col-sm-3 control-label" for="show_rowId">Record ID</label>
@@ -147,7 +151,7 @@
           <div class="form-group" id='submit_button' style="display: none;">
             <div class="col-sm-6 col-sm-offset-3">
               <button class="btn btn-info"
-                      id="get_property"
+                      id="upload"
                       type="submit"> Upload
               </button>   
             </div>
@@ -158,8 +162,7 @@
             <div class="col-sm-6 col-sm-offset-3">
               <button class="btn btn-primary"
                       id="updateRecord"
-                      type="button"
-                      onClick="javascript: update_record()">Update
+                      type="submit">Update
               </button>   
             </div>
             

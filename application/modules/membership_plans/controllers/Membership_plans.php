@@ -73,13 +73,15 @@ function build_data()
 function create()
 {
     $update_id = $this->uri->segment(3);
-    $submit = $this->input->post('submit', TRUE);
+
     $cancel = $this->input->post('cancel', TRUE);
+    if( $cancel == "cancel" )
+        redirect( $this->main_controller.'/manage');
+
+    $submit = $this->input->post('submit', TRUE);
     $show_panel = $this->input->post('show_panel', TRUE);
     $panel_id = $this->uri->segment(4) != null ? $this->uri->segment(4) : $show_panel;
 
-    if( $cancel == "cancel" )
-        redirect( $this->main_controller.'/manage');
 
     if( $submit == "Submit" ) {
         // process changes
@@ -120,15 +122,30 @@ function create()
     $this->load->library('MY_Form_helpers');
     $data = $this->my_form_helpers->build_columns($data, $fetch, $this->column_rules);
 
+    /* Get uploaded images by update_id */
+    $this->load->library('MY_Uploads');
+    $user_id = 0; // user_id zero is assigned to images belonging to the site 
+    $result_set  = $this->my_uploads->_get_uploaded_images($user_id, $update_id, 'membership_plans_upload'); 
+
+    $data['images_list'] = $result_set->result();
 
     $data['show_panel'] = empty($panel_id) ? 'panel1': $panel_id;
     $data['default'] = $this->default;  
+
+    /* setup modal hidden inputs */
     $data['action'] = is_numeric($update_id) ? 'Update Record' : 'Submit';
+    $data['manage_rowid'] = $update_id;
+    $data['member_id'] = $user_id;
+    $data['module'] = $this->main_controller;
+    $data['base_url'] = base_url();
+    $data['return_url'] = $this->main_controller.'/manage';
+
+
     $data['custom_jscript'] = [ 'sb-admin/js/jquery.cleditor.min',
                                 'public/js/site_init',    
                                 'public/js/site_loader_cleditor',
                                 'public/js/membership_plans',
-                                'public/js/upload-modal-image',                                
+                                'public/js/upload-modal-image',
                                 'public/js/model_js',
                                 'public/js/format_flds'];    
 
@@ -142,12 +159,54 @@ function create()
 }
 
 
-function delete( $update_id )
+function delete( $id )
 {
-    $this->_numeric_check($update_id);    
-quit(99);
+    $this->_numeric_check($id);    
+    $rows_updated = $this->_delete($id);
 
+    $flash_message = $rows_updated > 0 ?
+      " Membership Plan selected was sucessfully deleted" : "Membership Plan selected failed to be deleted";
+    $flash_type = $rows_updated > 0 ? 'success':'danger';
+    $this->_set_flash_msg($flash_message, $flash_type);      
+
+    redirect( $this->main_controller.'/member_manage');
 }
+
+
+function ajax_upload_one()
+{
+    $this->load->library('MY_Uploads');
+    $this->my_uploads->ajax_upload_one();
+}
+
+function ajax_remove_one()
+{
+    $this->load->library('MY_Uploads');
+    $this->my_uploads->ajax_remove_one();
+}
+
+function modal_fetch_ajax()
+{
+    $this->load->library('MY_Form_model');
+    $table_name = $this->main_controller.'_upload';    
+    $response = $this->my_form_model->modal_fetch($table_name);
+    echo json_encode($response);                
+    return;    
+}
+
+function modal_post_ajax()
+{
+    $this->load->library('MY_Form_model');
+
+    $img_id = $this->input->post('rowId', TRUE);
+    unset($_POST['rowId']);
+    $user_id = $this->site_security->_get_user_id();    
+
+    $response = $this->my_form_model->modal_post($update_id, $user_id, $this->column_rules);
+    echo json_encode($response);                
+    return;    
+}
+
 
 
 

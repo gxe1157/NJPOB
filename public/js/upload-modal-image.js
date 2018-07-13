@@ -1,9 +1,9 @@
-/* global img obj variables */
-/* global img obj variables */
-var img ={};
-var output = {};
+/* upload-modal-image */
+
+// var img ={};
+// var output = {};
+// var dupe_found = [];
 var client_files = [];
-var dupe_found = [];
 
 var model_js_mess = {
     'delete' : '<h3>Remove this document?</h3>',
@@ -89,8 +89,6 @@ function remove( obj ){
   let id = (obj.id).split('|');    
   let img_id = id[0];    
   let position = id[1];      
-
-  let base_url   = dir_path+controller+'/';
   let img_name = obj.value;
   let messText  = "Do You want to remove "+img_name+"?";
   // console.log( $('#upload-image-form').serializeArray() );
@@ -108,7 +106,7 @@ function remove( obj ){
       formData.append('img_id', img_id );
   
       $.ajax({
-        url: dir_path+'business_listings/ajax_remove_one',
+        url: dir_path+controller+'/ajax_remove_one',
         method:"POST",
         data: formData,
         contentType: false,
@@ -149,7 +147,7 @@ function build_table_row(data){
       table_row += '<td class="center">';
       table_row += '<button class="btn btn-danger btn-sm" id="'+data['record_id']+'|'+data['next_line_no']+'" value="'+data['remove_name']+'" type="button" ';
       table_row += '  onClick="javascript: remove(this)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Remove</button>';
-      table_row += ' <button  class="btn btn-info btn-sm btn-edit" id="="'+data['record_id']+'|2" type="button"';
+      table_row += ' <button  class="btn btn-info btn-sm btn-edit" id="'+data['record_id']+'|'+data['next_line_no']+'" type="button"';
       table_row += 'onClick="javascript: edit(this) "> Edit </button>';
       table_row += '</td></tr>';
       return table_row;
@@ -158,14 +156,17 @@ function build_table_row(data){
 function edit(obj) {
     let idArrayrowId = (obj.id).split('|');   
     let rowId = idArrayrowId[0];
-    let update_id = idArrayrowId[1];
+    let position = idArrayrowId[1];
+    let controller = _('module').value;
+
+console.log(idArrayrowId);
+console.log( $('#upload-image-form').serializeArray() );
 
     let formData = new FormData();
     formData.append('rowId', rowId );
-    formData.append('update_id', update_id );
-
+ 
     $.ajax({
-      url: dir_path+'business_listings/modal_fetch_ajax',
+      url: dir_path+controller+'/modal_fetch_ajax',
       method:"POST",
       data: formData,
       contentType: false,
@@ -174,7 +175,7 @@ function edit(obj) {
       success : function(data){
         // console.log( 'Return Data:......  ', data);
         let response = JSON.parse( data );
-        // console.log( 'Return Data:......  ', response);
+        console.log( 'Return Data:......  ', response);
 
         if( response['success'] == 1 ){
           let columns = response['mysqlRows'];
@@ -228,19 +229,26 @@ $('#upload-image-form').submit( function( e ) {
     let position = 0;    
     let parent_cat = 0;
     let required_docs = 0;
-    // console.log( $('#upload-image-form').serializeArray() );
+    let controller = _('module').value;
+    let member_id = _('member_id').value || 0;
+    let img_id = _('rowId').value;  
+alert('img_id | '+img_id  );      
+    e.preventDefault();
+
+console.log( $('#upload-image-form').serializeArray() );
 
     let formData = new FormData(this);
     formData.append('position', position);
     formData.append('parent_cat', parent_cat );
     formData.append('required_docs', required_docs );
-    formData.append('controller', _('module').value);    
-    formData.append('member_id', _('member_id').value );
+    formData.append('controller', controller);    
+    formData.append('member_id', member_id );
     formData.append('manage_rowid', _('manage_rowid').value );
     formData.append('caption', _('caption').value );
+    formData.append('img_id', img_id );    
 
     $.ajax({
-      url: dir_path+'business_listings/ajax_upload_one',
+      url: dir_path+controller+'/ajax_upload_one',
       method:"POST",
       data: formData,
       contentType: false,
@@ -249,7 +257,7 @@ $('#upload-image-form').submit( function( e ) {
       success : function(data){
         // console.log( 'Return Data:......  ', data);
         let response = JSON.parse( data );
-        // console.log( 'Return Data:......  ', response);
+        console.log( 'Return Data:......  ', response);
 
         let callback = function () { $("#uploadModal").modal('toggle'); }
         if( response['success'] == 1 ){
@@ -271,7 +279,7 @@ $('#upload-image-form').submit( function( e ) {
         } 
       }
     });
-    e.preventDefault();
+    // e.preventDefault();
   } );
 
 
@@ -283,10 +291,6 @@ $('#upload-image-form').submit( function( e ) {
   $('#upload-image-form input[type="file"]').change(function() {
     // from server
     var maxsize = 1024 * 1024; // 500 KB
-
-    /* assign to value to img obj */
-    // var img_id = this.id;
-    // assign_id(img_id);
 
     /* check for dupes here */
     var proceed = dedupe();

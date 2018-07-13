@@ -31,7 +31,7 @@
 
             foreach( $images_list as $key => $value ) {
               $record_id = $value->id;
-              $show_img  = base_url().'upload/business_listings/'.$value->image;
+              $show_img  = base_url().'upload/membership_plans/'.$value->image;
 
               $image_recno = $value->id;
               $remove_name  = explode("_",$value->image);
@@ -65,7 +65,7 @@
                         </button>                     
 
                         <button  class="btn btn-info btn-sm btn-edit"
-                                 id="<?= $record_id ?>|2"
+                                 id="<?= $record_id ?>|<?= $x ?>"
                                  type="button"
                                  onClick="javascript: edit(this) "> Edit
                         </button>
