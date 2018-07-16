@@ -228,7 +228,7 @@ $(document).ready(function (e) {
       let parent_cat = getParentId();
       let required_docs = _('required_docs').value;
 
-console.log( $('#upload-image-form').serializeArray() );
+// console.log( $('#upload-image-form').serializeArray() );
 
       let formData = new FormData(this);
       formData.append('position', position);
@@ -252,9 +252,7 @@ console.log( $('#upload-image-form').serializeArray() );
 
       }   
 
-console.log(target_url)      ;
-
-return;
+// return;
 
       upload_ajax( target_url, formData, position );
   });
