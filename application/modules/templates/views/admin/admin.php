@@ -191,7 +191,8 @@
     <!-- JavaScript -->
     <script src="<?= base_url() ?>sb-admin/js/jquery-1.10.2.js"></script>
     <script src="<?= base_url(); ?>sb-admin/js/jquery-migrate-1.0.0.min.js"></script>        
-    <script src="<?= base_url() ?>sb-admin/js/bootstrap.js"></script>
+
+     <script src="<?= base_url() ?>sb-admin/js/bootstrap.js"></script>
 
     <div class="col-md-8 col-md-offset-3">
         <!-- member_app.js -->

@@ -94,7 +94,8 @@ function car_shield_upload($manage_rowid=null)
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     
     $data['menu_level'] = '1';
-    $this->default['page_nav'] = "Manage Car Shield Upload";    
+    
+    // $this->default['page_nav'] = "Manage Car Shield Upload";    
     $data['title'] = "Upload Image using Ajax JQuery in CodeIgniter";
     $data['page_title'] = 'Car Shield Upload';
     $data['module'] = "car_shields";

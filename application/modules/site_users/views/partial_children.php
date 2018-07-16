@@ -3,8 +3,8 @@
           <div class="col-md-12"" >
               <div class="row"> 
                   <form id="family_info">
-                  <input type="hidden" id="base_url" name="base_url" value = "<?= base_url() ?>" >
-
+<!--                   <input type="hidden" id="base_url" name="base_url" value = "<?= base_url() ?>" >
+ -->
                  	<div class="col-md-12 well well-sm">
                  		<h4>Children</h4>
                  	</div>

@@ -88,7 +88,7 @@ function build_data( $user_id )
                                 'public/js/site_loader_cleditor',
                                 'public/js/site_init',
                                 'public/js/business_listings',
-                                'public/js/business_photo_upload',
+                                'public/js/upload-modal-image',
                                 'public/js/member-portal',    
                                 'public/js/model_js',
                                 'public/js/format_flds'];
@@ -106,6 +106,9 @@ function create()
         redirect($this->main_controller.'/'.$cancel.'/'.$user_id);
 
     $submit = $this->input->post('submit', TRUE);
+    $show_panel = $this->input->post('show_panel', TRUE);
+    $panel_id = $this->uri->segment(4) ? $this->uri->segment(4) : $show_panel;
+
     if( $submit == "Submit" ) {
         // process changes
         $this->load->library('form_validation');
@@ -131,8 +134,9 @@ function create()
                   "New Business was sucessfully added" : "New Business failed to be added";
                 $flash_type = $update_id > 0 ? 'success':'danger';
             }
-            $this->_set_flash_msg($flash_message, $flash_type);      
-            redirect($this->main_controller.'/create/'.$update_id);
+            $panel_id = empty($panel_id) ? '' : '/'.$panel_id;
+            $this->_set_flash_msg($flash_message, $flash_type); 
+            redirect($this->main_controller.'/create/'.$update_id.$panel_id);
 
         } else {
             // echo validation_errors();
@@ -156,13 +160,16 @@ function create()
     $data['images_list'] = $result_set->result();
 
     $panel_id = $this->uri->segment(4) != null ? $this->uri->segment(4) : $_POST['show_panel'];
-    $data['show_panel'] = $panel_id != null ?  $panel_id : 'company_info';
+
+    $data['show_panel'] = empty($panel_id) ? 'panel1': $panel_id;
+    $data['li_upload'] = is_numeric($update_id) ? '' : 'class="disabled"';
 
     $data['action'] = is_numeric($update_id) ? 'Update Record' : 'Submit';
     $data['manage_rowid'] = $update_id;
     $data['member_id'] = $user_id;
     $data['module'] = $this->main_controller;
     $data['base_url'] = base_url();
+    $data['update_id'] = $update_id;
 
     /* Update member page */
     if( $this->default['admin_mode'] == 'admin_portal' ) {
@@ -227,6 +234,28 @@ function modal_fetch_ajax()
 }
 
 function modal_post_ajax()
+{
+    $this->load->library('MY_Form_model');
+
+    $update_id = $this->input->post('rowId', TRUE);
+    unset($_POST['rowId']);
+    $data['caption'] = $this->input->post('caption',true);
+    $rows_updated =$this->model_name->update($update_id, $data, 'business_listings_upload');
+
+    if($rows_updated>0) {
+       $response['success'] = 1;
+       $response['new_caption'] = $data['caption'];
+    } else {
+       $response['success'] = 0;
+       $response['flash_message'] = "The caption field was not updated.";      
+    }
+
+    echo json_encode($response);                
+    return;    
+}
+
+
+function _modal_post_ajax()
 {
     $this->load->library('MY_Form_model');
 

@@ -49,7 +49,7 @@ $(document).ready(function() {
     // });
 
 
-    $('#business_app #submit_btn').on('click', function() {
+    $('#membership_plan #submit_btn').on('click', function() {
         $('#show_panel').val(last_clicked_href);
         // let error_mess = '<b>No changes have occurred to this record.</b>';
         //  if( change_occurred == false ){

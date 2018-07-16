@@ -1,9 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-	if( isset( $default['flash']) ) {
-		echo $this->session->flashdata('item');
-		unset($_SESSION['item']);
-	}
+	echo $this->session->flashdata('item');
 
 	$admin_mode = $default['admin_mode'] == 'admin_portal' ? 0 : 1;
 	$redirect_base = base_url().$this->uri->segment(1);
@@ -24,11 +21,10 @@
 
 <div class="row">
 	<div style="padding: 0px 0px 10px 20px;">
-	    <a 
-	       id="Business Network"
-	       href="<?= base_url() ?>business_listings/create">
-	      <button type="button" class="btn btn-primary">Add New Business</button>
-	    </a>
+		<a href="<?= base_url().$this->uri->segment(1) ?>/create" >
+			<button type="button" class="btn btn-primary"><?= $default['add_button'] ?></button>
+		</a>
+
 		<a href="<?= $cancel_button_url ?>" >
 			<button type="button" class="btn btn-default">Cancel</button>
 		</a>
@@ -41,29 +37,27 @@
 			<table id="example" class="table table-striped table-bordered">
 			 <thead>
 				  <tr>
-					  <th style="width: 16%;">Business Name</th>
-					  <th style="width: 16%;">Category</th>
-					  <th style="width: 16%;">specialization</th>	  
-					  <th style="width: 16%;">Location</th>
-					  <th style="width: 20%;">--</th>					  
+					  <th>Type</th>
+					  <th>Plan Name</th>
+					  <th>Date Created</th>
+					  <th>Image</th>					  
+					  <th>Actions</th>
 				  </tr>
 			  </thead>
 			  <tbody>
 
 			    <?php
-			    	// checkArray($columns->result(),1);
-			    	// checkArray($bus_categories,1);			    	
-			    	foreach( $columns->result() as $row ){
-			    	 	$edit_url = $redirect_base.'/create/'.$row->id;
-			    	 	$remove = $redirect_base.'/delete/'.$row->id;
-			    	 	$location = $row->city.", ".$row->state;
-			    	 	$date_assigned = convert_timestamp($row->create_date, 'datepicker_us');
-			    ?>
+						foreach( $columns->result() as $row ) {
+				    	 	$remove = base_url().$this->uri->segment(1).'/delete/'.$row->id;
+				    	 	$edit_url = base_url().$this->uri->segment(1)."/create/".$row->id;
+							$image_status = !empty($row->mem_plan_level) ? 'Uploaded':'Pending'; 
+							$create_date = convert_timestamp($row->create_date, 'datepicker_us'); ?>
 						<tr>
-							<td ><?= $row->business ?></td>
-							<td ><?= $bus_categories[$row->bus_category] ?></td>
-							<td ><?= $row->specialization ?></td>					
-							<td ><?= $location ?></td>
+							<td class="right"><?= $row->mem_plan_level ?></td>
+							<td class="right"><?= $row->form_header ?></td>
+							<td class="right"><?= $create_date ?></td>
+							<td class="right"><?= $image_status ?></td>
+
 
 							<td style="width: 20%;">
 								<a class="btn btn-danger btn-sm btnConfirm" id="delete-danger"

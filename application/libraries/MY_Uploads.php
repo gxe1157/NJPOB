@@ -2,12 +2,12 @@
  
 class MY_Uploads extends MY_Controller {
 
-public $upload_img_base =null;
-public $table_name = null;
-public $controller = null;
-public $upload_path = null;
-public $required_docs = null;
-public $img_id = null;
+private $upload_img_base =null;
+private $table_name = null;
+private $controller = null;
+private $upload_path = null;
+private $required_docs = null;
+private $update_id = null;
 
 //class constructor to load all required files
 function __construct()
@@ -17,7 +17,7 @@ function __construct()
 
     $this->source_id = $this->input->post('manage_rowid', TRUE) != null ? $this->input->post('manage_rowid', TRUE) : 0;   
     $this->required_docs = $this->input->post('required_docs', TRUE);
-    $this->img_id = $this->input->post('img_id', TRUE);   
+    $this->update_id = $this->input->post('img_id', TRUE);   
 
     $this->controller = $this->input->post('controller', TRUE);
     $this->table_name = $this->get_table_name($this->controller);  
@@ -27,7 +27,7 @@ function __construct()
 
 function ajax_remove_one()
 {
-    $query = $this->model_name->get_view_data_custom('id', $this->img_id, $this->table_name, null);
+    $query = $this->model_name->get_view_data_custom('id', $this->update_id, $this->table_name, null);
     $result_set = $query->result();
     $file_name = $result_set[0]->image;
     $user_id = $result_set[0]->userid;
@@ -40,7 +40,7 @@ function ajax_remove_one()
 
     $rows_deleted = 0;
     if($data['success'] == 1){
-        $rows_deleted = $this->model_name->_delete($this->img_id, $this->table_name);
+        $rows_deleted = $this->model_name->_delete($this->update_id, $this->table_name);
 
         $flash_message = $rows_deleted > 0 ?
           $data['remove_name']." was sucessfully removed" : "Error: ".$data['remove_name']." was not removed." ;
@@ -75,9 +75,9 @@ function ajax_upload_one()
     $imagename .= '.'.$uploaded_file[1];
 
     /* check mysql for active_image */
-    $is_uploaded = $this->_is_already_uploaded($this->controller, $imagename, $this->upload_path);
+    $is_uploaded = $this->_is_already_uploaded($imagename, $this->upload_path);
 
-    if( $is_uploaded == false ){
+    if( $is_uploaded == false ){  
         $this->load->library('upload', $config);
 
         $vector = $_FILES['file'];
@@ -111,30 +111,27 @@ function ajax_upload_one()
              'path' => $data['full_path'],
              'size' => $data['file_size'],
              'width_height' => $data['image_size_str'],
-             'admin_id' => $user_id // should be login admin
+             'admin_id' => $admin_id // should be login admin
           ];
-
-
 
           $response['error_mess'] = '';
 
-          if(is_numeric($this->img_id)){
+          if(is_numeric($this->update_id)){
               //update details
               $table_data['modified_date'] = time();            
-              $rows_updated = $this->model_name->update($this->img_id, $table_data, $this->table_name);
-              $response['record_id'] = $this->img_id;
-              $response['success'] = $rows_updated > 0 ? 1: 2; // Update failed
+              $rows_updated = $this->model_name->update($this->update_id, $table_data, $this->table_name);
+              $response['record_id'] = $this->update_id;
+              $response['success'] = $rows_updated > 0 ? 1: 2;
               $response['image_position'] = $position;              
           } else {
               //insert a new record    
               $table_data['create_date'] = time();
               $response['record_id'] = $this->model_name->insert($table_data, $this->table_name);
-              $response['success'] = $response['record_id'] > 0 ? 1: 2; // Insert failed
-              $results_set =
-                 $this->_get_uploaded_images($user_id, $this->source_id, $this->table_name )->num_rows();
+              $response['success'] = $response['record_id'] > 0 ? 1: 2;
+              $results_set = $this->_get_uploaded_images($user_id, $this->source_id, $this->table_name )->num_rows();
               $response['image_position'] = $results_set -1;
-
           }
+          $response['new_update_id'] = $this->update_id ? 0 : 1;
 
           $response['caption'] = $caption;
           $response['full_path'] = $data['full_path'];
@@ -142,12 +139,10 @@ function ajax_upload_one()
           $response['image_date'] = convert_timestamp( time(), 'datepicker_us');
           $response['file_name'] = $data['file_name'];
 
-
-
           /* build alert message for client side */
           list( $image_list, $users_images) =
              $this->_get_image_info($user_id, $this->source_id, $this->required_docs, $this->table_name);
-          $data['alert_mess'] = $this->set_message(count($image_list), count($users_images));
+          $response['alert_mess'] = $this->set_message(count($image_list), count($users_images));
 
         } else {
           // display errors
@@ -213,39 +208,6 @@ function _build_upload_folder()
     $prd_folder  = $this->controller."/";
     $upload_path = $this->upload_img_base.$prd_folder;
     return $upload_path;
-}
-
-/* --------------------------------------------------------------------------- */
-function build_upload_data( $update_id, $manage_rowid, $table_name, $required_docs )
-{
-    list( $data['status'], $data['user_avatar'],
-          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($update_id);
-
-    $data['custom_jscript'] = ['public/js/site_init',      
-                               'public/js/member-portal',
-                               'public/js/upload-image',
-                               'public/js/model_js'
-                              ];
-
-    $required_docs = empty($required_docs) ? 1 : $required_docs; 
-    list( $image_list, $users_images) =
-        $this->_get_image_info($update_id, $manage_rowid, $required_docs, $table_name );
-
-    $data['alert_mess'] = $this->set_message(count($image_list), count($users_images));
-
-    /* ?? */      
-    $data['form_type']  = 0;    
-    $data['show_buttons'] = $default['is_deleted'] ? false : true;
-    $data['image_list'] = $image_list;
-    $data['users_images'] = $users_images;
-    $data['userid'] = $update_id;
-    $data['default']  = $this->default;
-    $data['base_url'] = base_url();
-    
-    $data['view_module'] = 'site_upload';
-    $data['page_url'] = "manage_uploads";
-
-    return $data;
 }
 
 function _get_image_info($userid, $manage_rowid, $required_docs, $table_name)
@@ -320,6 +282,28 @@ function set_message($image_list_count, $users_images_count)
     $message .='</div>';
 
     return $message;
+}
+
+/* --------------------------------------------------------------------------- */
+function build_upload_data( $update_id, $manage_rowid, $table_name, $required_docs )
+{
+    $data['custom_jscript'] = ['public/js/site_init',      
+                               'public/js/member-portal',
+                               'public/js/upload-image',
+                               'public/js/model_js'
+                              ];
+
+    $required_docs = empty($required_docs) ? 1 : $required_docs; 
+    list( $image_list, $users_images) =
+        $this->_get_image_info($update_id, $manage_rowid, $required_docs, $table_name );
+
+    $data['alert_mess'] = $this->set_message(count($image_list), count($users_images));
+
+    $data['image_list'] = $image_list;
+    $data['users_images'] = $users_images;
+    $data['base_url'] = base_url();
+
+    return $data;
 }
 
 

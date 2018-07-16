@@ -14,11 +14,15 @@
         src="<?= base_url(); ?>public/js/html5shiv.js">
 </script>  
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-migrate-3.0.1.js"></script>
-<!-- <script src="<?= base_url(); ?>sb-admin/js/jquery-migrate-1.0.0.min.js"></script> -->
+ -->
+<script src="<?= base_url(); ?>sb-admin/js/jquery-1.10.2.js"></script>
+<script src="<?= base_url(); ?>sb-admin/js/jquery-migrate-1.0.0.min.js"></script>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="<?= base_url(); ?>public/js/site_loader_video.js"></script>
+
+<!-- <script src="<?= base_url(); ?>public/js/site_loader_video.js"></script> -->
 
 
 <!-- Use only for forms - https://github.com/nghuuphuoc/bootstrapvalidator -->

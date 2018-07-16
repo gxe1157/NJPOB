@@ -189,7 +189,7 @@ function save_changes_ajax()
 
         $rows_updated = $this->_update_user_tables($fld_group, $fld_arr, $update_id );
         $response['flash_message'] = $rows_updated > 0 ?
-            "Record details have been updates." : "Record details did not update.<br>Please notify the website administrator.";
+            "Record details have been updated." : "Record details did not update.<br>Please notify the website administrator.";
 
         $response['flash_type'] = $rows_updated > 0 ? "success" : "warning";
         $response['success'] =  '1';            
@@ -497,6 +497,10 @@ function member_upload($manage_rowid=null)
     $data['title'] = "Upload Image using Ajax JQuery in CodeIgniter";
     $data['page_title'] = 'Upload Files';
     $data['module'] = "site_users";
+
+    $data['view_module'] = 'site_upload';
+    $data['page_url'] = "manage_uploads";    
+    
     // $data['default'] = $this->default;    
 
     $this->load->module('templates');

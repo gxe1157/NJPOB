@@ -90,7 +90,7 @@ function remove( obj ){
   let img_id = id[0];    
   let position = id[1];      
   let img_name = obj.value;
-  let messText  = "Do You want to remove "+img_name+"?";
+  let messText  = "Do you want to remove "+img_name+"?";
   // console.log( $('#upload-image-form').serializeArray() );
 
   ezBSAlert({
@@ -138,17 +138,17 @@ function image_path(image){
   return  dir_path+upload_path;
 }
 
-
-function build_table_row(data){
-  let table_row  = '<tr id="tr'+data['next_line_no']+'" ><td><img src="'+data['show_img']+'" class ="img img-responsive" style="width: 100%;"></td>';
-      table_row += '<td class="right">'+data['caption']+'</td>';
-      table_row += '<td class="right" id="image_name_'+data['next_line_no']+'">'+data['image_org_name']+'</td>';
-      table_row += '<td class="right" id="image_date_'+data['next_line_no']+'">'+data['create_date']+'</td>';
+function build_table_row(response){
+  response['show_img'] = image_path(response['full_path']);
+  let table_row  = '<tr id="tr'+response['image_position']+'" ><td><img src="'+response['show_img']+'" class ="img img-responsive" style="width: 100%;"></td>';
+      table_row += '<td class="right">'+response['caption']+'</td>';
+      table_row += '<td class="right" id="image_name_'+response['image_position']+'">'+response['client_name']+'</td>';
+      table_row += '<td class="right" id="image_date_'+response['image_position']+'">'+response['image_date']+'</td>';
       table_row += '<td class="center">';
-      table_row += '<button class="btn btn-danger btn-sm" id="'+data['record_id']+'|'+data['next_line_no']+'" value="'+data['remove_name']+'" type="button" ';
+      table_row += '<button class="btn btn-danger btn-sm" id="'+response['record_id']+'|'+response['image_position']+'" value="'+response['remove_name']+'" type="button" ';
       table_row += '  onClick="javascript: remove(this)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Remove</button>';
-      table_row += ' <button  class="btn btn-info btn-sm btn-edit" id="'+data['record_id']+'|'+data['next_line_no']+'" type="button"';
-      table_row += 'onClick="javascript: edit(this) "> Edit </button>';
+      table_row += ' <button  class="btn btn-info btn-sm btn-edit" id="'+response['record_id']+'|'+response['image_position']+'" type="button"';
+      table_row += 'onClick="javascript: edit(this) "> Edit Caption</button>';
       table_row += '</td></tr>';
       return table_row;
 }
@@ -158,15 +158,55 @@ function edit(obj) {
     let rowId = idArrayrowId[0];
     let position = idArrayrowId[1];
     let controller = _('module').value;
+    let caption = $('#caption_'+position).html();
 
-console.log(idArrayrowId);
-console.log( $('#upload-image-form').serializeArray() );
+    $("#uploadModal").modal('toggle');
 
-    let formData = new FormData();
+    /* assign values to modal */
+    $('#uploadModal #rowId').val(rowId);
+    $('#uploadModal #show_rowId').val(rowId);  
+    $('#uploadModal #image_position').val(position);      
+    $('#uploadModal #caption').val(caption);      
+
+    let path = $('#img_'+position).attr('src');
+    filename = path.split("/")[path.split("/").length-1];
+    previewImg(filename);
+
+};
+
+
+/*----- jquery -----*/
+$(document).ready(function (e) {
+  $('#openUploadModal').on('click', function () {
+      noPreview();
+      $( '#uploadModal #pre_upload' ).css("display", "block");           
+      $('#show_rowId').val('');          
+      $('#uploadModal').modal();
+      $('#submit_button').css("display", "none");             
+  })
+
+  $('#uploadModal').on('hidden.bs.modal', function () {
+      if( _('imageFile') && _('imageFile').value != '' ) {
+        let fileName = imgFileInfo( 'imageFile' );
+        client_files_remove(fileName);    
+      }      
+
+      $('#show_rowId').val('');      
+      $( '#submit_button' ).css("display", "none");
+      $( '#update_button' ).css("display", "none");
+  })
+
+  $('#updateRecord').on('click',function (){
+    let rowId = _('rowId').value;
+    let position = _('image_position').value;
+    let controller = _('module').value;
+
+    let formData = new FormData(this);
     formData.append('rowId', rowId );
- 
+    formData.append('caption', _('caption').value);
+
     $.ajax({
-      url: dir_path+controller+'/modal_fetch_ajax',
+      url: dir_path+controller+'/modal_post_ajax',
       method:"POST",
       data: formData,
       contentType: false,
@@ -175,26 +215,11 @@ console.log( $('#upload-image-form').serializeArray() );
       success : function(data){
         // console.log( 'Return Data:......  ', data);
         let response = JSON.parse( data );
-        console.log( 'Return Data:......  ', response);
+        // console.log( 'Return Data:......  ', response);
 
         if( response['success'] == 1 ){
-          let columns = response['mysqlRows'];
           $("#uploadModal").modal('toggle');          
-          /* assign values to modal */
-          $('#rowId').val(columns['id']);
-          $('#show_rowId').val(columns['id']);          
-
-          for ( var key in columns ) {
-            if (columns.hasOwnProperty(key)){
-              if( key !== 'contains' ) {
-                 $('#'+key).val(columns[key]);
-                 if(key == 'image'){
-                    previewImg(columns[key]);
-                 }  
-              }
-            }
-          } //foreach
-
+          $('#caption_'+position).html(response['new_caption']);
         } else {
           $('#caption').val('');
           myAlert('Error!','<b>'+response['flash_message']+'</b>');
@@ -202,87 +227,60 @@ console.log( $('#upload-image-form').serializeArray() );
         }
       } //Success   
     });
-};
+  });
 
-/*----- jquery -----*/
-$(document).ready(function (e) {
-    $('#openUploadModal').on('click', function () {
-        noPreview();
-        $( '#uploadModal #pre_upload' ).css("display", "block");           
-        $('#show_rowId').val('');          
-        $('#uploadModal').modal();
-        $('#submit_button').css("display", "none");             
-    })
+  $('#upload-image-form').submit( function( e ) {
+      let position = 0;    
+      let parent_cat = 0;
+      let required_docs = 0;
+      let controller = _('module').value;
+      let member_id = _('member_id').value || 0;
+      let img_id = _('rowId').value;  
+      e.preventDefault();
 
-    $('#uploadModal').on('hidden.bs.modal', function () {
-        if( _('imageFile') && _('imageFile').value != '' ) {
-          let fileName = imgFileInfo( 'imageFile' );
-          client_files_remove(fileName);    
-        }      
+  // console.log( $('#upload-image-form').serializeArray() );
 
-        $('#show_rowId').val('');      
-        $( '#submit_button' ).css("display", "none");
-        $( '#update_button' ).css("display", "none");
-    })
+      let formData = new FormData(this);
+      formData.append('position', position);
+      formData.append('parent_cat', parent_cat );
+      formData.append('required_docs', required_docs );
+      formData.append('controller', controller);    
+      formData.append('member_id', member_id );
+      formData.append('manage_rowid', _('manage_rowid').value );
+      formData.append('caption', _('caption').value );
+      formData.append('img_id', img_id );    
 
-$('#upload-image-form').submit( function( e ) {
-    let position = 0;    
-    let parent_cat = 0;
-    let required_docs = 0;
-    let controller = _('module').value;
-    let member_id = _('member_id').value || 0;
-    let img_id = _('rowId').value;  
-    e.preventDefault();
+      $.ajax({
+        url: dir_path+controller+'/ajax_upload_one',
+        method:"POST",
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData:false,      
+        success : function(data){
+          // console.log( 'Return Data:......  ', data);
+          let response = JSON.parse( data );
+          console.log( 'Return Data:......  ', response);
 
-// console.log( $('#upload-image-form').serializeArray() );
-
-    let formData = new FormData(this);
-    formData.append('position', position);
-    formData.append('parent_cat', parent_cat );
-    formData.append('required_docs', required_docs );
-    formData.append('controller', controller);    
-    formData.append('member_id', member_id );
-    formData.append('manage_rowid', _('manage_rowid').value );
-    formData.append('caption', _('caption').value );
-    formData.append('img_id', img_id );    
-
-    $.ajax({
-      url: dir_path+controller+'/ajax_upload_one',
-      method:"POST",
-      data: formData,
-      contentType: false,
-      cache: false,
-      processData:false,      
-      success : function(data){
-        // console.log( 'Return Data:......  ', data);
-        let response = JSON.parse( data );
-        console.log( 'Return Data:......  ', response);
-
-        let callback = function () { $("#uploadModal").modal('toggle'); }
-        if( response['success'] == 1 ){
-            let data = {}; 
-            data['show_img'] = image_path(response['full_path']);
-            data['caption'] = response['caption'];
-            data['image_org_name'] = response['client_name'];
-            data['create_date'] = response['image_date'];
-            data['record_id'] = response['record_id'];
-            data['remove_name'] = response['file_name'];
-            data['next_line_no'] = response['image_position'];
-console.log('row_data | ',data);
-
+          let callback = function () { $("#uploadModal").modal('toggle'); }
+          if( response['success'] == 1 ){
             $("#uploadModal").modal('toggle');
-            let table_row =  build_table_row(data);
-            $( table_row ).appendTo('#table_contents');
-        } else {
-          myAlert('Error!',response['error_mess']);
-          // console.log('Error: Record failed to be added to database.');            
-        } 
-      }
-    });
-    // e.preventDefault();
-  } );
 
+            let table_row =  build_table_row(response);
+            if(response['new_update_id']>0) {
+              $( table_row ).appendTo('#table_contents');
+            }else{
+              $('#tr_'+response['image_position']).html(table_row);
+            }
 
+          } else {
+            myAlert('Error!',response['error_mess']);
+            // console.log('Error: Record failed to be added to database.');            
+          } 
+        }
+      });
+      // e.preventDefault();
+    } );
 
   if( $('#dbf_images').val() !== undefined )
         client_files = $.parseJSON( $('#dbf_images').val() );

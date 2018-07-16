@@ -1,11 +1,9 @@
-/*jslint browser: true, white: true, eqeq: true, plusplus: true, sloppy: true, vars: true*/
-/*global $, console, alert, FormData, FileReader*/
-
 /* global img obj variables */
 var img ={};
-var output = {};
-var client_files = [];
+//var output = {};
 // var convert_arr = [];
+
+var client_files = [];
 var dupe_found = [];
 var model_js_mess = {
         'delete' : '<h3>Remove this document?</h3>',

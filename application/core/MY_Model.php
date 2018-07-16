@@ -114,7 +114,7 @@ function get_with_limit($limit, $offset, $order_by) {
     return $query;
 }
 
-function get_where($id, $data_table = null){
+function get_where($id, $data_table = null) {
     $table = $data_table == null ?  $this->get_table() : $data_table;    
     $this->db->where('id', $id);
     $query=$this->db->get($table);
@@ -166,12 +166,13 @@ function _get_insert_id(){
    return $last_id;
 }
 
-function _update($id, $data){
-    $table = $this->get_table();
+function _update($id, $data, $data_table=null){
+    $table = $data_table == null ?  $this->get_table() : $data_table;        
     $this->db->where('id', $id);
     $this->db->update($table, $data);
     $rows_updated = $this->db->affected_rows();
     return $rows_updated;    
+
 }
 
 function _delete($id, $data_table = null ){

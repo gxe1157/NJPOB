@@ -25,7 +25,7 @@ class MY_Form_model extends MY_Controller{
         return ($response);                
     }
 
-    function modal_post($update_id, $user_id, $column_rules, $table_name=null)
+    function modal_post($update_id, $user_id=null, $column_rules, $table_name=null)
     {
 
         $this->form_validation->set_rules( $column_rules );

@@ -31,7 +31,7 @@
 
             foreach( $images_list as $key => $value ) {
               $record_id = $value->id;
-              $show_img  = base_url().'upload/membership_plans/'.$value->image;
+              $show_img  = base_url().'upload/'.$module.'/'.$value->image;
 
               $image_recno = $value->id;
               $remove_name  = explode("_",$value->image);
@@ -46,13 +46,12 @@
             <tr id="tr<?= $x ?>" >
               <td>
                 <img src="<?= $show_img ?>"
+                     id="img_<?= $x ?>"                
                      class = "img img-responsive"
                      style="width: 100%;">
               </td>
 
-              <td class="right">
-                  <?= $caption ?>
-              </td>
+              <td class="right" id="caption_<?= $x ?>"><?= $caption ?></td>
               <td class="right" id="image_name_<?= $x ?>"><?= $image_org_name;  ?></td>
               <td class="right" id="image_date_<?= $x ?>"><?= $create_date;  ?></td>
               <td class="center">
@@ -67,12 +66,16 @@
                         <button  class="btn btn-info btn-sm btn-edit"
                                  id="<?= $record_id ?>|<?= $x ?>"
                                  type="button"
-                                 onClick="javascript: edit(this) "> Edit
+                                 onClick="javascript: edit(this) "> Edit Caption
                         </button>
             </td>       
 
             </tr>
             <?php $x++; } ?>
+
+            <input type="hidden" name="dbf_images" id="dbf_images"
+                   value='<?= json_encode($arrImgNames) ?>' >
+
         </tbody>
       </table>
   </div><!-- //col-md-12-->

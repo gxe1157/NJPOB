@@ -80,7 +80,7 @@ function create()
 
     $submit = $this->input->post('submit', TRUE);
     $show_panel = $this->input->post('show_panel', TRUE);
-    $panel_id = $this->uri->segment(4) != null ? $this->uri->segment(4) : $show_panel;
+    $panel_id = $this->uri->segment(4) ? $this->uri->segment(4) : $show_panel;
 
 
     if( $submit == "Submit" ) {
@@ -128,8 +128,10 @@ function create()
     $result_set  = $this->my_uploads->_get_uploaded_images($user_id, $update_id, 'membership_plans_upload'); 
 
     $data['images_list'] = $result_set->result();
-
     $data['show_panel'] = empty($panel_id) ? 'panel1': $panel_id;
+    $data['li_upload'] = is_numeric($update_id) ? '' : 'class="disabled"';
+
+    $this->default['headline-sub'] = $data['columns'][1]['value'];
     $data['default'] = $this->default;  
 
     /* setup modal hidden inputs */
@@ -139,7 +141,6 @@ function create()
     $data['module'] = $this->main_controller;
     $data['base_url'] = base_url();
     $data['return_url'] = $this->main_controller.'/manage';
-
 
     $data['custom_jscript'] = [ 'sb-admin/js/jquery.cleditor.min',
                                 'public/js/site_init',    
@@ -161,15 +162,16 @@ function create()
 
 function delete( $id )
 {
+    $plan_name = $this->model_name->get_where($id, 'membership_plans')->row();
     $this->_numeric_check($id);    
-    $rows_updated = $this->_delete($id);
+    // $rows_updated = $this->_delete($id);
 
     $flash_message = $rows_updated > 0 ?
-      " Membership Plan selected was sucessfully deleted" : "Membership Plan selected failed to be deleted";
+      " Membership Plan, ".$plan_name->form_header.", was sucessfully deleted" : "Membership Plan, ".$plan_name->form_header.", was not deleted";
     $flash_type = $rows_updated > 0 ? 'success':'danger';
     $this->_set_flash_msg($flash_message, $flash_type);      
 
-    redirect( $this->main_controller.'/member_manage');
+    redirect( $this->main_controller.'/manage');
 }
 
 
@@ -198,16 +200,22 @@ function modal_post_ajax()
 {
     $this->load->library('MY_Form_model');
 
-    $img_id = $this->input->post('rowId', TRUE);
+    $update_id = $this->input->post('rowId', TRUE);
     unset($_POST['rowId']);
-    $user_id = $this->site_security->_get_user_id();    
+    $data['caption'] = $this->input->post('caption',true);
+    $rows_updated =$this->model_name->update($update_id, $data, 'membership_plans_upload');
 
-    $response = $this->my_form_model->modal_post($update_id, $user_id, $this->column_rules);
+    if($rows_updated>0) {
+       $response['success'] = 1;
+       $response['new_caption'] = $data['caption'];
+    } else {
+       $response['success'] = 0;
+       $response['flash_message'] = "The caption field was not updated.";      
+    }
+
     echo json_encode($response);                
     return;    
 }
-
-
 
 
 /* ===============================================
