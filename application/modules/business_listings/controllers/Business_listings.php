@@ -65,6 +65,8 @@ function member_manage()
 
     $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
     $data = $this->build_data( $user_id );
+    $data['update_id']=$user_id;
+        
     $data['bus_categories'] = $this->model_name->build_dropdowns('business_categories');
 
     $data = $this->my_form_model->admin_member_portal_view( $data );

@@ -77,6 +77,7 @@ function member_manage()
     $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
     $data = $this->build_data( $user_id );
     $data = $this->my_form_model->admin_member_portal_view( $data );
+    $data['update_id']=$user_id;
 
     $this->load->module('templates');
     $this->templates->public_main($data);
@@ -90,6 +91,7 @@ function car_shield_upload($manage_rowid=null)
     $table_name = 'car_shields_upload';
     $required_docs = 10;
     $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
+    $data['update_id'] = $update_id;
 
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     

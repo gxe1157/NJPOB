@@ -40,6 +40,7 @@ function welcome()
 {
     list( $data['status'], $data['user_avatar'],
           $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($this->user->id); 
+// dd($data);
 
     $data['default'] = $this->default;
     $data['menu_level'] = 1;

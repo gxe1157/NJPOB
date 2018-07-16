@@ -74,7 +74,9 @@ function ajax_upload_one()
 
 function _update_avatar_data($imagename, $userid)
 {
+
     $userid =  $this->input->post('update_id', TRUE);
+
     /* get image name on file */
     $default_avatar = 'annon_user.png';
     $mysql_query    = "SELECT avatar_name FROM `users` WHERE `id` =".$userid;

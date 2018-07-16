@@ -485,7 +485,11 @@ function member_upload($manage_rowid=null)
     $table_name = 'site_users_upload';
     $required_docs = 1;
     $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
+    
+    list( $data['status'], $data['user_avatar'],
+          $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($update_id);
 
+    
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     
     $data['update_id'] = $update_id;     

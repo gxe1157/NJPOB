@@ -39,7 +39,6 @@ $(document).ready(function (e) {
       if( e ) {
         let formData = new FormData();
         formData.append( 'update_id', _('update_id').value );           
-
         let target_url = dir_path+'site_upload/users_upload/ajax_remove_avatar';
         upload_ajax_avatar( target_url, formData );
       }

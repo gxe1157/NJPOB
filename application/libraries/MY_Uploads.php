@@ -287,6 +287,7 @@ function set_message($image_list_count, $users_images_count)
 /* --------------------------------------------------------------------------- */
 function build_upload_data( $update_id, $manage_rowid, $table_name, $required_docs )
 {
+
     $data['custom_jscript'] = ['public/js/site_init',      
                                'public/js/member-portal',
                                'public/js/upload-image',
