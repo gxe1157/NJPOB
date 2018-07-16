@@ -60,7 +60,6 @@ function ajax_upload_one()
     /* get admin_id logged in */
     $user = $this->ion_auth->user()->row();
     $admin_id = $user->id;    
-
     $user_id    = $this->input->post('member_id', TRUE); 
     $position   = $this->input->post('position', TRUE);
     $parent_cat = $this->input->post('parent_cat', TRUE);    

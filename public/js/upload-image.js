@@ -228,6 +228,8 @@ $(document).ready(function (e) {
       let parent_cat = getParentId();
       let required_docs = _('required_docs').value;
 
+console.log( $('#upload-image-form').serializeArray() );
+
       let formData = new FormData(this);
       formData.append('position', position);
       formData.append('parent_cat', parent_cat );
@@ -248,7 +250,11 @@ $(document).ready(function (e) {
         target_url = dir_path+'site_upload/site_ajax_upload/ajax_upload_one';
         alert('error: should not be here');
 
-      }    
+      }   
+
+console.log(target_url)      ;
+
+return;
 
       upload_ajax( target_url, formData, position );
   });

@@ -91,8 +91,9 @@ function car_shield_upload($manage_rowid=null)
     $table_name = 'car_shields_upload';
     $required_docs = 10;
     $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
-    $data['update_id'] = $update_id;
-
+    // $data['update_id'] = $update_id;
+    $data['member_id'] = $update_id;
+    
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     
     $data['menu_level'] = '1';
@@ -367,7 +368,6 @@ function modal_fetch_ajax()
 
 function modal_post_ajax()
 {
-    quit(88);
     $this->load->library('MY_Form_model');
     $update_id = $this->input->post('rowId', TRUE);
     unset($_POST['rowId']);
