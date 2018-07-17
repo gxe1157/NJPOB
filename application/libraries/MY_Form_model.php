@@ -75,6 +75,7 @@ class MY_Form_model extends MY_Controller{
 
         } else {
             /*  $row as each individual field array  */
+            $errors_array = [];
             foreach($column_rules as $row){
                 $field = $row['field'];                     // getting field name
                 $error = form_error($field);                // getting error for field name
@@ -116,6 +117,7 @@ class MY_Form_model extends MY_Controller{
             $table_data['social_sec'] = $this->site_security->_encrypt_string($user_ss);
 
         if( count($table_data) > 0 ) {
+            update($user_id, $table_data, 'user_info'){
             $rows_updated = $this->model_name->update_data( 'user_info', $table_data, $user_id);
             if($rows_updated <1)
                 quit( 'MY_Form_model | failed update');
