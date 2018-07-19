@@ -78,7 +78,7 @@
 							Sign up for you car shield
 							<br> here.
 						</p>
-						<a class="more_info" id="car_shield_info" href="more_info">More information....</a>
+						<a class="more_info" id="car_shield_info" href="more_info">More information</a>
 					</div>
 				</div>
 			</div>
@@ -96,7 +96,7 @@
 						<p>
 							5 Registered voters here....
 						</p>
-						<a class="more_info" id="legislative_outreach_info" href="more_info">More information....</a>						
+						<a class="more_info" id="legislative_outreach_info" href="more_info">More information</a>						
 					</div>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 						<p>
 							Are you a free lance professional or perhaps a business owner
 						</p>
-						<a class="more_info" id="business_network_info" href="more_info">More information....</a>							
+						<a class="more_info" id="business_network_info" href="more_info">More information</a>							
 					</div>
 				</div>
 			</div>

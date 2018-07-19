@@ -7,7 +7,6 @@ class MY_Form_model extends MY_Controller{
     function __construct(){
         parent::__construct();
         $this->mCi =& get_instance();
-
     }
 
     function modal_fetch( $table_name=null )
@@ -27,7 +26,6 @@ class MY_Form_model extends MY_Controller{
 
     function modal_post($update_id, $user_id=null, $column_rules, $table_name=null)
     {
-
         $this->form_validation->set_rules( $column_rules );
         if($this->form_validation->run() == TRUE) {
             /* get the variables */
@@ -117,12 +115,10 @@ class MY_Form_model extends MY_Controller{
             $table_data['social_sec'] = $this->site_security->_encrypt_string($user_ss);
 
         if( count($table_data) > 0 ) {
-            update($user_id, $table_data, 'user_info'){
-            $rows_updated = $this->model_name->update_data( 'user_info', $table_data, $user_id);
+            $rows_updated = $this->model_name->update($user_id, $table_data, 'user_info');
             if($rows_updated <1)
                 quit( 'MY_Form_model | failed update');
         }
-
     }   
 
     protected function _filter_data($table_name=null, $data)

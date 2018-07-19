@@ -53,7 +53,7 @@ function checkState(){
 
 function add_name( formData ){
     $.ajax({
-      url: dir_path+'site_users/add_child_record', 
+      url: 'site_users/add_child_record', 
       method:"POST",
       data: formData,
       contentType: false,
@@ -109,7 +109,7 @@ function remove_name(id){
 
     formData.append( 'id', id);  
     $.ajax({
-      url: dir_path+'site_users/remove_child_record', 
+      url: 'site_users/remove_child_record', 
       method:"POST",
       data: formData,
       contentType: false,

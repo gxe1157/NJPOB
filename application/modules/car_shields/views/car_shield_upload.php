@@ -7,7 +7,7 @@
         </div>
 
         <div class="col-sm-8 col-md-9">
-            <h3>Order your Car Shield [<?= $manage_rowid ?>]</h3> 
+            <p style="font-size: 1.2em;"><?= $fname ?>, please be sure to upload the items listed below in order to complete your application. We cannot process your Shield or ID Credentials until your membership is in compliance with our by-laws.</p> 
             <?= $this->load->view( 'site_upload/manage_uploads'); ?>
 
       </div>

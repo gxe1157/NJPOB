@@ -100,7 +100,7 @@ function build_data( $user_id )
 
 function create()
 {
-    $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();    
+    $user_id = $this->user->id;
     $update_id = $this->uri->segment(3);
 
     $cancel = $this->input->post('cancel', TRUE);
@@ -151,14 +151,16 @@ function create()
         $fetch['columns'] = $this->fetch_data_from_post();
     }
     $data = $this->build_data( $user_id );
-    
+
     $this->load->library('MY_Form_helpers');
     $data = $this->my_form_helpers->build_columns($data, $fetch, $this->column_rules);
     $data['bus_categories'] = $this->model_name->build_dropdowns('business_categories');
+    $data['headline_sub'] = $data['columns'][0]['value'] ? ' for '.$data['columns'][0]['value'] : '';
 
     /* Get uploaded images by userid and update_id */
     $this->load->library('MY_Uploads');
     $result_set  = $this->my_uploads->_get_uploaded_images($user_id, $update_id, 'business_listings_upload');    
+
     $data['images_list'] = $result_set->result();
 
     $panel_id = $this->uri->segment(4) != null ? $this->uri->segment(4) : $_POST['show_panel'];

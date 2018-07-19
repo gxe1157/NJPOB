@@ -44,7 +44,7 @@ function fetch_form_data( $user_id=null )
         $this->db->where( array("users.id"=> $user_id) );    
 
     $query = $this->db->get();
-    $result_set = $query->result();
+    $result_set = $query->row();
     return $result_set;
 }   
          

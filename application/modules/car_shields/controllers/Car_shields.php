@@ -24,22 +24,9 @@ function __construct() {
     if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
     $this->user = $this->ion_auth->user()->row();    
 
-    // /* is user logged in */
-    // $this->default = login_init();    
-
-    /* get user data */
-    // $table_name = 'car_shields';
     $update_id = $this->uri->segment(3);
-    // $results_set =
-    //    $this->model_name->get_view_data_custom('id', $update_id,$table_name, null)->result();
-
     $this->load->helper('car_shields/form_flds_helper');
     $this->column_rules = get_fields();
-
-    /* user status */
-    // $this->default['username'] = count($results_set) > 0 ? $results_set[0]->username : '';    
-    // $this->default['user_status'] = count($results_set) > 0 ? $results_set[0]->status : '';
-    // $this->default['user_is_delete'] = count($results_set) > 0 ? $results_set[0]->is_deleted : 0;
 
     /* page settings */
     $this->default['page_title'] = "Manage Car Shields";    
@@ -73,8 +60,8 @@ function manage_admin()
 
 function member_manage()
 {
-    $this->load->library('MY_Form_model');    
-    $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
+    $this->load->library('MY_Form_model');   
+    $user_id = $this->user->id;
     $data = $this->build_data( $user_id );
     $data = $this->my_form_model->admin_member_portal_view( $data );
     $data['update_id']=$user_id;
@@ -86,14 +73,15 @@ function member_manage()
 function car_shield_upload($manage_rowid=null)
 {
     $update_id  = $this->user->id; //$this->site_security->_make_sure_logged_in();
-
+    
     $this->load->library('MY_Uploads');   
     $table_name = 'car_shields_upload';
     $required_docs = 10;
     $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
     // $data['update_id'] = $update_id;
     $data['member_id'] = $update_id;
-    
+    $data['fname'] = $this->user->first_name;
+
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     
     $data['menu_level'] = '1';

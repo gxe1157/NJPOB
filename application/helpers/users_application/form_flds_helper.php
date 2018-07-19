@@ -44,7 +44,6 @@ if ( ! function_exists('get_fields'))
 {
    function get_fields( $results = array() )
     {
-
       $Select_option = array(
           array(''=>'Please Select...','Yes'=>'Yes','No'=>'No'),
           array(''=>'Please Select...','Male'=>'Male', 'Female'=>'Female', 'Other'=>'Other'),

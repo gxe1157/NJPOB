@@ -11,7 +11,7 @@
 ?>
 
 <h2 ><small><?= $default['headline'] ?></small>
-  <span style="font-size: .6em; color: red;"> [<?= $default['headline-sub'] ?>]</span>
+  <span style="font-size: .6em; color: red;"><?= $headline_sub ?></span>
 </h2>
 
 <!-- form -->

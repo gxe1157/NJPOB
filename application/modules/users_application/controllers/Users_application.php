@@ -24,6 +24,7 @@ function __construct() {
     list( $this->form_tables, $this->users, $this->user_address,
           $this->user_mail_to, $this->user_info, $this->user_employment_le,
           $this->user_employment_prv_sector, $this->user_children ) = get_table_data();
+
     $this->is_law_officer =
           substr($this->user->membership_level,0,3) == 'LE_' ? 1 : 0; 
 }
@@ -112,7 +113,9 @@ function youraccount_profile()
 
 function index($update_profile=null)
 {
-    list( $Select_option, $fld_group1, $fld_group2, $fld_group3, $fld_group4, $fld_group5 ) = get_fields($this->user);
+
+    $results = $this->model_name->fetch_form_data( $this->user->id );
+    list( $Select_option, $fld_group1, $fld_group2, $fld_group3, $fld_group4, $fld_group5 ) = get_fields($results);
 
     $data['Select_option']  = $Select_option;
     $data['fld_group1']     = $fld_group1;
