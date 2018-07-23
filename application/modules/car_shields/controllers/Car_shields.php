@@ -212,30 +212,7 @@ function process_payment()
 function post_payment()
 {
     /* payment */
-    $site_payments['transactionid'] = $_SESSION['transactionid'];
-    $site_payments['itemnumber']    = 
-                    isset($_SESSION['itemnumber']) != null ? $_SESSION['itemnumber']: null;
-    $site_payments['trans_type']    = $_SESSION['itemname'];
-    $site_payments['pay_method']    = $_SESSION['gateway_name'];
-    $site_payments['amount']        = $_SESSION['totalamount'];
-    $site_payments['username']      = 
-                    isset($_SESSION['username']) != null ? $_SESSION['username']: null;
-    $site_payments['cc_email']      = $_SESSION['cc_email'];    
-    $site_payments['create_date']   = time();  // timestamp for database
-
-    /* Add new car shield */
-    $car_shields['make'] = $_SESSION['make'];
-    $car_shields['model'] = $_SESSION['model'];
-    $car_shields['color'] = $_SESSION['color'];
-    $car_shields['model_year'] = $_SESSION['model_year'];
-    $car_shields['plate_no'] = $_SESSION['plate_no'];
-    $car_shields['vin_no'] = $_SESSION['vin_no'];
-    $car_shields['user_id'] = $_SESSION['user_id'];
-    $car_sheilds['shield_no'] = '0';
-    $car_sheilds['status'] = '1';     // 0- not ordered, 1 - pending, 2 - approved
-    $car_shields['admin_id'] = '0';
-    $car_shields['create_date'] = time(); 
-    $car_shields['transactionid'] = $_SESSION['transactionid'];
+    list($site_payments, $car_shields) = $this->model_name->_post_payment();
 
     /* Insert and update mysql here */
     $new_insert_id = $this->model_name->insert_data( $site_payments, $car_shields );
@@ -244,13 +221,12 @@ function post_payment()
     $this->my_form_model->update_user_info($user_id);
 
     /* Send Email */
+    $this->load->library('MY_Email_send');    
     $query = $this->model_name->get_shield_id($user_id)->result();
     $email = $query[0]->email;
     $transactionid = $site_payments['transactionid'];
+    $this->my_email_send->send_admin_email($email, 'car_shield', $transactionid);     
 
-    if( ENV == 'live') {
-        $this->send_mail($email, 'car_shield', $transactionid);     
-    }
     // redirect( $this->main_controller.'/payment_accepted');
     $this->payment_accepted($transactionid, $email, $new_insert_id);
 }

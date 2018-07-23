@@ -11,7 +11,7 @@ function __construct()
   parent::__construct();
     
   $this->load->module('site_security');
-  $this->load->library('form_validation');
+  // $this->load->library('form_validation');
   $this->form_validation->CI =& $this;
 
   /* ===============================================================

@@ -37,13 +37,13 @@ function insert_data( $site_payments, $car_shields )
   $this->db->trans_complete();
 
   if ($this->db->trans_status() === FALSE) {
-      /*-*/    
       // generate an error... or use the log_message() function to log your error
       //send email with payment information to webmaster        
 
       quit('payment posting failed...... ');
       redirect( $this->main_controller.'/user_payment_declined');
   }
+
   return $new_insert_id;
 }
 
@@ -87,6 +87,36 @@ function get_shield_id($user_id=null)
     return $query;
 
 }   
+
+function _post_payment()
+{
+    $site_payments['transactionid'] = $_SESSION['transactionid'];
+    $site_payments['itemnumber']    = 
+                    isset($_SESSION['itemnumber']) != null ? $_SESSION['itemnumber']: null;
+    $site_payments['trans_type']    = $_SESSION['itemname'];
+    $site_payments['pay_method']    = $_SESSION['gateway_name'];
+    $site_payments['amount']        = $_SESSION['totalamount'];
+    $site_payments['username']      = 
+                    isset($_SESSION['username']) != null ? $_SESSION['username']: null;
+    $site_payments['cc_email']      = $_SESSION['cc_email'];    
+    $site_payments['create_date']   = time();  // timestamp for database
+
+    /* Add new car shield */
+    $car_shields['make'] = $_SESSION['make'];
+    $car_shields['model'] = $_SESSION['model'];
+    $car_shields['color'] = $_SESSION['color'];
+    $car_shields['model_year'] = $_SESSION['model_year'];
+    $car_shields['plate_no'] = $_SESSION['plate_no'];
+    $car_shields['vin_no'] = $_SESSION['vin_no'];
+    $car_shields['user_id'] = $_SESSION['user_id'];
+    $car_sheilds['shield_no'] = '0';
+    $car_sheilds['status'] = '1';     // 0- not ordered, 1 - pending, 2 - approved
+    $car_shields['admin_id'] = '0';
+    $car_shields['create_date'] = time(); 
+    $car_shields['transactionid'] = $_SESSION['transactionid'];
+
+    return [$site_payments, $car_shields];
+}
 
 
 /* ===============================================

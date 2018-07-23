@@ -169,7 +169,7 @@ function edit(obj) {
     $('#uploadModal #caption').val(caption);      
 
     let path = $('#img_'+position).attr('src');
-    filename = path.split("/")[path.split("/").length-1];
+    let filename = path.replace(/^.*[\\\/]/, '');
     previewImg(filename);
 
 };
