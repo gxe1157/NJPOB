@@ -26,7 +26,9 @@
 
               <li role="presentation" ><a href="#panel2" aria-controls="panel2" role="tab" data-toggle="tab"><i class="fa fa-info" aria-hidden="true"></i>  <span>Member Benifits</span></a></li>
 
+              <?php if( is_numeric($update_id)) : ?>
               <li <?= $li_upload ?> role="presentation"><a href="#panel3" aria-controls="panel3" role="tab" data-toggle="tab"><i class="fa fa-upload" aria-hidden="true"></i>  <span>Upload Images</span></a></li>
+            <?php endif; ?>
             </ul>
 
     <form id="myForm" class="form-horizontal" method="post" action="<?= $form_location ?>" >
@@ -52,13 +54,13 @@
                 ?>
               </div>
 
+              <?php if( is_numeric($update_id)) : ?>
               <div role="tabpanel" class="tab-pane" id="panel3">
                 <?php 
-                  if( is_numeric($update_id))
-                      $this->load->view('partial_upload');    
+                    $this->load->view('partial_upload');    
                 ?>
               </div>
-
+            <?php endif; ?>
             </div> <!-- Tab panes -->
 
           </div> <!-- card end -->

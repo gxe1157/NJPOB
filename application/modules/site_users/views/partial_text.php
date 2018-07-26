@@ -1,7 +1,5 @@
 			                <div class="form-group"  style="margin: 5px;">
-			                  <label for="<?= $key ?>" class="col-sm-4 col-md-4 control-label">
-			                      <?= $labels[$key] ?>
-			                  </label>
+			                  <label for="<?= $key ?>" class="col-sm-4 col-md-4 control-label"><?= $labels[$key] ?></label>
 
 			                  <div class="col-sm-6 col-md-5 inputGroupContainer">
 			                      <div class="input-group">
