@@ -56,7 +56,7 @@ if ( ! function_exists('get_fields'))
             ),
             array(
               'field' => 'plate_no',
-              'label' => 'Plate No',
+              'label' => 'Plate #',
               'rules' =>'required|min_length[3]|max_length[20]',
               'icon'  => 'pencil',
               'placeholder'=>'',
@@ -65,7 +65,7 @@ if ( ! function_exists('get_fields'))
             ),            
             array(
               'field' => 'vin_no',
-              'label' => 'Vin No',
+              'label' => 'Vin #',
               'rules' =>'required|min_length[3]|max_length[30]',
               'icon'  => 'pencil',
               'placeholder'=>'',

@@ -453,7 +453,7 @@ if ( ! function_exists('get_fields'))
               'label' => 'Date Hired',
               'icon'  => 'user',
               'placeholder'=>' MM/DD/YYYY',
-              'input_value' => $display_value ? format_date($results->le_dt_hired) : '',              
+              'input_value' => !$display_value ? format_date($results->le_dt_hired) : '',              
               'input_type' =>'text',
               'input_options' => '0',
               'fld_group' => 'le_',

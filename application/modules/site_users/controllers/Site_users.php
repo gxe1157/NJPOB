@@ -220,6 +220,13 @@ function update_user()
     $result_set = $this->model_name->fetch_form_data($update_id);
 
     $data['columns'] = $result_set[0];
+
+    foreach ($data['columns'] as $key => $value) {
+        $date_value = $data['columns']->$key;
+        if( substr( $date_value,4,1 ) =='-'&& substr( $date_value,7,1 ) =='-' )
+                    $data['columns']->$key = format_date($date_value);
+    }
+
     $ss_number = $data['columns']->social_sec;
     $ss_number = $this->site_security->_decode_ss($ss_number);
     $data['columns']->social_sec =  $ss_number;
@@ -236,7 +243,6 @@ function update_user()
     $data['user_family'] = $this->user_family;        
     $data['user_employment_le'] = $this->user_employment_le;    
     $data['user_employment_prv_sector'] = $this->user_employment_prv_sector;        
-
     $data['user_children'] = $this->user_children;        
     $data['user_children_data'] = $this->model_name->get_view_data_custom('user_id', $update_id, 'user_children', null);
 

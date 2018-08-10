@@ -107,7 +107,8 @@
               <div role="tabpanel" class="tab-pane" id="user_employment_le">
                 <?php 
                   $data['fld_group'] = $user_employment_le;
-                  $data['submit_id']  = 'submit-user_employment_le';                            
+                  $data['submit_id']  = 'submit-user_employment_le';
+
                   $data['add_on'] = '';                  
                   $this->load->view( 'create_partial', $data);
                 ?>
