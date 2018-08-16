@@ -255,7 +255,7 @@ if ( ! function_exists('get_fields'))
             array(
               'field' => 'driver_lic',
               'label' => 'Driver&#39;s License',
-              'rules' => 'required|alpha_numeric',                              
+              'rules' => 'required',                              
               'icon'  => 'user',
               'placeholder'=>'',
               'input_value' => $results->driver_lic,              
