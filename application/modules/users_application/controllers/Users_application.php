@@ -40,7 +40,6 @@ function ajax_validate( )
     $fld_group = $this->input->post('fld_group', TRUE);
     /* Note: Param not in get_fields because input values not wanted */
     list( $Select_option, $fld_group1, $fld_group2, $fld_group3, $fld_group4 ) = get_fields();
-//quit($fld_group,1);
 
     /* remove validation rules */
     if( $fld_group == 'fld_group3' && $fld_group3[12]['input_value'] != 'Yes' ) {
@@ -57,7 +56,7 @@ function ajax_validate( )
                     $fld_group2[$key]['rules'] = '';
         }
     }
-//quit($fld_group);
+
     /* $$ contains the value of the fld_group for setting rules */
     $this->column_rules = $$fld_group;
 
@@ -66,11 +65,11 @@ function ajax_validate( )
     $this->form_validation->set_rules( $this->column_rules );
 
     if($this->form_validation->run() == TRUE) {
-//quit('true')        ;
         /* if Validation on fld_group3 is successful then form is complete */
         $job_completed = $fld_group == 'fld_group3' ? true : false;
         $this->update_user_account($fld_group, $job_completed);
         echo 1;       // passed        
+
     } else {
         $error_fldname='';
         /*  $row as each individual field array  */
@@ -82,8 +81,6 @@ function ajax_validate( )
                $errors_array[$error_fldname] = $error;  // Add errrors to $errors_array   
             } 
         }
-// dd($errors_array)        ;
-
         $temp = json_encode($errors_array);
         echo strip_tags($temp,'<p>');
     }
@@ -193,13 +190,14 @@ function update_user_account($fld_group, $job_completed)
             $this->_update_from_post('user_employment_le', $this->user_employment_le);
             $this->_update_from_post('user_employment_prv_sector', $this->user_employment_prv_sector);
             if( $job_completed == true ) { 
-                $this->model_name->update_data('users', array('app_completed_date' => time()) );    
+                $this->model_name->update_data('users', array('app_completed_date' => time()) ); 
 
                 /* Send Email */
-                if( ENV == 'live') {
-                  $email = $this->input->post( 'email', TRUE);
-                  $this->send_mail($email, 'memFormCompleted',null );                
-                }
+                $this->load->library('MY_Email_send');
+                $email_to = $this->input->post( 'email', TRUE);    
+                $type = 'memFormCompleted';
+                $variables = null;
+                $this->my_email_send->send_admin_email($email_to, $type, $variables);
             }    
        break;
 
