@@ -25,10 +25,10 @@ $(document).ready(function() {
     })
 
     if( $('#car_shield').val() == true ) { //if true then no car shield
-        $('.social_sec').css('display', 'none');
-        $('.ss_confirm').css('display', 'none');        
-        $('#social_sec').prop('disabled', true);
-        $('#ss_confirm').prop('disabled', true);
+        // $('.social_sec').css('display', 'none');
+        // $('.ss_confirm').css('display', 'none');        
+        // $('#social_sec').prop('disabled', true);
+        // $('#ss_confirm').prop('disabled', true);
     }
 
     function updateState( fieldName ) {

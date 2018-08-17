@@ -1,6 +1,9 @@
 <!-- include in Become-A-Member.php -->
-       
+<!-- <?= dd($fld_group,1) ?> -->
+
           <?php for( $i = $start; $i<$end; $i++ ) { ?>
+<!-- <?= $fld_group[$i]['label'] ?> -->
+
 
             <!-- Select input-->
             <div class="row">
@@ -34,14 +37,14 @@
                 </div>     
  
             <?php else: ?>
-
                 <!-- Text input-->
-                <div class="form-group <?= $fld_group[$i]['field'] ?>">
+                <div class="form-group">
                   <label class="col-md-3 control-label"><?= $fld_group[$i]['label'] ?></label>
                   <div class="<?= $col_width ?> inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-<?= $fld_group[$i]['icon'] ?>"></i></span>
+                            <i class="glyphicon glyphicon-<?= $fld_group[$i]['icon'] ?>"></i>
+                        </span>
 
                         <input  name="<?= $fld_group[$i]['field'] ?>" 
                                 value="<?= $fld_group[$i]['input_value'] ?>"
@@ -50,7 +53,7 @@
                                 class="form-control"
                                 type="<?= $fld_group[$i]['input_type'] ?>">
                       </div>
-                                            <!-- Report error here -->
+                      <!-- Report error here -->
                       <div class="<?= $fld_group[$i]['field'] ?>_error_mess"></div> 
 
                   </div>

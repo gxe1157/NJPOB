@@ -145,7 +145,7 @@ function index($update_profile=null)
     $data['custom_jscript'] = [ 'sb-admin/js/bootstrapValidator.min',
                                 'public/js/site_init',
                                 'public/js/member_app',
-                                'public/js/site_user_children',                                    
+                                'public/js/site_user_children',
                                 'public/js/model_js',
                                 'public/js/format_flds' 
                               ];    
