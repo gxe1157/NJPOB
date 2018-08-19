@@ -160,13 +160,17 @@ function create()
     /* Get uploaded images by userid and update_id */
     $this->load->library('MY_Uploads');
     $result_set  = $this->my_uploads->_get_uploaded_images($user_id, $update_id, 'business_listings_upload');    
-
     $data['images_list'] = $result_set->result();
 
+    /* This activates the tab panels in javascript */
     $panel_id = $this->uri->segment(4) != null ? $this->uri->segment(4) : $_POST['show_panel'];
-
     $data['show_panel'] = empty($panel_id) ? 'panel1': $panel_id;
+
+    /* use to disable tabpanels */
     $data['li_upload'] = is_numeric($update_id) ? '' : 'class="disabled"';
+    $data['tab_toggle'] = is_numeric($update_id) ? 'data-toggle="tab"' : '';    
+
+
 
     $data['action'] = is_numeric($update_id) ? 'Update Record' : 'Submit';
     $data['manage_rowid'] = $update_id;
