@@ -12,7 +12,7 @@ function __construct()
 
 function public_main( $data )
 {
-    $data['ad_plans'] = isset($ad_plans) ? $ad_plans : '';
+    $data['ad_plans'] = isset($data['ad_plans']) ? $data['ad_plans'] : '';
     $data['menu_level'] = isset($data['menu_level']) ? $data['menu_level'] : 0;
     $data['parent_titles'] = $this->get_nav($data['menu_level']);
     $data['contents']    = $data['page_url']  ? :'Main';

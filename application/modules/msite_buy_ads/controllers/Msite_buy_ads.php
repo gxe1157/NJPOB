@@ -5,7 +5,7 @@ class Msite_buy_ads extends MY_Controller
 {
 
 /* model name goes here */
-var $mdl_name = 'mdl_msite_buy_ads';
+var $mdl_name = 'Mdl_msite_buy_ads';
 var $store_controller = 'msite_buy_ads';
 
 var $column_rules = array(
@@ -75,7 +75,10 @@ function ad_form( $url_data = null ) {
     $data['item_counts']= $item_counts;
     $data['page_title'] = isset($item_title) ? $item_title : ' ';
 
-    $data['custom_jscript'] = ['ad_form_app'];    
+    $data['custom_jscript'] = ['sb-admin/js/bootstrapValidator.min',
+                               'public/js/ad_form_app',
+                               'public/js/format_flds'
+                              ];    
     $data['page_url']   = 'ad_form';
     $data['view_nav']   = 'ad_form_nav';
     $data['menu_level'] = 1;

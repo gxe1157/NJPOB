@@ -1,8 +1,23 @@
 
 
 $(document).ready(function() {
-  // alert('page loaded..................');
 
+    $('#cancel').on('click', function() {
+        let base_url = $('#base_url').val();
+        window.location.replace( base_url );        
+    })
+
+    $('#printer').on('click', function() {
+alert('Print form');
+    })
+
+    $('#phone').on('keydown', function(event) {
+        formatData(this,event,'DOWN','phone');
+    })
+
+    $('#phone').on('keyup', function(event) {
+        formatData(this,event,'UP','phone');        
+    })
 
 
     $('#ad_box_content').html('....');        
@@ -85,10 +100,6 @@ $(document).ready(function() {
                     notEmpty: {
                         message: 'Please supply your phone number'
                     },
-                    phone: {
-                        country: 'US',
-                        message: 'Please supply a vaild phone number with area code'
-                    }
                 }
             },
           } // end fields

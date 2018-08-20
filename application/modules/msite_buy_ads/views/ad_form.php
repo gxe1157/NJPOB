@@ -79,7 +79,9 @@
 <?= validation_errors("<p style='color: red;'>", "</p>") ?>
 <div class="col-sm-12" >
     <!-- paypal-express-checkout/process.php -->
-    <form id="myForm" method="post" action="<?= base_url() ?>msite_buy_ads/process_payment";>
+    <form id="myForm" method="post" action="<?= base_url() ?>msite_buy_ads/process_payment">
+
+    <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>" />        
 
     <fieldset>
         <input type="hidden" name="itemQty" value="1" />
@@ -141,7 +143,7 @@
               <div class="col-md-9 inputGroupContainer">
               <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-            <input name="phone" placeholder="(845)555-1212" class="form-control"
+            <input name="phone" id='phone' placeholder="(845)555-1212" class="form-control"
                    type="text" value="<?php echo set_value('phone'); ?>">
               </div>
             </div>
@@ -199,28 +201,21 @@
               </div>
             </div>
 
-            <!-- Button -->
-            <div class="form-group">
-              <!-- <label class="col-md-3 control-label"></label> -->
-              <div class="col-md-4">
-                <button type="submit"
-                        name="submitPayPal"
-                        class="btn btn-warning btn-block">Pay Pal
-                </button>
-              </div>
-            </div>           
+            <button type="submit"
+                    name="submitPayPal"
+                    class="btn btn-warning btn-block">Pay Pal
+            </button>
+            <button type="button"
+                    name="PrintFormayPal"                
+                    class="btn btn-default btn-block"
+                    id="printer">Print Form and Mail with Check
+            </button>
+            <button type="button"
+                    name="cancel"                
+                    class="btn btn-default btn-block"
+                    id="cancel">Cancel
+            </button>
 
-            <!-- Button -->
-            <div class="form-group">
-              <!-- <label class="col-md-3 control-label"></label> -->
-              <div class="col-md-8">
-                <button type="button"
-                        name="PrintFormayPal"                
-                        class="btn btn-default btn-block"
-                        id="printer">Print Form and Mail with Check
-                </button>
-              </div>
-            </div>
          </div>
       </div> 
       </div>

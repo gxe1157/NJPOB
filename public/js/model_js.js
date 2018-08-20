@@ -1,4 +1,13 @@
 
+if( model_js_mess === undefined ){
+	var model_js_mess = {
+        'delete' : '<h3>Delete this account?</h3>',
+        'suspend': '<h3>Suspend this account?</h3>',
+        'reset_pswrd' : '<h3>Reset Password?</h3>'
+    }
+}
+
+
  function upperFirstletter(str){
  	return str[0].toUpperCase() + str.substring(1);
  }
@@ -278,6 +287,10 @@ $(document).ready(function(){
   $(".btnConfirm").on("click", function(e){ 
 	e.preventDefault();
     var btnName = (this.id).split('-');
+
+console.log(btnName);
+console.log('model_js_mess',model_js_mess);
+
    	var messText  = model_js_mess[btnName[0]]; 
 	var href = $(this).attr('href');
 

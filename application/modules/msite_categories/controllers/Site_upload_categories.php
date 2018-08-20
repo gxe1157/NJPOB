@@ -1,16 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 // Rename Perfectcontroller to [Name]
-class Msite_categories extends MY_Controller
+class Site_upload_categories extends MY_Controller
 {
 
 /* model name goes here */
-var $mdl_name = 'mdl_msite_categories';
-var $site_controller  = 'msite_categories';
-/* set store items mysql table name here */
-var $items_mysql_table = 'msite_categories';
+var $mdl_name = 'mdl_site_upload_categories';
+var $site_controller  = 'site_upload_categories';
+
+/* set site upload mysql table name here */
+var $items_mysql_table = 'site_upload_categories';
 /* set assign category mysql table name here  */
-var $cat_assign_mysql_table = 'msite_cat_assign';
+var $cat_assign_mysql_table = 'store_cat_assign';
 
 
 var $column_rules = array(
@@ -18,7 +19,7 @@ var $column_rules = array(
         array('field' => 'parent_cat_id', 'label' => 'Parent Catergory', 'rules' => '')
 );
 
-var $columns_not_allowed = [];
+public $columns_not_allowed = [];
 public $default = [];
 
 function __construct() {
@@ -35,6 +36,7 @@ function __construct() {
     $this->default['flash'] = $this->session->flashdata('item');
     $this->site_security->_make_sure_logged_in();        
 }
+
 
 
 /* ===================================================
@@ -222,6 +224,34 @@ function _count_sub_cats()
     }
     return $sub_cats;
 }
+
+// function _get_sub_cat($parent_id)
+// {
+//     $sql  = "SELECT * FROM ".$this->items_mysql_table." where parent_cat_id = $parent_id ORDER BY cat_title";
+//     $sub_categories = $this->db->query($sql)->result();
+//     return $sub_categories;
+// }
+
+// function _get_cat_id_from_cat_url( $category_url ) {
+//     $query   = $this->get_where_custom('category_url', $category_url);
+//     $num_row = $query->num_rows();
+
+//     // show_error('Page was found........... ' );
+//     if($num_row == 0 ) show_404();
+
+//     $cat_id = _get_first_record( $query, 'id');
+//     return $cat_id;
+// }
+
+// function _get_target_pagination_base_url()
+// {
+//     $first_seg  = $this->uri->segment(1);
+//     $second_seg = $this->uri->segment(2);
+//     $third_seg  = $this->uri->segment(3);
+//     $target_base_url = base_url().$first_seg.'/'.$second_seg.'/'.$third_seg;
+//     return $target_base_url;
+
+// }
 
 
 /* ===============================================

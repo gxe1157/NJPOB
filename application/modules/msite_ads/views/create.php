@@ -5,26 +5,26 @@
 	$form_location = base_url()."msite_ads/create/".$update_id;
 	/* This is needed to insure the Ad Size drop down get populated  */
 	if( empty($columns['item_title']) ) $columns['item_title'] = $first_cat_title;
+
 ?>
-
-<?php if( is_numeric($update_id) ) { ?>
-	<div class="row">
-		<div class="col-md-12">
-			<h2 style="margin-top: 0px; ma">
-					<small><?= $default['headline'] ?></small></h2>			
-
-			<div class="well">		
-				<a href="<?= base_url() ?>msite_ads/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item</button></a>
-				<a href="<?= base_url() ?>msite_ads/view/<?= $update_id ?>/preview"><button type="button" class="btn btn-default">Preview Page</button></a>
-			</div>
-		</div><!-- end 12 span -->
-	</div><!-- end row -->
-<?php } ?>
 
 <div class="row">
 	<div class="col-md-12">
+		<h2 style="margin-top: 0px; border-bottom: 1px solid #999;">
+				<small><?= $default['page_header']  ?></small></h2>			
+	</div><!-- end 12 span -->
+</div><!-- end row -->
+
+<div class="row">
+	<div class="col-sm-9 col-md-offset-3">
+		<?= $this->load->view( 'view', $data); ?>
+		<br />
+	</div>	
+
+	<div class="col-md-12">
 		<div class="content">
 			<form class="form-horizontal" method="post" action="<?= $form_location ?>" >
+
 			  <fieldset>
 
 				<div class="form-group">
@@ -43,7 +43,7 @@
 					<label class="col-sm-4 col-md-3 control-label" for="selectStatus">Ad Size</label>
 					<div class="col-sm-6 col-md-5">
 						<?php
-						$additional_opt = ' id = "ad_id "  class="form-control"';
+						$additional_opt = ' id = "ad_id"  class="form-control"';
 						// $options = $plan[$plan_selected];
 						$options = $plan[ $columns['item_title'] ];
 
@@ -113,6 +113,7 @@
 <script langauge="Javascript">
 	var plans = <?php echo json_encode($plan) ?>;// don't use quotes
 	function get_ads_sizes(sel_option){
+		// alert(sel_option);
 		var sel_plan = [];
 		for ( var name in plans ) {
 			for ( var plan in plans[name] ){
@@ -123,10 +124,8 @@
 				}				
 			}
 		}
-
 		if( sel_plan.length>0)
 			buildAdId(sel_plan);
-		 //alert(sel_option+' | '+sel_plan);
 	}
 
 	function buildAdId(sel_plan) {
@@ -137,4 +136,5 @@
 		}
 		document.getElementById("ad_id").innerHTML = catOptions;
 	}
+
 </script>

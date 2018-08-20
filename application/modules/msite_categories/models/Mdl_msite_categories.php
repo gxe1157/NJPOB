@@ -11,20 +11,10 @@ function __construct( ) {
 
 function get_table() {
 	// table name goes here	
-    $table = "msite_categories";
+    $table = "Msite_categories";
     return $table;
 }
 
-
-// function get_item_id($update_id){
-//     /* fetch the item id */
-//     $item_id = null;
-//     $query = $this->get_where($update_id);
-//     foreach($query->result() as $row){
-//         $item_id = $row->item_id;
-//     }
-//     return $item_id ;
-// }    
 
 /* ===================================================
     Add custom model functions here

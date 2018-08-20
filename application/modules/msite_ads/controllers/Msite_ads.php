@@ -19,19 +19,32 @@ public $column_rules = array(
 );
 
 /* use like this.. in_array($key, $columns_not_allowed ) === false ) */
-public  $columns_not_allowed = array( 'create_date' );
-public $default = array();
-
+public  $columns_not_allowed = [];
+public $default = [];
 
 function __construct() {
     parent::__construct();
 
-    /* Manage panel */
-    $update_id = $this->uri->segment(3);
-    $this->default['headline']   = !is_numeric($update_id) ?
-                                    "Manage Ads" : "Update Ad Details";        
-    $this->default['add_button'] = "Add New Email";
+    /* is user logged in */
+    $this->load->module('auth');
+    if (!$this->ion_auth->logged_in()) redirect('auth/login', 'refresh');
+    $this->user = $this->ion_auth->user()->row();
+
+    /* Set admin mode */
+    $this->default['admin_mode'] = $this->session->admin_mode;
+
+    /* page settings */
+    $update_id = $this->uri->segment(3);    
+    $this->default['page_title'] = "Manage Terms and Conditions";    
+    $this->default['headline']   =
+         !is_numeric($update_id) ? "Manage Ads" : "Update Ad Details";        
+    $this->default['page_header'] =
+         !is_numeric($update_id) ? "Create New Ad" : "Update Ad Details";
+
+    $this->default['page_nav'] = "Ad Sales Campaign";         
+    $this->default['add_button'] = "Add New Ads";
     $this->default['flash'] = $this->session->flashdata('item');
+
 }
 
 
@@ -54,13 +67,15 @@ function manage()
         }
     }
 
-    $data['custom_jscript'] = [ 'sb-admin/js/datatables.min',
-                                'public/js/site_loader_datatable',
+    $data['custom_jscript'] = [ 
+                                // 'sb-admin/js/datatables.min',
+                                // 'public/js/site_loader_datatable',
+                                'public/js/model_js',
                                 'public/js/format_flds'];    
 
     $data['default']   = $this->default;    
     $data['page_url'] = "manage";
-    $data['redirect_url']   = base_url().$this->uri->segment(1)."/create";
+    $data['redirect_url']   = base_url().$this->uri->segment(1);
     $data['update_id']      = "";
 
     $this->load->module('templates');
@@ -70,7 +85,6 @@ function manage()
 
 function create()
 {
-    
     $update_id = $this->uri->segment(3);
     $submit = $this->input->post('submit', TRUE);
     if( $submit == "Cancel" ) {
@@ -112,6 +126,16 @@ function create()
     $data['drop_down_title'] = $drop_down_title;
     $data['plan'] = $plan;
     $data['first_cat_title'] = $first_cat_title;
+
+    /* data for preview panel */
+    $item_price = $data['columns']['item_price'];
+    if( strlen($item_price)>3 ) {
+        $len = strlen($item_price);
+        $data['item_price'] = substr($item_price, -$len,$len-3).','.substr($item_price, -3, 3);
+    }
+    $data['item_description'] = $data['columns']['item_description'];
+    $data['ad_id'] = $data['columns']['ad_id'];
+    $data['item_title'] = $data['columns']['item_title'];
 
     $data['default'] = $this->default;  
     $data['columns_not_allowed'] = $this->columns_not_allowed;
@@ -166,36 +190,16 @@ function deleteconf( $update_id )
     $data['page_url'] = "deleteconf";
     $data['update_id']  = $update_id;
 
-    $this->_render_view('admin', $data);
+    $this->load->module('templates');
+    $this->templates->admin($data); 
 }
-
-function view( $update_id )
-{
-    $this->_numeric_check( $update_id );
-    // fetch item details for pubic page
-    $data = $this->fetch_data_from_db( $update_id );
-
-    // build breadcrumbs_data
-    $preview = $this->uri->segment(4) == 'preview' ? true : false; // from msite_ads update - no breadcrumbs on preview
-    $breadcrumbs_data['template'] = 'public_bootstrap';
-    $breadcrumbs_data['current_page_title'] = $data['item_title'];
-    $breadcrumbs_data['breadcrumbs_array'] = $preview ? '' :  $this->_generate_breadcrumbs_array($update_id);
-
-    $data['breadcrumbs_data'] = $breadcrumbs_data;  //pass this array to data
-    $data['headline']  = "";
-    $data['view_module'] = "msite_ads";
-    $data['page_url'] = "view";
-    $data['update_id'] = $update_id;
-
-    $this->_render_view('public_bootstrap', $data);
-}
-
 
 function init_select_opts()
 {
     $all_categories = $this->_custom_query('SELECT * FROM msite_categories
                                            ORDER BY parent_cat_id');
 
+    
     foreach ($all_categories->result() as $key => $value) {
       // echo $key." id | ".$value->id." Pid | ".$value->parent_cat_id."<br>";
           if( $value->parent_cat_id == 0 ){
@@ -203,21 +207,20 @@ function init_select_opts()
             $drop_down_title[$value->cat_title] = $value->cat_title;
           }
     }
-
+    
     foreach ($parent_cat_title as $key=> $parent) {
       // echo  $key."  | ".$parent['id']."  | ".$parent['title']."<br>";
+
       /* get first parent select options */
-      if( $key == 0 ) $first_cat_title =  $parent['title'];
-
-
+      // if( $key == 0 ) $first_cat_title =  $parent['title'];
       foreach ($all_categories->result() as $key => $value) {
         if( ($parent['id'] == $value->parent_cat_id) ){
           $plan[ $parent['title'] ][$value->cat_title] = $value->cat_title;
         }
       }
     }
-    // $this->lib->checkArray($plan, 1);
-    //	echo $plan[$plan_selected][0]."<br>";
+
+    $drop_down_title = array_merge([''=>'Please Select ....'], $drop_down_title );
     return array( $drop_down_title ,$plan, $first_cat_title );
 }
 
