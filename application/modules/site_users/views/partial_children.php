@@ -41,8 +41,8 @@
       						<thead>
       						  <tr>
       						    <th width="5%">#</th>
-      						    <th width="25%">Firstname</th>
-      						    <th width="25%">Lastname</th>
+      						    <th width="25%">First Name</th>
+      						    <th width="25%">Last Name</th>
       						    <th width="15%">Birthday</th>
       						    <th width="15%">Gender</th>
       						    <th width="15%">Action</th>
