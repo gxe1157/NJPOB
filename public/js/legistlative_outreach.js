@@ -2,9 +2,9 @@
 
 /* Build obj to be used by model_js */
 var model_js_mess = {
-        'delete' : '<h3>Delete this account?</h3>',
-        'suspend': '<h3>Suspend this account?</h3>',
-        'reset_pswrd' : '<h3>Reset Password?</h3>',
+        'delete' : '<h3>Delete this row?</h3>',
+        // 'suspend': '<h3>Suspend this account?</h3>',
+        // 'reset_pswrd' : '<h3>Reset Password?</h3>',
         'submit_option' : null
     }
 
@@ -21,7 +21,6 @@ function editBtn( obj ){
     let formData = new FormData();
     formData.append('rowId', rowId[0] );
     formData.append('userId', rowId[1] );    
-// alert( rowId[0]+' | '+rowId[1]);
 
     $.ajax({
       url: dir_path+'legislative_outreach/modal_fetch_ajax',
@@ -59,6 +58,28 @@ function editBtn( obj ){
     });
 };
 
+function build_table_row(response, tr){
+  let table_row  = '';
+
+      if(tr)
+         table_row += '<tr id="tr_'+response['row_id']+'" >';
+
+      table_row += '<td class="right">'+response['fullName']+'</td>';
+      table_row += '<td class="right">'+response['voter_name']+'</td>';      
+      table_row += '<td class="right">'+response['voter_city']+'</td>';
+      table_row += '<td class="right">'+response['voter_email']+'</td>';
+
+      table_row += '<td class="center">';
+      table_row +='<a class="btn btn-danger btn-sm btnConfirm actionBtn" id="delete-danger"';
+      table_row +='href="http://localhost/njpob/legislative_outreach/delete/'+response['row_id']+'">';
+      table_row +='<i class="fa fa-trash fa-fw"></i> Remove </a> <button class="btn btn-info btn-sm btn-edit actionBtn" id="'+response['row_id']+'/'+response['user_id']+'" onClick="javascript: editBtn(this)"><i class="fa fa-pencil fa-fw"></i> Edit</button></td>';
+
+      if(tr)
+        table_row += '</tr>';
+
+      return table_row;
+}
+
 function add_data_ajax(){
     let formData = new FormData();
     let getData = $('#myModel').find(':input').serializeArray();
@@ -87,14 +108,16 @@ function add_data_ajax(){
 
         if( response['success'] == 1 ){
           /* Success */
-          if(response['new_update_id'] > 0) {
-            // New Record Added
-            $( response['table_lines'] ).appendTo('#example');
+          let table_row = ''; // build_table_row(response);
+          if(response['new_update_id']>0) {
+            table_row =  build_table_row(response, 1);            
+            $( table_row ).appendTo('#example > tbody:last-child');
           }else{
-            // Update Record
-            $('#tr_'+row_id).html(response['table_lines']);
-            // console.log(response['table_lines']);
+            //console.log('table_row',table_row);
+            table_row =  build_table_row(response, 0);            
+            $('#tr_'+response['row_id']).html(table_row);              
           }
+
           let flash_type = response['flash_type'];
           myAlert( 'Alert'+' ! ',response["flash_message"], flash_type );
 

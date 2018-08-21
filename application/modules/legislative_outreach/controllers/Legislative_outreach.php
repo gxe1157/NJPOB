@@ -74,8 +74,7 @@ function modal_post_ajax()
 
     $response = $this->my_form_model->modal_post($update_id, $user_id, $this->column_rules, null);
 
-    $response['table_lines']=
-        $this->model_name->build_table_row( $response, $user_id, $update_id);
+    $this->model_name->build_table_row( $response, $user_id, $update_id);
 
     echo json_encode($response);                
     return;    

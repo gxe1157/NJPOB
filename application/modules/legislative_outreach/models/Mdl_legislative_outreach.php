@@ -57,9 +57,9 @@ function get_legislative_id($update_id=null)
     return $query;
 }   
 
-function build_table_row(&$response, $user_id, $id )
+function build_table_row(&$response, $user_id, $update_id )
 {
-    $id = $response['new_update_id'] ? : $id;
+    $response['row_id'] = $response['new_update_id'] ? : $update_id;
 
     $query = $this->model_name->get_where($user_id, 'users')->row();
     $fullname = $query->first_name.' '.$query->last_name;
@@ -69,19 +69,12 @@ function build_table_row(&$response, $user_id, $id )
     $voter_city  = $this->input->post('city', TRUE);
     $voter_email = $this->input->post('email', TRUE);
 
-    $line = '';
-    $line .='<td class="right">'.$fullname.'</td>';   
-    $line .='<td class="right">'.$voter_fname.' '.$voter_lname.'</td>';
-    $line .='<td class="right">'.$voter_city.'</td>';
-    $line .='<td class="right">'.$voter_email.'</td>';
-    $line .='<td class="center">
-        <a class="btn btn-danger btn-sm btnConfirm actionBtn" id="delete-danger"
-        href="http://localhost/njpob/legislative_outreach/delete/'.$id.'">
-        <i class="fa fa-trash fa-fw"></i> Remove
-        </a>
-        <button class="btn btn-info btn-sm btn-edit actionBtn" id="'.$id.'/'.$user_id.'" onClick="javascript: editBtn(this)"><i class="fa fa-pencil fa-fw"></i> Edit</button></td>';
+    $response['fullName'] = $fullname;
+    $response['voter_name'] = $voter_fname.' '.$voter_lname;   
+    $response['voter_city'] = $voter_city;
+    $response['voter_email'] = $voter_email;
+    $response['user_id'] = $user_id;
 
-    return $line;
 }
 
 

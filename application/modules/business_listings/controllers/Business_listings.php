@@ -126,9 +126,10 @@ function create()
             if(is_numeric($update_id)){
                 //update the item details
                 $rows_updated = $this->_update($update_id, $data);
-                $flash_message = $rows_updated > 0 ?
-                  "The Business details were sucessfully updated" : "Business selected failed to be updated";
-                $flash_type = $rows_updated > 0 ? 'success':'danger';
+                if($rows_updated > 0) {
+                  $flash_message ='The Business details were sucessfully updated';
+                  $flash_type = 'success';
+                }
             } else {
                 //insert a new item
                 $update_id = $this->_insert($data);

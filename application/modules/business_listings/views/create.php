@@ -26,7 +26,7 @@
 
               <li role="presentation" ><a href="#panel2" aria-controls="panel2" role="tab" data-toggle="tab"><i class="fa fa-info" aria-hidden="true"></i>  <span>Member Benifits</span></a></li>
 
-              <li role="presentation" <?= $li_upload ?> ><a href="#upload_files" aria-controls="upload_files" role="tab" <?= $tab_toggle ?> ><i class="fa fa-upload" aria-hidden="true"></i><span> Upload Images</span></a></li>
+              <li role="presentation" <?= $li_upload ?> ><a href="#panel3" aria-controls="panel3" role="tab" <?= $tab_toggle ?> ><i class="fa fa-upload" aria-hidden="true"></i><span> Upload Images</span></a></li>
             </ul>
 
     <form id="myForm" class="form-horizontal" method="post" action="<?= $form_location ?>" >
@@ -54,7 +54,7 @@
 
               <div role="tabpanel" class="tab-pane" id="panel3">
                 <?php 
-                    $this->load->view('partial_upload');    
+                    $this->load->view('default_module/partial_upload');    
                 ?>
               </div>
 

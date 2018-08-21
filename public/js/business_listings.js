@@ -43,12 +43,12 @@ $(document).ready(function() {
 
     /* detect any input change */
     let change_occurred = false;    
-    $('#business_app :input').change(function(e){
+    $('#myForm :input').change(function(e){
       // console.log($(e.target).attr('id'));
       change_occurred = true;
     });
 
-    $('#business_app #submit_btn').on('click', function() {
+    $('#myForm #submit_btn').on('click', function() {
         let error_mess = '<b>No changes have occurred to this record.</b>';
          if( change_occurred == false ){
             myAlert( jsUcfirst('Alert'), error_mess, 'warning' );                  
