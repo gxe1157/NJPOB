@@ -117,7 +117,7 @@ function remove( obj ){
           let response = JSON.parse( data );
           // console.log( 'Return Data:......  ', response);
           if( response['success'] == 1 ){
-              $('#tr'+position).remove();
+              $('#tr_'+position).remove();
               client_files_remove(response["remove_name"]);                 
           } else {
             myAlert('Error!',response['flash_message']);
