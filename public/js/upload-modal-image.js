@@ -180,7 +180,8 @@ $(document).ready(function (e) {
   $('#openUploadModal').on('click', function () {
       noPreview();
       $( '#uploadModal #pre_upload' ).css("display", "block");           
-      $('#show_rowId').val('');          
+      $('#show_rowId').val('');  
+      $('#caption').val('');                
       $('#uploadModal').modal();
       $('#submit_button').css("display", "none");             
   })
