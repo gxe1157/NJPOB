@@ -7,7 +7,6 @@ parent::__construct();
 
 }
 
-
 function _get_user_id()
 {
     //attempt to get the ID of the user
@@ -103,6 +102,16 @@ function _decode_ss($str)
     return $last4_social;
 }
 
+function _mask_driver_lic($str)
+{
+    $driver_lic=null;
+    if($str){
+       $this->load->library('encryption');
+       $decrypted_string = $this->encryption->decrypt($str);
+       // $last4_social = 'xxx-xx-'.substr($decrypted_string,5,4);
+    }
+    return $str;
+}
 
 function create_key()
 {

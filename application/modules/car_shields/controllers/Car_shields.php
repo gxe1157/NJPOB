@@ -173,11 +173,11 @@ function process_payment()
     if($submit=='Cancel')
         redirect( $this->main_controller.'/member_manage');
 
-    $user_id = $this->user->id; //$this->site_security->_make_sure_logged_in();
+    $user_id = $this->user->id;
     list( $data['status'], $data['user_avatar'],
           $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($user_id);
 
-    list($data['ss_required'], $data['dl_required'] ) = $this->remove_rules($user_id);
+    list($data['ss_required'], $data['dl_required'], $data['ss'], $data['dl'] ) = $this->remove_rules($user_id);
 
     $this->load->library('form_validation');
     $this->form_validation->set_rules( $this->column_rules ); 
@@ -269,22 +269,27 @@ function remove_rules($user_id)
     $col    = 'id';
     $table  = 'user_info';
     $orderby= null;
-    $results_set = $this->model_name->get_view_data_custom(
-                            $col, $user_id, $table, $orderby)->result();
+    $value = $this->model_name->get_view_data_custom(
+                            $col, $user_id, $table, $orderby)->row();
 
     /* remove validation rules */
-    $dl_required  = empty( $results_set[0]->driver_lic ) ? 1 : 0;
+    $dl_required  = empty( $value->driver_lic ) ? 1 : 0;
     if( $dl_required == 0 ) {
         unset($this->column_rules[6]);  // remove rule for driver lic        
     }
 
-    $ss_required = empty( $results_set[0]->social_sec ) ? 1 : 0;
+    $ss_required = empty( $value->social_sec ) ? 1 : 0;
     if( $ss_required == 0 ) {
         unset($this->column_rules[7]);  // remove rule for social_sec
         unset($this->column_rules[8]);  // remove rule for ss_confirm
     }
     /* end remove validation rules */
-    return [$ss_required, $dl_required ];
+
+    $social_sec = $this->site_security-> _decode_ss($value->social_sec);
+    $driver_lic = $this->site_security-> _mask_driver_lic($value->driver_lic);
+
+    return [$ss_required, $dl_required, $social_sec, $driver_lic ];
+
 }
 
 

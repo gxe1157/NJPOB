@@ -10,7 +10,7 @@
           <form name="myForm" method="post"
                 action="<?= base_url('car_shields/process_payment') ?>">
 
-             <input type="hidden" name="itemprice" value ="32.95" />
+             <input type="hidden" name="itemprice" value ="39.00" />
              <input type="hidden" name="itemQty" value ="1" />
              <input type="hidden" name="itemname" value ="Car Shield Lease" />
              <input type="hidden" name="itemnumber" value ="" />           
@@ -40,6 +40,31 @@
                       </div>
                   </div>
             <?php } ?>
+            <? if(!$dl_required): ?>
+                  <div class="form-group">
+                      <label class="col-md-3 control-label" for="dl" >
+                        Driver's Lic.</label>
+                      <div class="col-md-8">
+                          <input type="text"
+                                 name="dl"
+                                 value="<?= $dl; ?>"
+                                 class="form-control" readonly>
+                      </div>
+                  </div>
+            <?php endif; ?> 
+            <? if(!$ss_required): ?>                                   
+                  <div class="form-group">
+                      <label class="col-md-3 control-label" for="ss" >
+                        Social Security</label>
+                      <div class="col-md-8">
+                          <input type="text"
+                                 name="ss"
+                                 value="<?= $ss; ?>"
+                                 class="form-control" readonly>
+                      </div>
+                  </div>
+            <?php endif; ?>      
+
             <!-- Pay Pal -->
             <div class="col-md-12 text-center" style="margin-top: 25px; margin-bottom:25px;"> 
                 <button type = "submit" class="btn btn-default"

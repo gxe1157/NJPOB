@@ -9,11 +9,13 @@ public $mdl_name = 'Mdl_business_listings';
 public $main_controller = 'business_listings';
 
 public $column_rules = [];
+public $panel1 = [];
 
 // used like this.. in_array($key, $columns_not_allowed ) === false )
 public $columns_not_allowed = array( 'create_date' );
 public $default= [];
 private $user= [];
+
 
 function __construct() {
     parent::__construct();
@@ -112,7 +114,13 @@ function create()
     $panel_id = $this->uri->segment(4) ? $this->uri->segment(4) : $show_panel;
 
     if( $submit == "Submit" ) {
-        // process changes
+
+        if($panel_id=='panel1' && !is_numeric($update_id) ) {
+            /* On insert new record change validation to panel1 fields */            
+            foreach ($this->column_rules as $key => $value)
+                if($key > 9 )   unset( $this->column_rules[$key] );    
+        }
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules( $this->column_rules );
 
@@ -121,8 +129,6 @@ function create()
             $data['user_id'] = $user_id;
             unset($data['error_mess']);            
 
-            // make search friendly url
-            // $data['item_url'] = url_title( $data['item_title'] );
             if(is_numeric($update_id)){
                 //update the item details
                 $rows_updated = $this->_update($update_id, $data);
@@ -132,6 +138,7 @@ function create()
                 }
             } else {
                 //insert a new item
+                $panel_id = 'panel2';
                 $update_id = $this->_insert($data);
                 $flash_message = $update_id > 0 ?
                   "New Business was sucessfully added" : "New Business failed to be added";
@@ -160,7 +167,7 @@ function create()
 
     /* Get uploaded images by userid and update_id */
     $this->load->library('MY_Uploads');
-    $result_set  = $this->my_uploads->_get_uploaded_images($user_id, $update_id, 'business_listings_upload');    
+    $result_set = $this->my_uploads->_get_uploaded_images($user_id, $update_id, 'business_listings_upload');    
     $data['images_list'] = $result_set->result();
 
     /* This activates the tab panels in javascript */
@@ -171,7 +178,8 @@ function create()
     $data['li_upload'] = is_numeric($update_id) ? '' : 'class="disabled"';
     $data['tab_toggle'] = is_numeric($update_id) ? 'data-toggle="tab"' : '';    
 
-
+    $data['li_panel2'] = is_numeric($update_id) ? '' : 'class="disabled"';
+    $data['tab_toggle_panel2'] = is_numeric($update_id) ? 'data-toggle="tab"' : '';
 
     $data['action'] = is_numeric($update_id) ? 'Update Record' : 'Submit';
     $data['manage_rowid'] = $update_id;

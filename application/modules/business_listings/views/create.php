@@ -22,9 +22,9 @@
           <div class="card">
             <ul class="nav nav-tabs nav-clr" role="tablist">
               <!-- role="presentation" class="active" -->
-              <li role="presentation "><a href="#panel1" aria-controls="pane1" role="tab" data-toggle="tab"><i class="fa fa-user"></i>  <span>Membership Plan</span></a></li>
+              <li role="presentation "><a href="#panel1" aria-controls="pane1" role="tab" data-toggle="tab"><i class="fa fa-user"></i>  <span>Business Info</span></a></li>
 
-              <li role="presentation" ><a href="#panel2" aria-controls="panel2" role="tab" data-toggle="tab"><i class="fa fa-info" aria-hidden="true"></i>  <span>Member Benifits</span></a></li>
+              <li role="presentation" <?= $li_panel2 ?> ><a href="#panel2" aria-controls="panel2" role="tab" <?= $tab_toggle_panel2 ?>><i class="fa fa-info" aria-hidden="true"></i>  <span>Services</span></a></li>
 
               <li role="presentation" <?= $li_upload ?> ><a href="#panel3" aria-controls="panel3" role="tab" <?= $tab_toggle ?> ><i class="fa fa-upload" aria-hidden="true"></i><span> Upload Images</span></a></li>
             </ul>
@@ -38,6 +38,8 @@
 
               <div role="tabpanel" class="tab-pane" id="panel1">
                 <?php 
+                  $data['action'] = is_numeric($update_id) ?
+                        'Update' : 'Continue';
                   $data['start'] = 0;
                   $data['end'] =10;
                   $this->load->view( 'create_partial', $data);
@@ -46,6 +48,8 @@
 
               <div role="tabpanel" class="tab-pane" id="panel2">
                 <?php 
+                  $data['action'] = is_numeric($update_id) ?
+                        'Update' : 'Submit';
                   $data['start'] = 10;
                   $data['end'] = 14;                  
                   $this->load->view( 'create_partial', $data);

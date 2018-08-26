@@ -49,7 +49,7 @@
                 </ul>
             <?php } else { ?>         
               <ul class="nav navbar-nav navbar-right">            
-                <li><a href="<?= base_url() ?>auth/logout">
+                <li><a href="<?= base_url() ?>auth/logout" style="font-size: 1.4em;">
                 <span class="glyphicon glyphicon-log-out"></span> Login Out</a></li>
               </ul>
               

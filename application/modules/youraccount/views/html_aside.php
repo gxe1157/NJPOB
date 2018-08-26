@@ -69,7 +69,7 @@
           <li>
             <a id ='remove_avatar'
                href="#">
-               <i class="fa fa-eraser" aria-hidden="true"></i> Avatar Reset</a>
+               <i class="fa fa-eraser" aria-hidden="true"></i> Remove Avatar</a>
           </li>
           <li>
             <a id ='change_password'
