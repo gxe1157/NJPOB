@@ -9,7 +9,7 @@
 							<textarea class="cleditor"
 									  id="<?= $field_name ?>"
   									  name="<?= $field_name ?>"
-									  rows="2" name="<?= $field_name ?>"><?= $value ?></textarea>						  	
+									  rows="2"><?= $value ?></textarea>						  	
 	                        <!-- Show errors here -->
 	                        <?= form_error($field_name, '<div class="error" style="color: red;">', '</div>'); ?>
 

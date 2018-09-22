@@ -41,12 +41,18 @@ $(document).ready(function() {
         $(this).attr( 'autocomplete', 'off' );
     });
 
+
     /* detect any input change */
     let change_occurred = false;    
     $('#myForm :input').change(function(e){
+      alert('Change' ) ; 
       // console.log($(e.target).attr('id'));
       change_occurred = true;
     });
+
+    $("textarea").cleditor().on('change', function(){
+      change_occurred = true;
+    })
 
     $('#myForm #submit_btn').on('click', function() {
         let error_mess = '<b>No changes have occurred to this record.</b>';

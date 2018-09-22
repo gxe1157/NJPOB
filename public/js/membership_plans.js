@@ -42,20 +42,8 @@ $(document).ready(function() {
         $(this).attr( 'autocomplete', 'off' );
     });
 
-    // /* detect any input change */
-    // $('#business_app').on('input', function() {
-    // // do something
-    //    alert( 'field '+this.id+' changed.....');
-    // });
-
-
     $('#membership_plan #submit_btn').on('click', function() {
         $('#show_panel').val(last_clicked_href);
-        // let error_mess = '<b>No changes have occurred to this record.</b>';
-        //  if( change_occurred == false ){
-        //     myAlert( jsUcfirst('Alert'), error_mess, 'warning' );                  
-        //     return false;
-        // }
     });
 
 

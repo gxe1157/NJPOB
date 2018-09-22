@@ -84,7 +84,16 @@
 
                     <!-- upload file input -->
                     <div id="pre_upload_<?= $x ?>" style="display:<?= $pre_upload ?>" >
-                            <input type="file" name="file[]" id="imageFile_<?= $x ?>" />
+                            <input type="file" name="file[]" id="imageFile_<?= $x ?>" disabled />
+                        <div id="">
+                            <?= form_dropdown('LE_dropdown',
+                                 [ '0' => 'Select ...',
+                                   '1' => 'Upload Now',
+                                   '2' => 'Will Upload Later',
+                                   '3' => 'Department Policy Does Not Allow'
+                                 ], ' id="LE_dropdown"'); ?>
+                        </div>    
+
                     </div>
                     <!-- upload file input -->
 

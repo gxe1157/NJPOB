@@ -40,7 +40,8 @@
                       </div>
                   </div>
             <?php } ?>
-            <? if(!$dl_required): ?>
+
+            <?php if(!$dl_required): ?>
                   <div class="form-group">
                       <label class="col-md-3 control-label" for="dl" >
                         Driver's Lic.</label>
@@ -52,7 +53,8 @@
                       </div>
                   </div>
             <?php endif; ?> 
-            <? if(!$ss_required): ?>                                   
+
+            <?php if(!$ss_required): ?>                                   
                   <div class="form-group">
                       <label class="col-md-3 control-label" for="ss" >
                         Social Security</label>

@@ -241,7 +241,7 @@ if ( ! function_exists('get_fields'))
             ), 
             array(
               'field' => 'mail_add1',
-              'label' => 'Mail Add1',
+              'label' => 'Mail Address1',
               'rules' => 'required|min_length[3]|max_length[100]',          
               'icon'  => 'envelope',
               'placeholder'=>'',
@@ -252,7 +252,7 @@ if ( ! function_exists('get_fields'))
             ),
             array(
               'field' => 'mail_add2',
-              'label' => 'Mail Add2',
+              'label' => 'Mail Address2',
               'rules' => 'max_length[100]',          
               'icon'  => 'envelope',
               'placeholder'=>'',

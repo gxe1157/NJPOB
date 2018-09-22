@@ -127,12 +127,12 @@ $(document).ready(function() {
         alert('Need information here...... '+id);
     });
 
-    let change_occurred = false;
     $('#users_admin').on( 'focus', ':input', function(){
         $(this).attr( 'autocomplete', 'off' );
     });
 
     /* Save and continue */
+    let change_occurred = false;
     $('#users_admin :input').change(function(e){
         change_occurred = true;
     });
