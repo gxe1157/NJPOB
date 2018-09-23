@@ -38,6 +38,7 @@ function noPreview(){
 
 function selectImage(e) {
   // console.log('|'+'#previewImg_'+img['id'], '#pre_upload_'+img['id']);
+  $('#image_name_'+img['id']).html('------');  
   $( '#previewImg_'+img['id'] ).attr('src', e.target.result);
   $( '#pre_upload_'+img['id'] ).css("display", "none");
   $( '#confirm_upload_'+img['id'] ).css("display", "block");
@@ -70,6 +71,9 @@ function cancel( obj ){
   // from client
   var file = imgFileInfo( 'imageFile_'+img["id"] );
   client_files_remove(file);
+
+  let image_name = get_image_name(img["id"]);
+  $('#image_name_'+img["id"]).html(image_name);
   noPreview();
 }
 
@@ -151,7 +155,7 @@ function get_image_name(position) {
   let image_name = null;
   let getRoleValue = $('#role_'+position).val().split('_');
   if( getRoleValue[0] == 'Law Enforcement or Agency Photo ID' ) {
-      image_name = '<p style="color: red;"><input type="checkbox" name="mycheck" value="1" /> ';
+      image_name = '<p style="color: red;"><input type="checkbox" name="credentials" id="credentials" value="1" /> ';
       image_name += 'Check here if department policy prohibits sending your ID credentials. We will contact you to discuss.</p>';      
   }
   return image_name
@@ -227,50 +231,48 @@ $(document).ready(function (e) {
     });
 
   /* Credentials */
-  $('#credentials').on('change', function(){
-      alert($('#credentials').val());
+  $('input[name*="credentials"]').on('change', function(){
+      let value = 0;
+      let id = this.id;
+      let position = id.split('_').pop();
+      let update_id = $('#member_id').val();
+
       if(this.checked === true){
-         // disable browse 
-         alert(this.checked);
+        // disable browse    
+        $('#imageFile_'+position).prop("disabled",true);
+        value = 1;
       } else {
-         // enable browse
-         alert(this.checked);
+        // enable browse
+        $('#imageFile_'+position).prop("disabled",false);         
+        value = 0;
       }
 
-      let target_url = dir_path+'site_users/modal_post_ajax';      
-      alert('target_url: '+target_url);
-
+      let target_url = dir_path+'site_users/ajax_credentials';      
       let formData = new FormData(this);
-      formData.append('position', position);
+      formData.append('credentials', value);
+      formData.append('update_id', update_id);
 
-    $.ajax({
-      url: target_url,
-      method:"POST",
-      data: formData,
-      contentType: false,
-      cache: false,
-      processData:false,
-      success:function(data)
-      {
-          // console.log( 'Return Data:......  ', data);
-          let response = JSON.parse( data );
-          console.log( 'Return Data:......  ', response);
-          
-          if( response['success'] == '1'){
-              $('#alert_mess').html(response['alert_mess']);
-          }else{
-              $('#message_'+position).html('<div class=\"alert alert-danger error_messages\" role=\"alert\"> '+response['error_mess']+'</div>').fadeIn( 300 ).delay( 500 ).fadeOut( 400 );
-          }
-        } // end success
-    });
-
-
-
-
-
-
-
-
+      $.ajax({
+        url: target_url,
+        method:"POST",
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData:false,
+        success:function(data)
+        {
+            // console.log( 'Return Data:......  ', data);
+            let response = JSON.parse( data );
+            console.log( 'Return Data:......  ', response);
+            
+            if( response['success'] == '1') {
+                // $('#alert_mess').html('Credentials have been update.');
+            }else{
+              alert('Failed..............');
+                // $('#message_'+position).html('<div class=\"alert alert-danger error_messages\" role=\"alert\"> '+response['error_mess']+'</div>').fadeIn( 300 ).delay( 500 ).fadeOut( 400 );
+            }
+          } // end success
+      });
 
   });
 

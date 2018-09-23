@@ -64,6 +64,7 @@
 
                   $pre_upload = $image_name == '' ? "block" : "none";
                   $completed_upload = $pre_upload == "block" ? "none" : "block";
+                  $credentials = 'credentials_'.$x;
               ?>
                 <tr>
                   <td>
@@ -81,11 +82,11 @@
                   <td class="right" id="image_name_<?= $x ?>"><?= $image_name;  ?>
                     <?php if($role == 'Law Enforcement or Agency Photo ID' && empty($image_name)): ?>
                       <p style="color: red;">
-                        <?= form_checkbox('credentials', '1', false, ['id'=>'credentials']); ?>
+                        <?= form_checkbox('credentials', '1', $credentials_status, ['id'=>$credentials]); ?>
                       Check here if department policy prohibits sending your ID credentials. We will contact you to discuss.</p>
                     <?php endif; ?>
                   </td>
-                  
+
                   <td class="right" id="image_date_<?= $x ?>"><?= $create_date;  ?></td>
 
                   <td class="right">
@@ -93,16 +94,6 @@
                     <!-- upload file input -->
                     <div id="pre_upload_<?= $x ?>" style="display:<?= $pre_upload ?>" >
                             <input type="file" name="file[]" id="imageFile_<?= $x ?>" />
-                        <div id="">
-                            <?php 
-                                // echo form_dropdown('LE_dropdown',
-                                //  [ '0' => 'Select ...',
-                                //    '1' => 'Upload Now',
-                                //    '2' => 'Will Upload Later',
-                                //    '3' => 'Department Policy Does Not Allow'
-                                //  ], ' id="LE_dropdown"');
-                            ?>
-                        </div>    
 
                     </div>
                     <!-- upload file input -->

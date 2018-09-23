@@ -50,6 +50,13 @@ function fetch_form_data( $user_id=null )
     $result_set = $query->result();
     return $result_set;
 }   
+
+function get_credentials_status($user_id)
+{
+  $mysql_query  = 'SELECT `credentials` FROM `user_employment_le` WHERE `user_id`="'.$user_id.'"';
+  $row = $this->db->query($mysql_query)->row();
+  return $row->credentials;
+}
          
 function update_data( $table_name, $table_data, $user_id )
 {

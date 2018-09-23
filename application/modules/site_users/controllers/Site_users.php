@@ -469,6 +469,21 @@ function modal_post_ajax()
     return;    
 }
 
+function ajax_credentials()
+{
+
+    $table_name = 'user_employment_le';
+    $table_data['credentials'] = $this->input->post('credentials', TRUE);
+    $update_id = $this->input->post('update_id', TRUE);
+
+    $rows_updated = $this->model_name->update($update_id, $table_data, $table_name);
+    $response['record_id'] = $update_id;
+    $response['success'] = $rows_updated > 0 ? 1: 2;
+
+    echo json_encode($response);
+
+}
+
 function ajax_upload_one()
 {
     $this->load->library('MY_Uploads');
@@ -491,13 +506,14 @@ function member_upload($manage_rowid=null)
     $table_name = 'site_users_upload';
     $required_docs = 1;
     $data = $this->my_uploads->build_upload_data( $update_id, $manage_rowid,$table_name, $required_docs);
-        
+
     list( $data['status'], $data['user_avatar'],
           $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($update_id);
-    
+
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     
     $data['update_id'] = $update_id;     
+    $data['credentials_status'] = $this->model_name->get_credentials_status($data['member_id']);
 
     $data['menu_level'] = 1;
     $data['image_repro'] = '';
