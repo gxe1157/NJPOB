@@ -217,6 +217,7 @@ function save_changes_ajax()
 
 function update_user()
 {
+
     $user = $this->ion_auth->user()->result()[0];
     $update_id = is_numeric($this->uri->segment(3)) ?
             $this->uri->segment(3) : $this->user->id; 
@@ -504,6 +505,7 @@ function ajax_remove_one()
 
 function member_upload($manage_rowid=null)
 {
+
     $update_id  = $this->user->id;
     $manage_rowid = $manage_rowid != null ? $manage_rowid : 0;  
 
