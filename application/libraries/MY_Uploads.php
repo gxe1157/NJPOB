@@ -27,9 +27,12 @@ function __construct()
 
 function ajax_remove_one()
 {
+// ddf($this->update_id.' | '.$this->table_name,1);
     $query = $this->model_name->get_view_data_custom('id', $this->update_id, $this->table_name, null);
     $result_set = $query->result();
     $file_name = $result_set[0]->image;
+// dd($result_set);
+
     $user_id = $result_set[0]->userid;
     $file_location = $this->upload_path.$file_name;
 
@@ -130,7 +133,6 @@ function ajax_upload_one()
               $results_set = $this->_get_uploaded_images($user_id, $this->source_id, $this->table_name )->num_rows();
               $response['image_position'] = $results_set -1;
           }
-          $response['new_update_id'] = $this->update_id ? 0 : 1;
 
           $response['caption'] = $caption;
           $response['full_path'] = $data['full_path'];

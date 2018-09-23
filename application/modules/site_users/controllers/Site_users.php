@@ -494,7 +494,6 @@ function member_upload($manage_rowid=null)
         
     list( $data['status'], $data['user_avatar'],
           $data['member_id'], $data['fullname'], $data['member_level'] ) = get_login_info($update_id);
-
     
     $data['required_docs'] = $required_docs;     
     $data['manage_rowid'] = $manage_rowid;     

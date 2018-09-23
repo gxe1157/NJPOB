@@ -130,8 +130,9 @@ function remove( obj ){
 
              /* Redirect if module/controller exist */
             if(response['success'] == 1 ){
+                let image_name = get_image_name(position);
                 $('#alert_mess').html(response['alert_mess']);              
-                $('#image_name_'+position).html('......');
+                $('#image_name_'+position).html(image_name);
                 $('#image_date_'+position).html('......');
                 $('#message_'+position).html('<div class=\"alert alert-info error_messages\" role=\"alert\"> '+ response["remove_name"]+'<br>has been removed.</div>').fadeIn( 300 ).delay( 500 ).fadeOut( 400 );
             } else {
@@ -145,6 +146,16 @@ function remove( obj ){
       }
     })  
 } 
+
+function get_image_name(position) {
+  let image_name = null;
+  let getRoleValue = $('#role_'+position).val().split('_');
+  if( getRoleValue[0] == 'Law Enforcement or Agency Photo ID' ) {
+      image_name = '<p style="color: red;"><input type="checkbox" name="mycheck" value="1" /> ';
+      image_name += 'Check here if department policy prohibits sending your ID credentials. We will contact you to discuss.</p>';      
+  }
+  return image_name
+}
 
 function upload_ajax( target_url, formData, position ) {
 
@@ -167,7 +178,7 @@ function upload_ajax( target_url, formData, position ) {
           if( response['success'] == '1'){
               $('#alert_mess').html(response['alert_mess']);
 
-              $('#removeImg_'+position).val(response['new_insert_id']);
+              $('#removeImg_'+position).val(response['record_id']);
               $('#confirm_upload_'+position).css("display", "none");
               $('#completed_upload_'+position).css("display", "block");
               $('#pre_upload_'+position).css("display", "none");
@@ -214,6 +225,55 @@ $(document).ready(function (e) {
       alert('Cancel Button just pressed not working.... ');
       // window.location.replace('youraccount/welcome');
     });
+
+  /* Credentials */
+  $('#credentials').on('change', function(){
+      alert($('#credentials').val());
+      if(this.checked === true){
+         // disable browse 
+         alert(this.checked);
+      } else {
+         // enable browse
+         alert(this.checked);
+      }
+
+      let target_url = dir_path+'site_users/modal_post_ajax';      
+      alert('target_url: '+target_url);
+
+      let formData = new FormData(this);
+      formData.append('position', position);
+
+    $.ajax({
+      url: target_url,
+      method:"POST",
+      data: formData,
+      contentType: false,
+      cache: false,
+      processData:false,
+      success:function(data)
+      {
+          // console.log( 'Return Data:......  ', data);
+          let response = JSON.parse( data );
+          console.log( 'Return Data:......  ', response);
+          
+          if( response['success'] == '1'){
+              $('#alert_mess').html(response['alert_mess']);
+          }else{
+              $('#message_'+position).html('<div class=\"alert alert-danger error_messages\" role=\"alert\"> '+response['error_mess']+'</div>').fadeIn( 300 ).delay( 500 ).fadeOut( 400 );
+          }
+        } // end success
+    });
+
+
+
+
+
+
+
+
+
+  });
+
 
   /* On submit */
   $('#upload-image-form').on('submit', function(e) {
