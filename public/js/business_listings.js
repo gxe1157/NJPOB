@@ -45,7 +45,6 @@ $(document).ready(function() {
     /* detect any input change */
     let change_occurred = false;    
     $('#myForm :input').change(function(e){
-      alert('Change' ) ; 
       // console.log($(e.target).attr('id'));
       change_occurred = true;
     });

@@ -13,10 +13,10 @@ if ( ! function_exists('get_tables_names'))
 
       $user_info    = array('registered_voter', 'legislative_dist', 'gender', 'dob',
                               'driver_lic', 'height', 'weight','social_sec', 'hair_color',
-                              'eye_color', 'marital_status' );
+                              'eye_color');
 
-      $user_family  = array('spouse_fname', 'spouse_lname',
-                              'spouse_dob', 'spouse_gender', 'spouse_email');
+      $user_family  = array( 'marital_status', 'spouse_fname', 'spouse_lname',
+                              'spouse_dob', 'spouse_gender', 'spouse_email' );
 
       $user_employment_le = array('le_agency', 'le_dept', 'le_add1', 'le_add2', 'le_city',
                                     'le_state', 'le_zip', 'le_rank', 'le_email', 'le_phone',
@@ -327,17 +327,6 @@ if ( ! function_exists('get_fields'))
               'input_options' => '0',
               'fld_group' =>'3'          
             ),
-            array(
-              'field' => 'marital_status',
-              'label' => 'Marital Status',
-              'rules' => 'required',                              
-              'icon'  => 'user',
-              'placeholder'=>'Please select ',
-              'input_value' => $display_value ? $results->marital_status : '',             
-              'input_type' =>'drop_down_sel',
-              'input_options' => '2',
-              'fld_group' =>'3'
-            ), 
             array(
               'field' => 'le_agency',
               'label' => 'Agency',
@@ -668,11 +657,22 @@ if ( ! function_exists('get_fields'))
               'input_value' => $display_value ? $results->eye_color : '',       
               'input_type' =>'text',
               'input_options' => '0'
-            ),          
-            array( //6
+            ),
+            array( //6a
+              'field' => 'marital_status',
+              'label' => 'Marital Status',
+              'rules' => 'required',                              
+              'icon'  => 'user',
+              'placeholder'=>'Please select ',
+              'input_value' => $display_value ? $results->marital_status : '',             
+              'input_type' =>'drop_down_sel',
+              'input_options' => '2',
+              'fld_group' =>'3'
+            ),                       
+            array( //6b
               'field' => 'spouse_fname',
               'label' => 'Spouse First Name',
-              'rules' => 'required',
+              'rules' => 'required|min_length[3]|max_length[40]',
               'icon'  => '',
               'placeholder'=>'',
               'input_value' => $display_value ? $results->spouse_fname : '',       
@@ -682,7 +682,7 @@ if ( ! function_exists('get_fields'))
             array( //7
               'field' => 'spouse_lname',
               'label' => 'Spouse Last Name',
-              'rules' => '',
+              'rules' => 'required|min_length[3]|max_length[40]',
               'icon'  => '',
               'placeholder'=>'',
               'input_value' => $display_value ? $results->spouse_lname : '',       
@@ -693,7 +693,7 @@ if ( ! function_exists('get_fields'))
             array( //8
               'field' => 'spouse_dob',
               'label' => 'Spouse Date of Birth',
-              'rules' => '',
+              'rules' => 'required',
               'icon'  => '',
               'placeholder'=>'MM/DD/YYYY',
               'input_value' => $display_value ? format_date($results->spouse_dob) : '',
@@ -703,7 +703,7 @@ if ( ! function_exists('get_fields'))
             array( //9
               'field' => 'spouse_gender',
               'label' => 'Spouse Gender',
-              'rules' => '',              
+              'rules' => 'required',              
               'icon'  => '',
               'placeholder'=>'',
               'input_value' => $display_value ? $results->spouse_gender : '',
@@ -713,7 +713,7 @@ if ( ! function_exists('get_fields'))
             array( //9
               'field' => 'spouse_email',
               'label' => 'Spouse Email',
-              'rules' => '',              
+              'rules' => 'required|valid_email|max_length[200]',              
               'icon'  => 'enveople',
               'placeholder'=>'email@email.com',
               'input_value' => $display_value ? $results->spouse_email : '',

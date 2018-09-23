@@ -2,7 +2,7 @@
 <!-- <?= dd($fld_group,1) ?> -->
 
           <?php for( $i = $start; $i<$end; $i++ ) { ?>
-<!-- <?= $fld_group[$i]['label'] ?> -->
+
 
 
             <!-- Select input-->
@@ -45,7 +45,9 @@
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-<?= $fld_group[$i]['icon'] ?>"></i>
                         </span>
-
+<?php
+if($fld_group[$i]['field'] == '')
+?>
                         <input  name="<?= $fld_group[$i]['field'] ?>" 
                                 value="<?= $fld_group[$i]['input_value'] ?>"
                                 id = "<?= $fld_group[$i]['field'] ?>" 

@@ -117,6 +117,7 @@ function ajax_upload_one()
           ];
 
           $response['error_mess'] = '';
+          $response['new_update_id'] = 0;              
 
           if(is_numeric($this->update_id)){
               //update details
@@ -132,6 +133,7 @@ function ajax_upload_one()
               $response['success'] = $response['record_id'] > 0 ? 1: 2;
               $results_set = $this->_get_uploaded_images($user_id, $this->source_id, $this->table_name )->num_rows();
               $response['image_position'] = $results_set -1;
+              $response['new_update_id'] = 1;              
           }
 
           $response['caption'] = $caption;
@@ -266,7 +268,7 @@ function _get_uploaded_images($userid, $manage_rowid,$table_name ){
     return $query;
 }
 
-function set_message($image_list_count, $users_images_count)
+function set_message($image_list_count, $users_images_count, $app_type)
 {
     $set_mess ='<div class="col-md-12 alert alert-danger">';
     $missing_uploads = $image_list_count - $users_images_count;
@@ -276,7 +278,7 @@ function set_message($image_list_count, $users_images_count)
 
     $docs = $missing_uploads == 1 ? 'document' : 'documents'; 
     if($missing_uploads < 1 ) {
-      $message .='Congratulations!. All required documets have been uploaded. Your application will now be processed.';  
+      $message .='Congratulations!. All required documets have been uploaded. Your '.$app_type.' application will now be processed.';  
     } else {
       $message .= 'You are required to provide '.$image_list_count.' documents for verification. Our records show we still need you to send '.$missing_uploads.' '.$docs;  
     }
@@ -295,11 +297,12 @@ function build_upload_data( $update_id, $manage_rowid, $table_name, $required_do
                                'public/js/model_js'
                               ];
 
+    $app_type = $table_name == 'car_shields_upload' ? 'car shield' : 'membership';
     $required_docs = empty($required_docs) ? 1 : $required_docs; 
     list( $image_list, $users_images) =
         $this->_get_image_info($update_id, $manage_rowid, $required_docs, $table_name );
 
-    $data['alert_mess'] = $this->set_message(count($image_list), count($users_images));
+    $data['alert_mess'] = $this->set_message(count($image_list), count($users_images), $app_type);
 
     $data['image_list'] = $image_list;
     $data['users_images'] = $users_images;

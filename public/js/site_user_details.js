@@ -6,6 +6,8 @@ var model_js_mess = {
         'submit_option' : null
 }
 
+// const spouse_var = [];
+
 const fldNames = {'child_fname':'First Name', 'child_lname' : 'Last Name',
                 'child_dob':'Date of Birth', 'child_gender': 'Gender' };
 
@@ -15,6 +17,7 @@ function prvSectorUpdate( ) {
     let arg = prv_sector_arg();
     $(".clear_error_mess").html('');     
 
+    $('#submit-user_employment_prv_sector-1').prop( 'disabled', arg);
     $('#prv_sector_employer').prop( 'disabled', arg);
     $('#prv_sector_dept').prop( 'disabled', arg);              
     $('#prv_sector_position').prop( 'disabled', arg);              
@@ -25,15 +28,65 @@ function prvSectorUpdate( ) {
     $('#prv_sector_zip').prop( 'disabled', arg);
     $('#prv_sector_email').prop( 'disabled', arg);                                          
     $('#prv_sector_phone').prop( 'disabled', arg);                                                        
-    $('#prv_sector_dt_hired').prop( 'disabled', arg);                                                        
+    $('#prv_sector_dt_hired').prop( 'disabled', arg);
+
+    if(arg) {
+      // $('#submit-user_employment_prv_sector-1').prop( 'disabled', arg);
+      $('#prv_sector_employer').val('');
+      $('#prv_sector_dept').val('');              
+      $('#prv_sector_position').val('');              
+      $('#prv_sector_add1').val('');                            
+      $('#prv_sector_add2').val('');                            
+      $('#prv_sector_city').val('');                            
+      $('#prv_sector_state').val('');                            
+      $('#prv_sector_zip').val('');
+      $('#prv_sector_email').val('');                                          
+      $('#prv_sector_phone').val('');                                                        
+      $('#prv_sector_dt_hired').val('');          
+    }
+
+
 }
+
+
 
 function prv_sector_arg() {
     let arg = $('#prv_sector').val() == 'Yes' ? false : true;
     return arg;
 } 
 
+function user_family_update() {
+    let arg = user_family_marital_status();
+    user_family_status(arg);
+
+    $(".clear_error_mess").html('');     
+    if(arg) {
+      $('#spouse_fname').val('');
+      $('#spouse_lname').val('');
+      $('#spouse_dob').val('');
+      $('#spouse_gender').val('');
+      $('#spouse_email').val('');
+    }
+} 
+
+function user_family_status(arg) {
+    $('#spouse_fname').prop( 'disabled', arg);
+    $('#spouse_lname').prop( 'disabled', arg);
+    $('#spouse_dob').prop( 'disabled', arg);
+    $('#spouse_gender').prop( 'disabled', arg);
+    $('#spouse_email').prop( 'disabled', arg);
+}
+
+
+function user_family_marital_status() {
+    let arg = $('#marital_status').val() == 'Married' ? false : true;
+    return arg;
+} 
+
+
 function save_changes_ajax( id ){
+    user_family_status(false);
+
     let update_flds = {};
     let formData = new FormData();
     let div_id = id.split('-');
@@ -58,9 +111,10 @@ function save_changes_ajax( id ){
       success:function(data)
       {
         $(".clear_error_mess").html('');            
+        user_family_update();
 
         let response = JSON.parse(data);
-        console.log(response);
+        // console.log(response);
 
         if( response['success'] == 1 ) {
             let message = response['flash_type'];
@@ -98,17 +152,29 @@ function save_changes_ajax( id ){
 }
 
 $(document).ready(function() {
+    /* init vars */
     prvSectorUpdate();    
+    user_family_update();    
+    const spouse_var = [$('#spouse_fname').val(), $('#spouse_lname').val(), $('#spouse_dob').val(), $('#spouse_gender').val(), $('#spouse_email').val(), $('#spouse_fname').val() ];   
 
     $('#prv_sector').on('change', function(){
         prvSectorUpdate();
     })
 
-    $('input[name="dob"], input[name="spouse_dob"], input[name="child_dob"], input[name="le_dt_hired"], input[name="prv_sector_dt_hired"]').on('keydown', function(event) {
+    $('#marital_status').on('change', function(){
+        $('#spouse_fname').val(spouse_var[0]);
+        $('#spouse_lname').val(spouse_var[1]);
+        $('#spouse_dob').val(spouse_var[2]);
+        $('#spouse_gender').val(spouse_var[3]);
+        $('#spouse_email').val(spouse_var[4]);
+        user_family_update();
+    })
+
+    $('input[name="le_dt_retired"], input[name="dob"], input[name="spouse_dob"], input[name="child_dob"], input[name="le_dt_hired"], input[name="prv_sector_dt_hired"]').on('keydown', function(event) {
         formatData(this,event,'DOWN','date');
     })
 
-    $('input[name="dob"], input[name="spouse_dob"], input[name="child_dob"], input[name="le_dt_hired"], input[name="prv_sector_dt_hired"]').on('keyup', function(event) {
+    $('input[name="le_dt_retired"], input[name="dob"], input[name="spouse_dob"], input[name="child_dob"], input[name="le_dt_hired"], input[name="prv_sector_dt_hired"]').on('keyup', function(event) {
         formatData(this,event,'UP','date');        
     })
 

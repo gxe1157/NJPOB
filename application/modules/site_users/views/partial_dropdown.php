@@ -17,5 +17,9 @@
 		                                    $additional_dd_code);
 		                            ?>
 	                        	</div>
+			                        <!-- Show errors here -->
+			    				  	<span class="<?= $key ?> clear_error_mess"
+								  		  style="color: red; text-align: left;"></span>
+
 							  </div>
 							</div>  

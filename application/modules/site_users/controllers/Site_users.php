@@ -154,7 +154,6 @@ function add_child_record()
 
 }
 
-
 function save_changes_ajax()
 {
     $errors_array = [];
@@ -173,6 +172,11 @@ function save_changes_ajax()
             if( $this->column_rules[$index]['field'] == 'social_sec' )
                 $this->column_rules[$index]['rules'] ='';
 
+            if($fld_group == 'user_family' && $_POST['marital_status'] != 'Married') {
+                if( $chk_value !='marital_status')
+                    $this->column_rules[$index]['rules'] ='';
+            }
+
             $this->column_rules[$index]['input_value'] = $_POST[$chk_value];
         }
     }
@@ -183,11 +187,12 @@ function save_changes_ajax()
     $this->form_validation->set_rules( $this->column_rules );
 
     if($this->form_validation->run() == TRUE) {
-        /* exception - over ride */
-            if($fld_group == 'user_family')  $fld_group = 'user_info';
+        /* exception - over ride - table is for both is user_info */
+           if($fld_group == 'user_family')  $fld_group = 'user_info';
         /* exception - over ride */
 
         $rows_updated = $this->_update_user_tables($fld_group, $fld_arr, $update_id );
+
         $response['flash_message'] = $rows_updated > 0 ?
             "Record details have been updated." : "Record details did not update.<br>Please notify the website administrator.";
 
@@ -300,10 +305,10 @@ function _update_user_tables( $table_name, $field_names = array(), $update_id)
 
             if($field_name == 'social_sec')
                     $value = $this->site_security->_encrypt_string($value);
-
-          $table_data[$field_name] = $value;
         }
+        $table_data[$field_name] = $value;        
     }
+
     /* Update into mysql here */
     $rows_updated = $this->model_name->update_data($table_name, $table_data, $update_id );    
     return $rows_updated;

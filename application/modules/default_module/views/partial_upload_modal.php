@@ -47,7 +47,7 @@
                          type="text"
                          id="caption"
                          name="caption"
-                         placeholder="Enter Property ID here">
+                         placeholder="Image description here">
                       <span id="error_'+key+'" style="color:red; font-weight: bold;"></span>
                 </div>
           </div>

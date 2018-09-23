@@ -228,11 +228,11 @@ $(document).ready(function() {
             state: {
                 validators: {
                     notEmpty: {
-                        message: 'Please supply your abbreviate the state name'
+                        message: 'Please supply state name abbreviated'
                     },
                     regexp: {
                         regexp: /^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$/,
-                        message: 'The abbreviate the state. example: CT, NJ, CA ...'
+                        message: ' state name must be abbreviate. example: CT, NJ, CA ...'
                     }                    
                 }
             },
@@ -243,7 +243,7 @@ $(document).ready(function() {
                     },
                     regexp: {
                         regexp: /^\d{5}$/,
-                        message: 'The US zipcode must contain 5 digits'
+                        message: 'US zipcode must contain 5 digits'
                     }                    
                 }
             },
@@ -467,11 +467,11 @@ $(document).ready(function() {
             le_state: {
                 validators: {
                     notEmpty: {
-                        message: 'Please supply your abbreviate the state name'
+                        message: 'Please supply state name abbreviated'
                     },
                     regexp: {
                         regexp: /^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$/,
-                        message: 'The abbreviate the state. example: CT, NJ, CA ...'
+                        message: 'state name must be abbreviate. example: CT, NJ, CA ...'
                     }                    
                 }
             },
@@ -482,7 +482,7 @@ $(document).ready(function() {
                     },
                     regexp: {
                         regexp: /^\d{5}$/,
-                        message: 'The US zipcode must contain 5 digits'
+                        message: 'The US zipcode must contain 5 digit number.'
                     }                    
                 }                
             },
@@ -582,11 +582,11 @@ $(document).ready(function() {
             prv_sector_state: {
                 validators: {
                     notEmpty: {
-                        message: 'Please supply your abbreviate the state name'
+                        message: 'Please supply state name abbreviated'
                     },
                     regexp: {
                         regexp: /^(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$/,
-                        message: 'The abbreviate the state. example: CT, NJ, CA ...'
+                        message: 'state name must be abbreviate. example: CT, NJ, CA ...'
                     }                    
                 }
             },

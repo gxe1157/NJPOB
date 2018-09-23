@@ -115,7 +115,7 @@
                                       $data['icon']="user";
                                       $data['cl']="btn btn-info btn-md";
                                       $data['cl_form']="form-group";
-                                      $data['top_line'] ="Member personal details here.................................";
+                                      $data['top_line'] ="Member's personal details.";
 
                                       $data['Select_option'] =$Select_option;
                                       $this->load->view( 'includes/Membership-input-profile', $data);
@@ -169,7 +169,7 @@
                                       $data['fld_group'] = $fld_group4;
                                       $data['icon']="user";
                                       $data['class']  = "btn btn-info btn-md";
-                                      $data['top_line'] ="Spouse's info here.................................";
+                                      $data['top_line'] ="Spouse's information.";
 
                                       $this->load->view( 'includes/Membership-input-spouse-children', $data);
                                     ?>
