@@ -1,8 +1,6 @@
 <!-- include in Become-A-Member.php -->
-<!-- <?= dd($fld_group,1) ?> -->
 
           <?php for( $i = $start; $i<$end; $i++ ) { ?>
-
 
 
             <!-- Select input-->

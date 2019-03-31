@@ -37,7 +37,6 @@ function __construct() {
 }
 
 
-
 /* ===================================================
     Controller functions goes here. Put all DRY
     functions in applications/core/My_Controller.php

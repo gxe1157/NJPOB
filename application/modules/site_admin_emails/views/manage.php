@@ -31,7 +31,6 @@
 			  <tbody>
 
 					<?php
-						$this->load->module('timedates');					
 						foreach( $columns->result() as $row ) {
 							$edit_url = base_url().$this->uri->segment(1)."/create/".$row->id;	
 							$create_date = convert_timestamp($row->create_date, 'datepicker_us'); ?>

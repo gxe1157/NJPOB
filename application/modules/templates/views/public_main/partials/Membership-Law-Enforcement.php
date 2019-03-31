@@ -1,7 +1,28 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    $options[0] = "Select...";
+    foreach ($member_plans as $key => $value) {
+      $options[] = $value->mem_plan_level;
+    }
+?>
 
 <div class="col-md-12" style="margin-top:20px;">
     <div class="col-md-5">
-         <img class="image img-responsive img-thumbnail" src="<?= base_url() ?>public/images/Law_enforcement/1-2T.jpg" width="80%" />
+      <?php
+      echo '<img class="image img-responsive img-thumbnail" src="'.base_url().'public/images/LE/'.$member_plans[0]->mem_plan_image.'" />';
+      foreach ($member_plans as $key => $value) {
+        $num = $key+1;
+
+        // sprintf(format,arg1,arg2,arg++);
+        $mem_dues1 = '$'.number_format( ($value->mem_dues1),2 );        
+        $mem_dues2 = '$'.number_format( ($value->mem_dues2),2 );
+        $savings = '$'.number_format( ($value->mem_dues2-$value->mem_dues1),2 );
+        $mem_plan_details = "$mem_dues1 or $mem_dues2 for 3 years savings of $savings.";
+
+        $plans[$num] = $member_plans[$key]->mem_plan_benefits;
+        $plan_fees[$num] = $mem_plan_details;
+      }
+
+      ?>
 
     </div>
 
@@ -17,24 +38,14 @@
                 <div class="panel-body panel-body-landing">
                      <table class="table" style="min-height: 210px;">
                          <tr>
-                            <td  style="font-size: 1.5em; text-align:center; color: red; ">
-                              Annual Fee: $35.00
+                            <td  style="font-size: 1.2em; text-align:center; color: red; ">
+                              <span id="show_fee"></span>
                             </td>
                         </tr>
 
                         <tr>
                             <td>
-                                <ul class="panel_ul">                                     
-                                    <li>Preferred Vendor Program/Law Enforcement Buy*</li>
-                                    <li>Free Legal Consultation / Legal Services Network*<br />Medical /Dental Services <span class="panel_li_spans">( Physicians Committee )</span>*</li>
-                                    <li>Financial Services Network <span class="panel_li_spans">( Planning & Accountants )</span>*</li>
-                                    <li>Insurance Services Network <span class="panel_li_spans">( Life, Home, Vehicle, etc. )</span>*</li>
-                                    <li>Membership Credentials & Certificate,</li>
-                                    <li>20- POB Courtesy Cards</li>
-                                    <li>Member Car Shield*</li>
-                                    <li>Auto Decal, Membership Lapel Pin & Calendar*</li>
-                                    <li>Copy of News letter</li>                                    
-                                </ul>
+                                <span id="show_plan"></span>
                             </td>
                         </tr>
                     </table>
@@ -48,15 +59,26 @@
                           action="<?= base_url() ?>users_registration"
                           method="POST"
                           onSubmit=" return validate()" >
+                      <input type="hidden" name="selected_plan" id="selected_plan"  />
+                      <input type="hidden" name="plan" id="plan" value='<?php echo json_encode($plans) ?>'  />
+                      <input type="hidden" name="plan_fees" id="plan_fees" value='<?php echo json_encode($plan_fees) ?>'  />                      
 
                        <div class="form-group">
-                          <label for="LE-Membership" >Membership level 
-                          <select class="form-control" name="selected_plan" id="selected_plan" >
-                              <option value='0' >Select</option>
-                              <option value='LE_Active' >Active</option>
-                              <option value='LE_Retired-Form' >Retired\Former</option>
-                          </select>
+                          <label for="selected_option" >Membership level&nbsp; &nbsp;
+                          <?php
+                                  $additional_dd_code = 'class="form-control"';
+                                  $additional_dd_code .=' id="selected_option"';
+                                  $field_name = "selected_option";
+
+                                  echo form_dropdown(
+                                        $field_name,
+                                        $options,
+                                        $value, // selected option value
+                                        $additional_dd_code);
+                                ?>
+
                           </label>
+
                        </div>
                        <button type="submit" class="btn btn-primary">Register</button>
                     </form>
@@ -72,7 +94,8 @@
        <p style="padding: 5px; text-align:justify;">If you are not comfortable applying or making payments on-line, Click on the Download App link below, fill out the application, print it out, enclose a check and send it us ASAP.<br /> Thank You!</p>
         <div style="cursor:pointer;" ><a onClick="Javascript: do_post();">
         <img class="image img-responsive center-block" src="<?= base_url() ?>public//images/Become A Member Section-4.png" width="300" height="45" /></a></div>
-
+        <br />
+        <center><a href="<?= base_url().'Become-A-Member' ?>" class="btn btn-warning btn-lg">Return</a></center>
     </div>
 
     <div style="clear:both;"></div> 
@@ -84,7 +107,7 @@
       <p>
       <b>(1) Any Regularly Appointed or Elected Law Enforcement Officer /Official Active or Retired</b> of these United States, or any State, political subdivision thereof, for any agency who is
        <span style="font-weight: bold; text-decoration:underline;">sworn to up hold the law</span> shall be eligible for membership in the Organization, subject to provisions set forth in the Constitution and By-Laws of this Organization. No person shall be denied membership on account of race, religion, sex, age, creed, color or national origin.<br/><br/>
-      <b>(2) The Active, Former & Retired Membership</b> shall be comprised of regularly appointed or elected Law Enforcement Officers/Officials sworn to up hold the law of the United States or any of the States or political subdivisions. This class may include, subject to the approval of the Executive Board, those members who formerly served as a law enforcement officer for more than one (1) year.<span style="background: yellow;"> The yearly membership dues shall be ($35.00) or ($90.00) for 3 years savings of $15.00.</span> Said fee may be waived by vote of the Executive Board. All members in good standing active, former & retired, (as herein defined), and those members assigned to positions with titles of Director and/or committee chairman, shall have voice and right to vote on all issues. </p>
+      <b>(2) The Active, Former & Retired Membership</b> shall be comprised of regularly appointed or elected Law Enforcement Officers/Officials sworn to up hold the law of the United States or any of the States or political subdivisions. This class may include, subject to the approval of the Executive Board, those members who formerly served as a law enforcement officer for more than one (1) year.<span style="background: yellow; font-size: 1.1em;"> The yearly membership dues shall be <?= $mem_plan_details ?></span> Said fee may be waived by vote of the Executive Board. All members in good standing active, former & retired, (as herein defined), and those members assigned to positions with titles of Director and/or committee chairman, shall have voice and right to vote on all issues. </p>
       <br>
       <p style="color:red;">Based on our Benefit Packet that you will receive from us, 75% of your dues are spent on benefit materials and administrative cost of sending you your membership articles. Therefore the organization doesn't make money on Law Enforcement Officers. We make it on our fundraising programs and on our <span style="font-weight: bold; text-decoration:underline;">Civilian Associate Membership Programs!</span></p>
       <br>

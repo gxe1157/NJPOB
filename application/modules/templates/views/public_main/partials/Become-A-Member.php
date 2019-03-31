@@ -48,7 +48,7 @@
                     <div class="panel panel-primary" style="border: none;">
                         <div class="controle-header panel-heading panel-heading-landing">
                             <h3 class="panel-title panel-title-landing">
-                                Civilian Members
+                                Civilian Members - Club Members
                             </h3>
                         </div>
                         <div class="panel-body panel-body-landing">
@@ -73,7 +73,9 @@
                             </table>
                         </div>
                         <div class="panel-footer panel-footer-landing">
-                            <a href="#" class="btn btn-price btn-success btn-md">SELECT</a>
+                            <!-- <a href="#" class="btn btn-price btn-success btn-md">SELECT</a> -->
+                            <a href="<?= base_url() ?>Membership-Law-Civilian" class="btn btn-price btn-success btn-md">Civilian</a>
+                            <a href="<?= base_url() ?>membership_club" class="btn btn-price btn-success btn-md">Club Member</a>                            
                         </div>
                     </div>
                 </div>

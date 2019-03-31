@@ -17,7 +17,32 @@ $(document).ready(function() {
     //   error_mess = error_mess.split("|");
     //   myAlert( jsUcfirst('Error')+' ! ', error_mess, 'danger' );
     // }
-    
+
+    /* use in Membership-Law-Civilian.php */
+    $('#selected_option').on('change', function(){
+        let option = $('#selected_option').val();
+        let color = '#fff';
+        let length = $('#selected_option > option').length;
+
+        let resp_plan = JSON.parse( $('#plan').val() );
+        let resp_fee = JSON.parse( $('#plan_fees').val() );
+
+        $('#selected_plan').val( $( "#selected_option option:selected" ).text() );
+        if( option != 0  ) {
+            $('#show_plan').html(resp_plan[option]);
+            $('#show_fee').html('Annual Membership: '+resp_fee[option]);            
+        }else{
+            $('#show_plan').html('');
+            $('#show_fee').html('');
+        }
+
+        for( var i = 0; i<length; i++ ) {
+            color = i == option ? '#F9C809' : '#fff';
+            $('#plan_'+i).css('background-color', color);            
+        }
+
+    });
+
     /* update show_panel hidden field */
     if( $('#show_panel').val() ) {
         let val = $('#show_panel').val();

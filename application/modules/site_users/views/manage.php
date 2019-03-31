@@ -40,7 +40,6 @@
 			  <tbody>
 
 					<?php
-						$this->load->module('timedates');	
 						foreach( $columns->result() as $row ) {
 						    if( $row->is_delete > 0 ){
 						        $show_status = 'Deleted';
@@ -53,7 +52,8 @@
 							$car_shield_url = base_url()."car_shields/manage_admin/".$row->id;
 							$legislative_url = base_url()."legislative_outreach/manage_admin/".$row->id;
 							$business_listings = base_url()."business_listings/manage_admin/".$row->id;							
-							$create_date = convert_timestamp($row->create_date, 'datepicker_us'); ?>
+							$create_date = convert_timestamp($row->create_date, 'datepicker_us');
+					 ?>
 
 						<tr>
 							<td class="right"><?= $row->last_name ?></td>

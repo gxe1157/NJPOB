@@ -121,8 +121,8 @@ function get_where($id, $data_table = null) {
     return $query;
 }
 
-function get_where_custom($col, $value, $orderby) {
-    $table = $this->get_table();
+function get_where_custom($col, $value, $orderby, $data_table) {
+    $table = $data_table == null ?  $this->get_table() : $data_table;    
     $this->db->where($col, $value);
     $this->db->order_by($orderby);        
     $query=$this->db->get($table);

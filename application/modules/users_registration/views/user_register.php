@@ -2,7 +2,6 @@
 
 <?php
   foreach ($plans as $plan ) {
-      $details    = $plan->mem_plan_details;
       $dues1      = $plan->mem_dues1;
       $dues2      = $plan->mem_dues2;
       $dues3      = $plan->mem_life;
@@ -10,8 +9,15 @@
       $image_name = $plan->mem_plan_image;
       $savings    = ($plan->mem_dues1*3 - $plan->mem_dues2);
       $category   = $plan->mem_category;
+
+      // sprintf(format,arg1,arg2,arg++);
+      $mem_dues1 = '$'.number_format( ($plan->mem_dues1),2 );        
+      $mem_initiation = '$'.number_format( ($plan->mem_initiation),2 );
+      $total_due = '$'.number_format( ($plan->mem_dues1+$plan->mem_initiation),2 );
+      $details = sprintf($plan->mem_plan_details, $mem_dues1, $mem_initiation, $total_due);  
   }
-  // $this->lib->checkArray($plans,1);
+  
+  $return_url = [ 'LE' => 'Membership-Law-Enforcement', 'Civilian' => 'Membership-Law-Civilian', 'Club' => 'membership_club'];
 ?>
 
 
@@ -98,12 +104,12 @@
 <div class="col-md-12" style="margin-top:20px;">
     <div class="col-md-3">
          <img class="img-responsive img-thumbnail"
-         src="<?= base_url() ?>public/images/Civilian/<?= $image_name ?>" width="80%" />
+         src="<?= base_url() ?>public/images/<?= $category ?>/<?= $image_name ?>" width="80%" />
     </div>
 
     <div class="col-md-9">
       <div style="clear:both;"></div>
-      <?= nl2br($details) ?>
+      <?= $details ?>
     </div>
 
     <div style="clear:both;"></div>
@@ -216,7 +222,7 @@
                   <input type="radio" name="itemname"
                    value="1 Year Subscription with Initiation"
                    onClick="Javascript: update_payment('<?= $dues1 ?>','<?= $init_fee ?>', 1);" >
-                   Annual dues $<?= $dues1 ?> for the year. 
+                   Annual dues <?= '$'.number_format( ($dues1),2 ) ?> for the year. 
                 </label>
                 </div>
               </div>
@@ -226,7 +232,7 @@
                   <input type="radio" name="itemname"
                    value="3 Year Subscription with Initiation"
                    onClick="Javascript: update_payment('<?= $dues2 ?>','<?= $init_fee ?>',3);">
-                   3 year dues $<?= $dues2 ?> a savings of $<?= $savings ?>.
+                   3 year dues <?= '$'.number_format( ($dues2),2 ) ?> a savings of $<?= $savings ?>.
                 </label>
                 </div>
               </div>
@@ -237,7 +243,7 @@
                   <input type="radio" name="itemname"
                    value="Lifetime membership Subscription"
                    onClick="Javascript: update_payment('<?= $dues3 ?>','0',99);">
-                   Lifetime Membership dues $<?= $dues3 ?>
+                   Lifetime Membership dues <?= '$'.number_format( ($dues3),2 ) ?>
                 </label>
                 </div>
               </div>
@@ -272,8 +278,9 @@
                 <button type="submit"
                         name="submitPayPal"
                         id="#submitPayPal"
-                        class="btn btn-default btn-lg">Submit
+                        class="btn btn-success btn-lg">Submit
                 </button>
+                <a href="<?= base_url().$return_url[$category] ?>" class="btn btn-default btn-lg">Cancel</a>
                 </div>
             </div>           
 

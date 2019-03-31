@@ -15,14 +15,39 @@ function __construct()
 function index()
 {
 	$first_bit = trim($this->uri->segment(1) );
+
+	if( $first_bit=='membership_club' )
+			$first_bit = 'Membership-Law-Civilian';
+
 	$this->load->module('webpages');
 	$query = $this->webpages->get_where_custom('page_url', $first_bit);
 	$num_rows = $query->num_rows();
 
 	if($num_rows > 0) {
 		/* special case data fetch */
-		$Advertise_Your_Business = $this->webpages->_get_first_record( $query, 'page_url');
-		if( $Advertise_Your_Business == 'Advertise-Your-Business') {
+		if( $first_bit == 'Membership-Law-Civilian' || $first_bit == 'Membership-Law-Enforcement' ){
+			$get_category = trim($this->uri->segment(1)) == 'membership_club' ? 'membership_club' : $first_bit;
+
+			switch ($get_category) {
+			    case 'membership_club':
+			    	$mem_category = 'Club';
+			        break;
+
+			    case 'Membership-Law-Civilian':
+					$mem_category = 'Civilian';			    
+			        break;
+
+			    case 'Membership-Law-Enforcement':
+					$mem_category = 'LE';			    			    
+			        break;
+			}
+
+		    $data['custom_jscript'] = [ 'public/js/membership_plans'];
+			$data['member_plans'] = $this->model_name->get_where_custom('mem_category', $mem_category, $order_by = null, 'membership_plans')->result();
+		}
+
+		// $Advertise_Your_Business = $this->webpages->_get_first_record( $query, 'page_url');
+		if( $first_bit == 'Advertise-Your-Business' ){
 				$data['ad_plans'] = $this->_ad_plan_select_options();
 		}
 

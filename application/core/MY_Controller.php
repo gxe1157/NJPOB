@@ -160,9 +160,9 @@ function get_where($id, $table_name = null)
     return $query;
 }
 
-function get_where_custom($col, $value, $order_by = null)
+function get_where_custom($col, $value, $order_by = null, $table_name = null)
 {
-    $query = $this->model_name->get_where_custom($col, $value, $order_by);
+    $query = $this->model_name->get_where_custom($col, $value, $order_by, $table_name);
     return $query;
 }
 

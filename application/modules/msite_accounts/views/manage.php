@@ -28,10 +28,9 @@
 			  <tbody>
 
 					<?php
-						$this->load->module('timedates');					
 						foreach( $columns->result() as $row ) {
 						$edit_url = $redirect_url."/".$row->id;	
-						$create_date = $this->timedates->get_nice_date($row->create_date, 'cool')			
+						$create_date = convert_timestamp($row->date_created, 'cool');			
 					?>
 						<tr>
 							<td class="right"><?= $row->firstname ?></td>

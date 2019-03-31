@@ -139,7 +139,8 @@ function create()
     $data['default'] = $this->default;  
     $data['columns_not_allowed'] = $this->columns_not_allowed;
     $data['labels'] = $this->_get_column_names('label');
-    $data['custom_jscript'] = [ 'sb-admin/js/bootstrap3-typeahead',
+    $data['custom_jscript'] = [ 'public/js/site_init',
+                                'sb-admin/js/bootstrap3-typeahead',
                                 'sb-admin/js/jquery.cleditor.min',
                                 'public/js/site_loader_cleditor',
                                 'public/js/site_loader_search',

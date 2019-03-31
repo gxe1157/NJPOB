@@ -1,8 +1,4 @@
 
- function upperFirstletter(str){
- 	return str[0].toUpperCase() + str.substring(1);
- }
-
  function build_form_inputs(){
 	let build = '';
 	let columns = model_js_mess['fldNames'];

@@ -34,11 +34,9 @@ function __construct() {
 
 function index()
 {
-    $Selected_plan = $this->input->post('selected_plan', TRUE);
-    $sql_items = 'SELECT * FROM membership_plans
-                  WHERE `mem_plan_level` = "'.$Selected_plan.'"';
 
-    $data['plans'] = $this->_custom_query($sql_items)->result();
+    $Selected_plan = $this->input->post('selected_plan', TRUE);
+    $data['plans'] = $this->model_name->get_where_custom('mem_plan_level', $Selected_plan, $order_by = null, 'membership_plans')->result();
     $data['gateway_name'] = 'PayPal';
     $data['custom_jscript'] = ['sb-admin/js/bootstrapValidator.min',
                                'public/js/model_js',
